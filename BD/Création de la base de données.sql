@@ -94,7 +94,7 @@ CREATE TABLE Patient(
         Adresse         Varchar (25) NOT NULL ,
         Numero_tel      Varchar (25) NOT NULL ,
         Niveau_priorite Int NOT NULL ,
-        IDc             Int NOT NULL ,
+        IDc             Int ,
         PRIMARY KEY (IDp )
 )ENGINE=InnoDB;
 
