@@ -4,7 +4,7 @@
 
 
 #------------------------------------------------------------
-# Table: Médecin
+# Table: Mï¿½decin
 #------------------------------------------------------------
 
 CREATE TABLE Medecin(
@@ -77,7 +77,7 @@ CREATE TABLE Service_d_accueil(
 
 CREATE TABLE Type_d_intervention(
         Nom_intervention Varchar (25) NOT NULL ,
-        Duree            Datetime NOT NULL ,
+        Duree            Int NOT NULL ,
         IDr              Varchar (25) NOT NULL ,
         PRIMARY KEY (Nom_intervention )
 )ENGINE=InnoDB;
@@ -135,7 +135,7 @@ CREATE TABLE souffre(
 
 
 #------------------------------------------------------------
-# Table: reçoit
+# Table: reï¿½oit
 #------------------------------------------------------------
 
 CREATE TABLE recoit(
