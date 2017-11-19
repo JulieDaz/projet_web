@@ -4,7 +4,7 @@
 
 
 #------------------------------------------------------------
-# Table: Médecin
+# Table: Mï¿½decin
 #------------------------------------------------------------
 
 CREATE TABLE Medecin(
@@ -53,6 +53,7 @@ CREATE TABLE Planning(
         Heure_debut   Datetime NOT NULL ,
         Heure_fin     Datetime NOT NULL ,
         Date_priseRDV Date NOT NULL ,
+        Nom_intervention              Varchar (25) NOT NULL ,
         PRIMARY KEY (IDc )
 )ENGINE=InnoDB;
 
@@ -78,7 +79,6 @@ CREATE TABLE Type_d_intervention(
         Nom_intervention Varchar (25) NOT NULL ,
         Duree            Datetime NOT NULL ,
         IDr              Varchar (25) NOT NULL ,
-        IDc              Int NOT NULL ,
         PRIMARY KEY (Nom_intervention )
 )ENGINE=InnoDB;
 
@@ -135,7 +135,7 @@ CREATE TABLE souffre(
 
 
 #------------------------------------------------------------
-# Table: reçoit
+# Table: reï¿½oit
 #------------------------------------------------------------
 
 CREATE TABLE recoit(
@@ -159,7 +159,7 @@ ALTER TABLE Responsable_d_intervention ADD CONSTRAINT FK_Responsable_d_intervent
 ALTER TABLE Service_d_accueil ADD CONSTRAINT FK_Service_d_accueil_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
 ALTER TABLE Service_d_accueil ADD CONSTRAINT FK_Service_d_accueil_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
 ALTER TABLE Type_d_intervention ADD CONSTRAINT FK_Type_d_intervention_IDr FOREIGN KEY (IDr) REFERENCES Responsable_d_intervention(IDr);
-ALTER TABLE Type_d_intervention ADD CONSTRAINT FK_Type_d_intervention_IDc FOREIGN KEY (IDc) REFERENCES Planning(IDc);
+ALTER TABLE Planning ADD CONSTRAINT FK_Planning_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE Patient ADD CONSTRAINT FK_Patient_IDc FOREIGN KEY (IDc) REFERENCES Planning(IDc);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDc FOREIGN KEY (IDc) REFERENCES Planning(IDc);
