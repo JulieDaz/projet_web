@@ -1,6 +1,6 @@
 <h1>Page d'accueil</h1>
 
-<form metohd="post" action="traitement.php">
+<form method="post" action="traitement.php">
   <label>ID</label> : <input type="text" name="ID">
   <br><br>
   <label>Mot de passe</label> : <input type="password" name="Mdp">

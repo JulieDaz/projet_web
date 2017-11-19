@@ -64,7 +64,7 @@ CREATE TABLE Planning(
 
 CREATE TABLE Service_d_accueil(
         Nom_service Varchar (25) NOT NULL ,
-        Facture     Double NOT NULL ,
+        Facture     Double NOT NULL,
         IDm         Varchar (25) NOT NULL ,
         IDp         Int NOT NULL ,
         PRIMARY KEY (Nom_service )
@@ -94,7 +94,7 @@ CREATE TABLE Patient(
         Adresse         Varchar (25) NOT NULL ,
         Numero_tel      Varchar (25) NOT NULL ,
         Niveau_priorite Int NOT NULL ,
-        IDc             Int ,
+        IDc             Int NOT NULL ,
         PRIMARY KEY (IDp )
 )ENGINE=InnoDB;
 
