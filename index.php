@@ -1,4 +1,13 @@
-<h1>Page d'accueil</h1>
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+
+
+<h1>Welcome to Medical Planner</h1>
+
 
 <form method="post" action="traitement.php">
   <label>ID</label> : <input type="text" name="ID">
@@ -7,4 +16,16 @@
   <br><br>
   <input type="submit" value="Se connecter">
 </form>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
 
