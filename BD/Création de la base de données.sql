@@ -90,11 +90,11 @@ CREATE TABLE Patient(
         IDp             int (11) Auto_increment  NOT NULL ,
         Nom             Varchar (25) NOT NULL ,
         Prenom          Varchar (25) NOT NULL ,
-        Adresse         Varchar (25) NOT NULL ,
-        Numero_tel      Varchar (25) NOT NULL ,
+        Adresse         Varchar (25) ,
+        Numero_tel      Varchar (25) ,
         Niveau_priorite Int NOT NULL ,
         IDc             Int ,
-        Nom_service     Varchar (25) NOT NULL ,
+        Nom_service     Varchar (25) ,
         PRIMARY KEY (IDp )
 )ENGINE=InnoDB;
 
