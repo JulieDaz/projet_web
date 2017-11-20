@@ -66,7 +66,6 @@ CREATE TABLE Service_d_accueil(
         Nom_service Varchar (25) NOT NULL ,
         Facture     Double NOT NULL ,
         IDm         Varchar (25) NOT NULL ,
-        IDp         Int NOT NULL ,
         PRIMARY KEY (Nom_service )
 )ENGINE=InnoDB;
 
@@ -77,8 +76,8 @@ CREATE TABLE Service_d_accueil(
 
 CREATE TABLE Type_d_intervention(
         Nom_intervention Varchar (25) NOT NULL ,
-        Duree            Datetime NOT NULL ,
-        IDr              Varchar (25) NOT NULL ,
+        Duree            Int NOT NULL ,
+        IDr              Varchar (25) ,
         PRIMARY KEY (Nom_intervention )
 )ENGINE=InnoDB;
 
@@ -94,7 +93,8 @@ CREATE TABLE Patient(
         Adresse         Varchar (25) NOT NULL ,
         Numero_tel      Varchar (25) NOT NULL ,
         Niveau_priorite Int NOT NULL ,
-        IDc             Int NOT NULL ,
+        IDc             Int ,
+        Nom_service     Varchar (25) NOT NULL ,
         PRIMARY KEY (IDp )
 )ENGINE=InnoDB;
 
@@ -157,9 +157,9 @@ CREATE TABLE a_comme(
 
 ALTER TABLE Responsable_d_intervention ADD CONSTRAINT FK_Responsable_d_intervention_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE Service_d_accueil ADD CONSTRAINT FK_Service_d_accueil_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
-ALTER TABLE Service_d_accueil ADD CONSTRAINT FK_Service_d_accueil_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
 ALTER TABLE Type_d_intervention ADD CONSTRAINT FK_Type_d_intervention_IDr FOREIGN KEY (IDr) REFERENCES Responsable_d_intervention(IDr);
 ALTER TABLE Planning ADD CONSTRAINT FK_Planning_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
+ALTER TABLE Patient ADD CONSTRAINT FK_Patient_Nom_service FOREIGN KEY (Nom_service) REFERENCES Service_d_accueil(Nom_service);
 ALTER TABLE Patient ADD CONSTRAINT FK_Patient_IDc FOREIGN KEY (IDc) REFERENCES Planning(IDc);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDc FOREIGN KEY (IDc) REFERENCES Planning(IDc);
