@@ -2,10 +2,22 @@
 
 $connexion = connect() ;
 $id = $_POST['ID'] ;
-$req = 'SELECT' . $id . 'FROM medecin'
-echo "coucou ça marche"
+
+$mdp = $_POST['mdp'] ;
 
 
+$login = "SELECT * FROM Medecin WHERE IdM = '$id' AND Mdp = '$mdp'" ;
 
+$verif = mysqli_query($connexion, $login) ;
 
+print("<br>") ; 
+
+if ($verif==FALSE)
+	{
+		print("Vérifier votre identifiant ou votre mot de passe") ;
+	}
+else 
+	{ 
+		print("coucou ça marche") ;
+	}
 ?>
