@@ -38,6 +38,7 @@ INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Hépatite"
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Cancer","4");
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Diabète","3");
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Hémorragie","4");
+INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Carie","2");
 
 INSERT INTO `patient`(`IDp`, `Nom`, `Prenom`, `Adresse`, `Numero_tel`, `Niveau_priorite`, `IDc`, `Nom_service`) VALUES ("0","Aber","Pierre","0 rue","06","0","","");
 INSERT INTO `patient`(`IDp`, `Nom`, `Prenom`, `Adresse`, `Numero_tel`, `Niveau_priorite`, `IDc`, `Nom_service`) VALUES ("1","Bad","Michael","1 rue","06","0","","");
@@ -65,9 +66,9 @@ INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`, `IDm`) VALUES ("Dentis
 INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`, `IDm`) VALUES ("Analyse_sanguine","250","M_MFriedman");
 
 INSERT INTO `planning`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("1","2017-11-19","2017-11-19 08:00:00","2017-11-19 09:00:00","2017-11-18","Radio");
-INSERT INTO `planning`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("2","2017-11-19","2017-11-19 08:00:00","2017-11-19 08:30:00","2017-11-18","Prise de sang");
-INSERT INTO `planning`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("3","2017-11-19","2017-11-19 08:00:00","2017-11-19 11:00:00","2017-11-18","Chirurgie");
-INSERT INTO `planning`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("4","2017-11-19","2017-11-19 11:00:00","2017-11-19 14:00:00","2017-11-18","Chirurgie");
+INSERT INTO `planning`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("2","2017-11-19","2017-11-19 08:00:00","2017-11-19 08:30:00","2017-11-18","Prise_de_sang");
+INSERT INTO `planning`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("3","2017-11-19","2017-11-19 08:00:00","2017-11-19 11:00:00","2017-11-18","Prise_de_sang");
+INSERT INTO `planning`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("4","2017-11-19","2017-11-19 11:00:00","2017-11-19 14:00:00","2017-11-18","Dentisterie");
 INSERT INTO `planning`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("5","2017-11-19","2017-11-19 09:00:00","2017-11-19 10:00:00","2017-11-18","Radio");
 
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","0");
@@ -77,12 +78,12 @@ INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Membre_cassé","3");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Membre_cassé","4");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Grippe","5");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Grippe","6");
-INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Grippe","7");
+INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Carrie","7");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Grippe","8");
-INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Cancer","9");
+INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Diabète","9");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Cancer","10");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Cancer","11");
-INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Cancer","12");
+INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Diabète","12");
 
 INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Radio","3");
 INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Radio","4");
@@ -108,6 +109,18 @@ UPDATE `patient` SET `Nom_service`="Radiologie" WHERE `IDp`="4";
 UPDATE `patient` SET `Nom_service`="Dentisterie" WHERE `IDp`="7";
 UPDATE `patient` SET `Nom_service`="Analyse_sanguine" WHERE `IDp`="9";
 UPDATE `patient` SET `Nom_service`="Analyse_sanguine" WHERE `IDp`="12";
+
+UPDATE `patient` SET `IDc`="1" WHERE `IDp`="3";
+UPDATE `patient` SET `IDc`="2" WHERE `IDp`="9";
+UPDATE `patient` SET `IDc`="3" WHERE `IDp`="12";
+UPDATE `patient` SET `IDc`="5" WHERE `IDp`="4";
+UPDATE `patient` SET `IDc`="4" WHERE `IDp`="7";
+
+UPDATE `patient` SET `Niveau_priorite`=(SELECT `Niveau_urgence` FROM `pathologie` WHERE `Nom_pathologie`="Membre_cassé") WHERE `IDc`="1";
+UPDATE `patient` SET `Niveau_priorite`=(SELECT `Niveau_urgence` FROM `pathologie` WHERE `Nom_pathologie`="Membre_cassé") WHERE `IDc`="5";
+UPDATE `patient` SET `Niveau_priorite`=(SELECT `Niveau_urgence` FROM `pathologie` WHERE `Nom_pathologie`="Diabète") WHERE `IDc`="2";
+UPDATE `patient` SET `Niveau_priorite`=(SELECT `Niveau_urgence` FROM `pathologie` WHERE `Nom_pathologie`="Hépatite") WHERE `IDc`="3";
+UPDATE `patient` SET `Niveau_priorite`=(SELECT `Niveau_urgence` FROM `pathologie` WHERE `Nom_pathologie`="Carie") WHERE `IDc`="4";
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
