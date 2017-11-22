@@ -6,6 +6,7 @@ $mdp = $_POST['mdp'] ;
 
 print("<br>") ; 
 
+<<<<<<< HEAD
 $test="utilisateur";
 
 switch ($test) {
@@ -19,6 +20,12 @@ switch ($test) {
 		print($user);
 		break;
 }
+=======
+
+$login = "SELECT * FROM Medecin WHERE IdM = '$id' AND Mdp = '$mdp'" ;
+
+$verif = do_request($login, $connexion);
+>>>>>>> 6b41591332d343d85f00ea427e5bc9d733622553
 
 $login = "SELECT * FROM $user WHERE IdM = '$id' AND Mdp = '$mdp'" ;
 $verif = mysqli_query($connexion, $login) ;
