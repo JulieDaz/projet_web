@@ -6,9 +6,10 @@ $id = $_POST['ID'] ;
 $mdp = $_POST['mdp'] ;
 
 
+
 $login = "SELECT * FROM Medecin WHERE IdM = '$id' AND Mdp = '$mdp'" ;
 
-$verif = mysqli_query($connexion, $login) ;
+$verif = do_request($login, $connexion);
 
 print("<br>") ; 
 
