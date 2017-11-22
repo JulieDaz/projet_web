@@ -24,9 +24,6 @@ $login = "SELECT * FROM Medecin WHERE IdM = '$id' AND Mdp = '$mdp'" ;
 
 $verif = do_request($login, $connexion);
 
-$login = "SELECT * FROM $user WHERE IdM = '$id' AND Mdp = '$mdp'" ;
-$verif = mysqli_query($connexion, $login) ;
-
 if ($verif==FALSE)
 	{
 		print("Vérifier votre identifiant ou votre mot de passe") ;
