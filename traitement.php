@@ -6,36 +6,39 @@ $mdp = $_POST['mdp'] ;
 
 print("<br>") ; 
 
-<<<<<<< HEAD
-$test="utilisateur";
-
-switch ($test) {
-	case 1:
-		$user = 'Medecin' ;
-		echo "coucou ya qqn?";
-		print($user);
-		break;
-	case 2:
-		$user = 'Responsable_d_intervention' ;
-		print($user);
-		break;
+if ($id == "" OR $mdp == "") {
+	print("Attention vous n'avez pas rempli tous les champs. Veuillez recommencer.");
 }
-=======
-
-$login = "SELECT * FROM Medecin WHERE IdM = '$id' AND Mdp = '$mdp'" ;
-
-$verif = do_request($login, $connexion);
->>>>>>> 6b41591332d343d85f00ea427e5bc9d733622553
-
-$login = "SELECT * FROM $user WHERE IdM = '$id' AND Mdp = '$mdp'" ;
-$verif = mysqli_query($connexion, $login) ;
-
-if ($verif==FALSE)
-	{
-		print("Vérifier votre identifiant ou votre mot de passe") ;
+else {
+	$user="Medecin" ;
+	$identifiant = "IDm" ;
+	$login = "SELECT * FROM $user WHERE $identifiant = '$id' AND Mdp = '$mdp'" ;
+	$verif = do_request($login, $connexion);
+	if ($verif == TRUE) {
+		print("Connexion réussie : vous êtes un médecin");
+		}
+		elseif ($verif == FALSE) {
+			$user="Responsable_d_intervention" ;
+			$identifiant = "IDr" ;
+			$login = "SELECT * FROM $user WHERE $identifiant = '$id' AND Mdp = '$mdp'" ;
+			$verif2 = do_request($login, $connexion);
+			if ($verif2 == TRUE) {
+				print("Connexion réussie : vous êtes un responsable");
+				}
+			elseif ($verif2 == FALSE) {
+				$user="Administrateur" ;
+				$identifiant = "IDa" ;
+				$login = "SELECT * FROM $user WHERE $identifiant = '$id' AND Mdp = '$mdp'" ;
+				$verif3 = do_request($login, $connexion);
+				if ($verif3 == TRUE) {
+					print("Connexion réussie : vous êtes un admin");
+					}
+				else {	
+					print("va te faire foutre enculé de ta mère") ;
+				}	
+			}
+		}
 	}
-else 
-	{ 
-		print("coucou ça marche") ;
-	}
-?>
+
+
+//print($user);
