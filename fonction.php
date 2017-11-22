@@ -1,7 +1,7 @@
 <?php  
 
 /***** Connexion à la base de donnée ******/
-function connect() 
+function connect()
 {
     $user = 'root'; // utilisatrice
     $mdp = '';  // mot de passe
