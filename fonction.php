@@ -25,8 +25,29 @@ function deconnect($connexion)
 	mysqli_close($connexion);
 }
 
+function do_request($request,$connexion)
+{
+    $req = mysqli_query($connexion,$request) or die('Erreur SQL !<br>'.$request.'<br>'.mysqli_error());
+    $a = array();
+    while($row = mysqli_fetch_assoc($req))
+    {
+        $a[] = $row;
+    }
+    mysqli_free_result($req);
+    return $a;
+}
 
-
-
+function print_request($array) // en cours de réalisation
+{
+    for($i=0;$i<sizeof($array);$i++)
+    {
+        $row = $array[$i];
+        foreach($row as $data)
+        {
+            print($data);
+            print("<br>");
+        }
+    }
+}
 
 ?>
