@@ -4,7 +4,7 @@
 
 
 #------------------------------------------------------------
-# Table: Médecin
+# Table: Mï¿½decin
 #------------------------------------------------------------
 
 CREATE TABLE Medecin(
@@ -51,6 +51,7 @@ CREATE TABLE Creneaux(
         Heure_debut   Datetime NOT NULL ,
         Heure_fin     Datetime NOT NULL ,
         Date_priseRDV Date NOT NULL ,
+        Nom_intervention           Varchar (25) NOT NULL ,
         PRIMARY KEY (IDc )
 )ENGINE=InnoDB;
 
@@ -61,7 +62,7 @@ CREATE TABLE Creneaux(
 
 CREATE TABLE Service_d_accueil(
         Nom_service Varchar (25) NOT NULL ,
-        Facture     Double NOT NULL ,
+        Facture     Double ,
         PRIMARY KEY (Nom_service )
 )ENGINE=InnoDB;
 
@@ -74,7 +75,6 @@ CREATE TABLE Type_d_intervention(
         Nom_intervention Varchar (25) NOT NULL ,
         Duree            Datetime NOT NULL ,
         IDr              Varchar (25) NOT NULL ,
-        IDc              Int NOT NULL ,
         PRIMARY KEY (Nom_intervention )
 )ENGINE=InnoDB;
 
@@ -88,7 +88,7 @@ CREATE TABLE Patient(
         Nom             Varchar (25) NOT NULL ,
         Prenom          Varchar (25) NOT NULL ,
         Adresse         Varchar (25) NOT NULL ,
-        Numero_tel      Varchar (25) NOT NULL ,
+        Numero_tel      Varchar (25) ,
         Niveau_priorite Int NOT NULL ,
         Nom_service     Varchar (25) NOT NULL ,
         PRIMARY KEY (IDp )
@@ -123,10 +123,10 @@ CREATE TABLE Utilisateurs(
 #------------------------------------------------------------
 
 CREATE TABLE peut_visualiser(
-        IDm Varchar (25) NOT NULL ,
+        IDm Varchar (25) ,
         IDc Int NOT NULL ,
-        IDr Varchar (25) NOT NULL ,
-        IDa Varchar (25) NOT NULL ,
+        IDr Varchar (25) ,
+        IDa Varchar (25) ,
         PRIMARY KEY (IDm ,IDc ,IDr ,IDa )
 )ENGINE=InnoDB;
 
@@ -154,7 +154,7 @@ CREATE TABLE souffre(
 
 
 #------------------------------------------------------------
-# Table: reçoit
+# Table: reï¿½oit
 #------------------------------------------------------------
 
 CREATE TABLE recoit(
@@ -180,17 +180,17 @@ CREATE TABLE a_comme(
 #------------------------------------------------------------
 
 CREATE TABLE est(
-        IDm Varchar (25) NOT NULL ,
+        IDm Varchar (25) ,
         IDu Int NOT NULL ,
-        IDa Varchar (25) NOT NULL ,
-        IDr Varchar (25) NOT NULL ,
+        IDa Varchar (25) ,
+        IDr Varchar (25) ,
         PRIMARY KEY (IDm ,IDu ,IDa ,IDr )
 )ENGINE=InnoDB;
 
 ALTER TABLE Medecin ADD CONSTRAINT FK_Medecin_Nom_service FOREIGN KEY (Nom_service) REFERENCES Service_d_accueil(Nom_service);
 ALTER TABLE Responsable_d_intervention ADD CONSTRAINT FK_Responsable_d_intervention_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE Type_d_intervention ADD CONSTRAINT FK_Type_d_intervention_IDr FOREIGN KEY (IDr) REFERENCES Responsable_d_intervention(IDr);
-ALTER TABLE Type_d_intervention ADD CONSTRAINT FK_Type_d_intervention_IDc FOREIGN KEY (IDc) REFERENCES Creneaux(IDc);
+ALTER TABLE Creneaux ADD CONSTRAINT FK_Type_d_intervention_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE Patient ADD CONSTRAINT FK_Patient_Nom_service FOREIGN KEY (Nom_service) REFERENCES Service_d_accueil(Nom_service);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDc FOREIGN KEY (IDc) REFERENCES Creneaux(IDc);
