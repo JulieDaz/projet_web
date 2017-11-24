@@ -1,6 +1,6 @@
 <?php include("fonction.php");
 
-session_star();
+session_start();
 
 $connexion = connect() ;
 $id = $_POST['ID'] ;
@@ -48,6 +48,32 @@ else {
 
 }
 
+$creneaux = get_creneaux($usertype,$id,$connexion);
+$heure_debut = array();
+$heure_fin = array();
+$date_rdv = array();
+
+foreach($creneaux as $creneau)
+{
+	foreach($creneau as $heure)
+	{
+		foreach($heure as $value)
+		{
+			if (array_key_exists('Heure_debut', $heure))
+			{
+				$date = strtotime($value);
+				$date_rdv[] = date('d/m/y', $date);
+				$heure_debut[] = date('H:i', $date);
+			}
+			else
+			{
+				$date = strtotime($value);
+				$heure_fin[] = date('H:i', $date);
+			}
+		}
+	}
+}
+
 ?>
 
 <head>
@@ -60,27 +86,37 @@ else {
 	<?php
 		$jour = array(null, "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
 		$rdv["Dimanche"]["16:30"] = "Dermatologue";
-		$rdv["Dimanche"]["17"] = "Dermatologue";
-		$rdv["Lundi"]["9"] = "Mémé -_-";
+		$rdv["Samedi"]["9:00"] = "Baseball";
 		echo "<tr><th>Heure</th>";
 		for($x = 1; $x < 8; $x++)
+		{
 			echo "<th>".$jour[$x]."</th>";
+		}
 		echo "</tr>";
-		for($j = 8; $j < 20; $j += 0.5) {
+		for($j = 8; $j < 20; $j += 0.5) 
+		{
 			echo "<tr>";
-			for($i = 0; $i < 7; $i++) {
-				if($i == 0) {
-					$heure = str_replace(".5", ":30", $j);
-					echo "<td class=\"time\">".$heure."</td>";
+			for($i = 0; $i < 7; $i++) 
+			{
+				if($i == 0) 
+				{
+					$heures = intval($j);
+					$realPart = $j - $heures;
+					$minutes = intval( $realPart * 60);
+					if ($minutes == 0)
+					{
+						$minutes = "00";
+					}
+					echo "<td class=\"time\">".$heures.":".$minutes."</td>";
 				}
 				echo "<td>";
-				if(isset($rdv[$jour[$i+1]][$heure])) {
-					echo $rdv[$jour[$i+1]][$heure];
+				if(isset($rdv[$jour[$i+1]][$heures.":".$minutes])) 
+				{
+					echo $rdv[$jour[$i+1]][$heures.":".$minutes];
 				}
 				echo "</td>";
 			}
 			echo "</tr>";
-			echo "";
 		}
 	?>
 	</table>
