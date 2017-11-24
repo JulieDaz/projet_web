@@ -76,6 +76,7 @@ print_creneaux($creneaux);
 				echo "</td>";
 			}
 			echo "</tr>";
+			echo "";
 		}
 	?>
 	</table>
