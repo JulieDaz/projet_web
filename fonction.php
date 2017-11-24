@@ -28,6 +28,7 @@ function deconnect($connexion)
 function do_request($connexion,$request)
 {
     $req = mysqli_query($connexion,$request) or die('<br>Erreur SQL !<br>'.$request.'<br>'.mysqli_error($connexion));
+    $a = array();
     while($row = mysqli_fetch_assoc($req))
     {
         $a[] = $row;
@@ -46,7 +47,7 @@ function get_creneaux($job, $ID, $connexion)
         foreach($IDp_from_medecin as $IDp_array) // pour chaque ID patient récupéré
         {
             $IDp = $IDp_array['IDp']; // on va chercher la valeur contenue par la clé 'IDp'
-            $request_IDc = "SELECT IDc FROM patient WHERE IDp = $IDp"; // deuxième requête pour récupérer les ID créneaux pour chaque patient
+            $request_IDc = "SELECT IDc FROM patient WHERE IDp = '$IDp'"; // deuxième requête pour récupérer les ID créneaux pour chaque patient
             $IDc_from_patient = do_request($connexion, $request_IDc); // on effectue la requête --> tableau de tableau
         }
         foreach($IDc_from_patient as $IDc_array) // pour chaque créneau récupéré
@@ -70,8 +71,9 @@ function print_request($array)
         foreach($row as $data)
         {
             print($data);
-            print("<br>");
+            print("\t");
         }
+        print("<br>");
     }
 }
 
