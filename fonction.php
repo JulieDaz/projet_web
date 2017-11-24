@@ -47,14 +47,14 @@ function get_creneaux($job, $ID, $connexion)
         foreach($IDp_from_medecin as $IDp_array) // pour chaque ID patient récupéré
         {
             $IDp = $IDp_array['IDp']; // on va chercher la valeur contenue par la clé 'IDp'
-            $request_IDc = "SELECT IDc FROM patient WHERE IDp = '$IDp'"; // deuxième requête pour récupérer les ID créneaux pour chaque patient
+            $request_IDc = "SELECT IDc FROM creneaux WHERE IDp = '$IDp'"; // deuxième requête pour récupérer les ID créneaux pour chaque patient
             $IDc_from_patient = do_request($connexion, $request_IDc); // on effectue la requête --> tableau de tableau
         }
         foreach($IDc_from_patient as $IDc_array) // pour chaque créneau récupéré
         {
             $IDc = $IDc_array['IDc']; // on va chercher la valeur contenue par la clé 'IDc'
-            $request_HDebut = "SELECT DATE_FORMAT(Heure_debut, '%d/%m/%y %H:%i:%s') as Heure_debut FROM planning WHERE IDc = $IDc"; // requête pour récupérer l'heure de début du créneau
-            $request_HFin = "SELECT DATE_FORMAT(Heure_fin, '%d/%m/%y %H:%i:%s') as Heure_fin FROM planning WHERE IDc = $IDc"; // requête pour récupérer l'heure de fin du créneau
+            $request_HDebut = "SELECT Heure_debut FROM creneaux WHERE IDc = $IDc"; // requête pour récupérer l'heure de début du créneau
+            $request_HFin = "SELECT Heure_fin FROM creneaux WHERE IDc = $IDc"; // requête pour récupérer l'heure de fin du créneau
             $Heure_debut = do_request($connexion, $request_HDebut); // on effectue la requête
             $Heure_fin = do_request($connexion, $request_HFin); // on effectue la requête
         }
