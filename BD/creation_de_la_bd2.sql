@@ -2,6 +2,9 @@
 #        Script MySQL.
 #------------------------------------------------------------
 
+DROP DATABASE projet_web;
+
+CREATE DATABASE projet_web CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 #------------------------------------------------------------
 # Table: Medecin
@@ -17,7 +20,7 @@ CREATE TABLE Medecin(
 
 
 #------------------------------------------------------------
-# Table: Responsable d'intervention
+# Table: Responsable dintervention
 #------------------------------------------------------------
 
 CREATE TABLE Responsable_d_intervention(
@@ -51,13 +54,14 @@ CREATE TABLE Creneaux(
         Heure_debut   Datetime NOT NULL ,
         Heure_fin     Datetime NOT NULL ,
         Date_priseRDV Date NOT NULL ,
+        IDp           Int NOT NULL ,
         Nom_intervention           Varchar (25) NOT NULL ,
         PRIMARY KEY (IDc )
 )ENGINE=InnoDB;
 
 
 #------------------------------------------------------------
-# Table: Service d'accueil
+# Table: Service daccueil
 #------------------------------------------------------------
 
 CREATE TABLE Service_d_accueil(
@@ -68,12 +72,12 @@ CREATE TABLE Service_d_accueil(
 
 
 #------------------------------------------------------------
-# Table: Type d'intervention
+# Table: Type dintervention
 #------------------------------------------------------------
 
 CREATE TABLE Type_d_intervention(
         Nom_intervention Varchar (25) NOT NULL ,
-        Duree            Datetime NOT NULL ,
+        Duree            Int NOT NULL ,
         IDr              Varchar (25) NOT NULL ,
         PRIMARY KEY (Nom_intervention )
 )ENGINE=InnoDB;
@@ -181,7 +185,6 @@ ALTER TABLE Responsable_d_intervention ADD CONSTRAINT FK_Responsable_d_intervent
 ALTER TABLE Creneaux ADD CONSTRAINT FK_Creneaux_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
 ALTER TABLE Creneaux ADD CONSTRAINT FK_Creneaux_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE Type_d_intervention ADD CONSTRAINT FK_Type_d_intervention_IDr FOREIGN KEY (IDr) REFERENCES Responsable_d_intervention(IDr);
-ALTER TABLE Creneaux ADD CONSTRAINT FK_Type_d_intervention_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE Patient ADD CONSTRAINT FK_Patient_Nom_service FOREIGN KEY (Nom_service) REFERENCES Service_d_accueil(Nom_service);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDc FOREIGN KEY (IDc) REFERENCES Creneaux(IDc);
