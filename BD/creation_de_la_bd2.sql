@@ -4,7 +4,7 @@
 
 
 #------------------------------------------------------------
-# Table: M�decin
+# Table: Medecin
 #------------------------------------------------------------
 
 CREATE TABLE Medecin(
@@ -107,10 +107,10 @@ CREATE TABLE Pathologie(
 
 
 #------------------------------------------------------------
-# Table: Utilisateurs
+# Table: Utilisateur
 #------------------------------------------------------------
 
-CREATE TABLE Utilisateurs(
+CREATE TABLE Utilisateur(
         IDu       int (11) Auto_increment  NOT NULL ,
         Mdp       Varchar (25) NOT NULL ,
         User_type Varchar (25) NOT NULL ,
@@ -132,17 +132,6 @@ CREATE TABLE peut_visualiser(
 
 
 #------------------------------------------------------------
-# Table: a rendez-vous
-#------------------------------------------------------------
-
-CREATE TABLE a_rendez_vous(
-        IDc Int NOT NULL ,
-        IDp Int NOT NULL ,
-        PRIMARY KEY (IDc ,IDp )
-)ENGINE=InnoDB;
-
-
-#------------------------------------------------------------
 # Table: souffre
 #------------------------------------------------------------
 
@@ -154,7 +143,7 @@ CREATE TABLE souffre(
 
 
 #------------------------------------------------------------
-# Table: re�oit
+# Table: recoit
 #------------------------------------------------------------
 
 CREATE TABLE recoit(
@@ -189,6 +178,8 @@ CREATE TABLE est(
 
 ALTER TABLE Medecin ADD CONSTRAINT FK_Medecin_Nom_service FOREIGN KEY (Nom_service) REFERENCES Service_d_accueil(Nom_service);
 ALTER TABLE Responsable_d_intervention ADD CONSTRAINT FK_Responsable_d_intervention_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
+ALTER TABLE Creneaux ADD CONSTRAINT FK_Creneaux_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
+ALTER TABLE Creneaux ADD CONSTRAINT FK_Creneaux_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE Type_d_intervention ADD CONSTRAINT FK_Type_d_intervention_IDr FOREIGN KEY (IDr) REFERENCES Responsable_d_intervention(IDr);
 ALTER TABLE Creneaux ADD CONSTRAINT FK_Type_d_intervention_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE Patient ADD CONSTRAINT FK_Patient_Nom_service FOREIGN KEY (Nom_service) REFERENCES Service_d_accueil(Nom_service);
@@ -196,15 +187,13 @@ ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDm FOREIGN KEY (I
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDc FOREIGN KEY (IDc) REFERENCES Creneaux(IDc);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDr FOREIGN KEY (IDr) REFERENCES Responsable_d_intervention(IDr);
 ALTER TABLE peut_visualiser ADD CONSTRAINT FK_peut_visualiser_IDa FOREIGN KEY (IDa) REFERENCES Administrateur(IDa);
-ALTER TABLE a_rendez_vous ADD CONSTRAINT FK_a_rendez_vous_IDc FOREIGN KEY (IDc) REFERENCES Creneaux(IDc);
-ALTER TABLE a_rendez_vous ADD CONSTRAINT FK_a_rendez_vous_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
 ALTER TABLE souffre ADD CONSTRAINT FK_souffre_Nom_pathologie FOREIGN KEY (Nom_pathologie) REFERENCES Pathologie(Nom_pathologie);
 ALTER TABLE souffre ADD CONSTRAINT FK_souffre_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
 ALTER TABLE recoit ADD CONSTRAINT FK_recoit_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE recoit ADD CONSTRAINT FK_recoit_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
 ALTER TABLE a_comme ADD CONSTRAINT FK_a_comme_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
 ALTER TABLE a_comme ADD CONSTRAINT FK_a_comme_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
-ALTER TABLE est ADD CONSTRAINT FK_est_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
-ALTER TABLE est ADD CONSTRAINT FK_est_IDu FOREIGN KEY (IDu) REFERENCES Utilisateurs(IDu);
-ALTER TABLE est ADD CONSTRAINT FK_est_IDa FOREIGN KEY (IDa) REFERENCES Administrateur(IDa);
 ALTER TABLE est ADD CONSTRAINT FK_est_IDr FOREIGN KEY (IDr) REFERENCES Responsable_d_intervention(IDr);
+ALTER TABLE est ADD CONSTRAINT FK_est_IDu FOREIGN KEY (IDu) REFERENCES Utilisateur(IDu);
+ALTER TABLE est ADD CONSTRAINT FK_est_IDa FOREIGN KEY (IDa) REFERENCES Administrateur(IDa);
+ALTER TABLE est ADD CONSTRAINT FK_est_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
