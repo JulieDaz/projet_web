@@ -65,11 +65,11 @@ INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Chirurgie","2
 INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Dentisterie","250");
 INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Analyse_sanguine","250");
 
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("0","2017-11-19","2017-11-19 08:00:00","2017-11-19 09:00:00","2017-11-18","Radio");
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("1","2017-11-19","2017-11-19 08:00:00","2017-11-19 08:30:00","2017-11-18","Prise_de_sang");
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("2","2017-11-19","2017-11-19 08:00:00","2017-11-19 11:00:00","2017-11-18","Prise_de_sang");
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("3","2017-11-19","2017-11-19 11:00:00","2017-11-19 14:00:00","2017-11-18","Dentisterie");
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `Nom_intervention`) VALUES ("4","2017-11-19","2017-11-19 09:00:00","2017-11-19 10:00:00","2017-11-18","Radio");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("0","2017-11-19","2017-11-19 08:00:00","2017-11-19 09:00:00","2017-11-18","3","Radio");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("1","2017-11-19","2017-11-19 08:00:00","2017-11-19 08:30:00","2017-11-18","9","Prise_de_sang");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("2","2017-11-19","2017-11-19 08:00:00","2017-11-19 11:00:00","2017-11-18","12","Prise_de_sang");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("3","2017-11-19","2017-11-19 11:00:00","2017-11-19 14:00:00","2017-11-18","7","Dentisterie");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("4","2017-11-19","2017-11-19 09:00:00","2017-11-19 10:00:00","2017-11-18","4","Radio");
 
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","0");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","1");
@@ -97,20 +97,20 @@ INSERT INTO `peut_visualiser`(`IDm`, `IDc`, `IDr`, `IDa`) VALUES ("M_RDupont","3
 INSERT INTO `peut_visualiser`(`IDm`, `IDc`, `IDr`, `IDa`) VALUES ("M_RDupont","4","R_MChirurguy","A_ISomer");
 INSERT INTO `peut_visualiser`(`IDm`, `IDc`, `IDr`, `IDa`) VALUES ("M_MFriedman","5","R_JMRadioguy","A_ISomer");
 
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("0", "94803jean", "Medecin");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("1", "06478andre", "Medecin");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("2", "39489roger", "Medecin");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("3", "93849michelle", "Medecin");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("4", "93389marc", "Medecin");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("5", "09483valentine", "Medecin");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("6", "18946dan", "Medecin");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("7","29481somer", "Admin");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("8", "34908jean-michel", "Responsable");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("9","18610henri", "Responsable");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("10","23098marcus", "Responsable");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("11","18642miles", "Responsable");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("12","13587jeanne", "Responsable");
-INSERT INTO `utilisateurs`(`IDu`, `Mdp`, `User_type`) VALUES ("13","78634etienne", "Responsable");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("0", "94803jean", "Medecin");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("1", "06478andre", "Medecin");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("2", "39489roger", "Medecin");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("3", "93849michelle", "Medecin");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("4", "93389marc", "Medecin");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("5", "09483valentine", "Medecin");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("6", "18946dan", "Medecin");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("7","29481somer", "Admin");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("8", "34908jean-michel", "Responsable");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("9","18610henri", "Responsable");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("10","23098marcus", "Responsable");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("11","18642miles", "Responsable");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("12","13587jeanne", "Responsable");
+INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`) VALUES ("13","78634etienne", "Responsable");
 
 INSERT INTO `est`(`IDm`, `IDu`, `IDa`, `IDr`) VALUES ("M_JMeduse","0","","");
 INSERT INTO `est`(`IDm`, `IDu`, `IDa`, `IDr`) VALUES ("M_ALamin","1","","");
@@ -126,12 +126,6 @@ INSERT INTO `est`(`IDm`, `IDu`, `IDa`, `IDr`) VALUES ("","10","","R_MIrman");
 INSERT INTO `est`(`IDm`, `IDu`, `IDa`, `IDr`) VALUES ("","11","","R_MChirurguy");
 INSERT INTO `est`(`IDm`, `IDu`, `IDa`, `IDr`) VALUES ("","12","","R_JDentis");
 INSERT INTO `est`(`IDm`, `IDu`, `IDa`, `IDr`) VALUES ("","13","","R_EOlvira");
-
-INSERT INTO `a_rendez_vous`(`IDc`, `IDp`) VALUES ("0","3");
-INSERT INTO `a_rendez_vous`(`IDc`, `IDp`) VALUES ("1","4");
-INSERT INTO `a_rendez_vous`(`IDc`, `IDp`) VALUES ("2","9");
-INSERT INTO `a_rendez_vous`(`IDc`, `IDp`) VALUES ("3","7");
-INSERT INTO `a_rendez_vous`(`IDc`, `IDp`) VALUES ("4","12");
 
 UPDATE `type_d_intervention` SET `IDr`="R_JMRadioguy" WHERE `Nom_intervention`="Radio";
 UPDATE `type_d_intervention` SET `IDr`="R_HBloodman" WHERE `Nom_intervention`="Prise_de_sang";
