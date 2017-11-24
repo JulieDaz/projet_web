@@ -1,6 +1,6 @@
 <?php include("fonction.php");
 
-session_star();
+session_start();
 
 $connexion = connect() ;
 $id = $_POST['ID'] ;
