@@ -84,4 +84,26 @@ else {
 		}
 	?>
 	</table>
+
+
+
+<?php
+
+if ($usertype == "Admin") {
+?>
+<p>Formulaires :</p>
+
+	<form method="post" action="ajouter.php"> 
+	<label id=for="Ajout">Ajouter/retirer un médecin, un responsable d'intervention ou un patient</label>
+	<input type="submit" value="Valider">
+	</form>
+
+	<form method="post" action="ajouter2.php"> 
+	<label for="Ajout2">Ajouter/retirer une pathologie, un service d'intervention ou un service d'accueil</label>
+	<input type="submit" value="Valider">
+	</form>
+
+<?php }
+?>
+	
 </body>
