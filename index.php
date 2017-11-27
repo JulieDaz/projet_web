@@ -1,7 +1,9 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Medical Planner</title>
 </head>
 <body>
 
@@ -10,12 +12,13 @@
 
 
 <form method="post" action="traitement.php">
-  <label>ID</label> : <input type="text" name="ID">
+  <label>ID</label> : <input type="text" required="on" name="ID">
   <br><br>
-  <label>Mot de passe</label> : <input type="password" name="mdp">
+  <label>Mot de passe</label> : <input type="password" required="on" name="mdp">
   <br><br>
   <input type="submit" value="Se connecter">
 </form>
+
 
 </body>
 </html>

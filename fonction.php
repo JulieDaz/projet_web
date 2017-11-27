@@ -120,6 +120,26 @@ function print_creneaux($array) // pas d'utilité
     }
 }
 
+
+function generate_id($id, $nom, $prenom)
+{
+    $first_letter = $prenom[0] ;
+    $login = $first_letter.$nom ;
+
+    switch ($id) {
+        case 'IDm':
+            $login_def = "M_".$login ;
+            break;
+        case 'IDr':
+            $login_def = "R_".$login ;
+            break;    
+    }
+    return $login_def ; 
+}
+
+
+
+
 function nom_jour($date) // fonction pour récupérer le jour de la date donné
 {
    $jour_semaine = array(1=>"lundi", 2=>"mardi", 3=>"mercredi", 4=>"jeudi", 5=>"vendredi", 6=>"samedi", 7=>"dimanche");
