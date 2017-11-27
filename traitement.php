@@ -91,6 +91,26 @@ foreach($creneaux as $creneau) // pour chaque créneau
 	<?php
 		$jours_semaine = array(null, "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
 		print("<br>");
+
+
+
+		$date_du_jour = date('d/m/Y');
+		for($k = 1; $k < sizeof($jours_semaine); $k++)
+		{
+			$jour_de_date = ucfirst(nom_jour($date_du_jour));
+			if ($jour_de_date == $jours_semaine[$k])
+			{
+				list($jour,$mois,$annee) = explode("/", $date_du_jour);
+				print("<br>");
+				print($date_du_jour);
+				$days_back = $k-30;
+				$date_lundi = date("d/m/Y", mktime(0,0,0,$mois,$jour-$days_back,$annee));
+				print("<br>");
+			}
+		}
+
+
+		
 		for($i = 0; $i < sizeof($heure_debut); $i++) // pour chaque créneau stocké
 		{
 			$j=30; // on définit un incrément
