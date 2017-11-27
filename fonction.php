@@ -98,4 +98,24 @@ function print_creneaux($array)
     }
 }
 
+
+function generate_id($id, $nom, $prenom)
+{
+    $first_letter = $prenom[0] ;
+    $login = $first_letter.$nom ;
+
+    switch ($id) {
+        case 'IDm':
+            $login_def = "M_".$login ;
+            break;
+        case 'IDr':
+            $login_def = "R_".$login ;
+            break;    
+    }
+    return $login_def ; 
+}
+
+
+
+
 ?>
