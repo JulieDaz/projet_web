@@ -6,7 +6,7 @@ $connexion = connect() ;
 $id = $_POST['ID'] ;
 $mdp = $_POST['mdp'] ;
 
-print("<br>") ; 
+print("<br>") ;
 
 if ($id == "" OR $mdp == ""){
 	print("Attention vous n'avez pas rempli tous les champs. Veuillez recommencer.");
