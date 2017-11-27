@@ -91,8 +91,8 @@ CREATE TABLE Patient(
         IDp             int (11) Auto_increment  NOT NULL ,
         Nom             Varchar (25) NOT NULL ,
         Prenom          Varchar (25) NOT NULL ,
-        Adresse         Varchar (25) NOT NULL ,
-        Numero_tel      Varchar (25) ,
+        Adresse         Varchar (25) ,
+        Numero_tel      Varchar (25) NOT NULL ,
         Niveau_priorite Int NOT NULL ,
         Nom_service     Varchar (25) NOT NULL ,
         PRIMARY KEY (IDp )
