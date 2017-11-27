@@ -27,7 +27,7 @@ CREATE TABLE Responsable_d_intervention(
         IDr              Varchar (25) NOT NULL ,
         Nom              Varchar (25) NOT NULL ,
         Prenom           Varchar (25) NOT NULL ,
-        Nom_intervention Varchar (25) NOT NULL ,
+        Nom_intervention Varchar (25) ,
         PRIMARY KEY (IDr )
 )ENGINE=InnoDB;
 
