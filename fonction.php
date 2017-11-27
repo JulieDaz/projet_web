@@ -26,7 +26,7 @@ function deconnect($connexion)
 }
 
 /*****fonction permettant de faire des requêtes*****/
-function do_request($request,$connexion)
+function do_request($connexion,$request)
 {
     $req = mysqli_query($connexion,$request) or die('<br>Erreur SQL !<br>'.$request.'<br>'.mysqli_error($connexion));
     $a = array();
@@ -67,7 +67,7 @@ function get_creneaux($job, $ID, $connexion)
     }
     elseif ($job == "Admin")
     {
-        
+
     }
     elseif ($job == "Responsable")
     {
@@ -99,7 +99,7 @@ function print_request($array) // pas d'utilité
     }
 }
 
-function print_creneaux($array) // pas d'utilité 
+function print_creneaux($array) // pas d'utilité
 {
     // $array
     for($i=0;$i<sizeof($array);$i++)
@@ -132,9 +132,9 @@ function generate_id($id, $nom, $prenom)
             break;
         case 'IDr':
             $login_def = "R_".$login ;
-            break;    
+            break;
     }
-    return $login_def ; 
+    return $login_def ;
 }
 
 
@@ -143,12 +143,12 @@ function generate_id($id, $nom, $prenom)
 function nom_jour($date) // fonction pour récupérer le jour de la date donné
 {
    $jour_semaine = array(1=>"lundi", 2=>"mardi", 3=>"mercredi", 4=>"jeudi", 5=>"vendredi", 6=>"samedi", 7=>"dimanche");
-    
+
    list($annee, $mois, $jour) = explode ("/", $date);
-    
+
    $timestamp = mktime(0,0,0, date($mois), date($jour), date($annee));
    $njour = date("N",$timestamp);
-    
+
    return $jour_semaine[$njour];
 }
 ?>

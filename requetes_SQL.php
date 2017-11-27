@@ -10,7 +10,7 @@
 
     $connexion = connect();
     $request = "SELECT Nom_intervention FROM type_d_intervention";
-    $typeIntervention = do_request($request,$connexion);
+    $typeIntervention = do_request($connexion,$request);
 
     return $typeIntervention;
   }
