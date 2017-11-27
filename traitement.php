@@ -48,37 +48,43 @@ else {
 
 }
 
-$creneaux = get_creneaux($usertype,$id,$connexion);
+$super_tableau_creneaux = get_creneaux($usertype,$id,$connexion);
 
-foreach($creneaux as $creneau) // pour chaque créneau
+foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
 {
-	foreach($creneau as $data) // pour chaque information
+	foreach($data as $creneau) // pour chaque créneau 
 	{
-		foreach($data as $value) // pour chaque valeur
+		foreach($creneau as $key) // pour chaque clé
 		{
-			if (array_key_exists('Heure_debut', $data)) // si l'information 'Heure_debut' existe
+			foreach($key as $value) // pour chaque valeur
 			{
-				$date = strtotime($value); // on convertit sa valeur en format date
-				$date_rdv[] = date('d/m/y', $date); // on stocke la date de rdv
-				$heure_debut[] = date('G:i', $date); // on stocke l'heure de début du rdv
-			}
-			elseif(array_key_exists('Heure_fin', $data)) // si l'information 'Heure_fin' existe
-			{
-				$date = strtotime($value); // on convertit sa valeur en format date
-				$heure_fin[] = date('G:i', $date); // on stocke l'heure de fin du rdv
-			}
-			elseif(array_key_exists('Nom', $data)) // si l'information 'Nom' existe 
-			{
-				$nom_patient[] = $value; // on stocke le nom du patient
-			}
-			elseif(array_key_exists('Prenom',$data)) // si l'information 'Prenom' existe
-			{
-				$prenom_patient[] = $value; // on stocke le prénom du patient
+				if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
+				{
+					$date = strtotime($value); // on convertit sa valeur en format date
+					$date_rdv[] = date('d/m/y', $date); // on stocke la date de rdv
+					$heure_debut[] = date('G:i', $date); // on stocke l'heure de début du rdv
+				}
+				elseif(array_key_exists('Heure_fin', $key)) // si l'information 'Heure_fin' existe
+				{
+					$date = strtotime($value); // on convertit sa valeur en format date
+					$heure_fin[] = date('G:i', $date); // on stocke l'heure de fin du rdv
+				}
+				elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe 
+				{
+					$nom_patient[] = $value; // on stocke le nom du patient
+				}
+				elseif(array_key_exists('Prenom',$key)) // si l'information 'Prenom' existe
+				{
+					$prenom_patient[] = $value; // on stocke le prénom du patient
+				}
+				elseif(array_key_exists('Nom_intervention',$key))
+				{
+					$nom_intervention[] = $value;
+				}
 			}
 		}
 	}
 }
-
 ?>
 
 <head>
@@ -91,35 +97,32 @@ foreach($creneaux as $creneau) // pour chaque créneau
 	<?php
 		$jours_semaine = array(null, "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
 		print("<br>");
-
-
-
-		$date_du_jour = date('d/m/Y');
-		for($k = 1; $k < sizeof($jours_semaine); $k++)
-		{
-			$jour_de_date = ucfirst(nom_jour($date_du_jour));
-			if ($jour_de_date == $jours_semaine[$k])
-			{
-				list($jour,$mois,$annee) = explode("/", $date_du_jour);
-				print("<br>");
-				print($date_du_jour);
-				$days_back = $k-30;
-				$date_lundi = date("d/m/Y", mktime(0,0,0,$mois,$jour-$days_back,$annee));
-				print("<br>");
-			}
-		}
-
-
+		$semaine = 0; // variable pour indiquer dans quelle semaine on se trouve
+		$dates_semaine = get_dates_semaines($semaine); // on récupère un tableau avec les dates de la semaine que l'on veut regarder (selon le $semaine)
 		
 		for($i = 0; $i < sizeof($heure_debut); $i++) // pour chaque créneau stocké
 		{
 			$j=30; // on définit un incrément
 			$jour = ucfirst(nom_jour($date_rdv[$i])); // on récupère le jour de la date
-			$rdv[$jour][$heure_debut[$i]] = "Creneau"; // on crée une première entrée dans $rdv pour chaque créneau
-			while(date("H:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))) < date("H:i", strtotime($heure_fin[$i]))) // tant que l'heure de début < l'heure de la fin
+			if(isset($nom_intervention))
+			{
+				$rdv[$jour][$heure_debut[$i]] = $nom_intervention[$i].": ".$prenom_patient[$i]." ".$nom_patient[$i]; // on crée une première entrée dans $rdv pour chaque créneau
+			}
+			else
+			{
+				$rdv[$jour][$heure_debut[$i]] = $prenom_patient[$i]." ".$nom_patient[$i]; // on crée une première entrée dans $rdv pour chaque créneau
+			}
+				while(date("H:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))) < date("H:i", strtotime($heure_fin[$i]))) // tant que l'heure de début < l'heure de la fin
 			{
 				$h = date("G:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))); // on crée un mini-créneau pour réprésenter la demi-heure de créneau suivant le demi-créneau précédent
-				$rdv[$jour][$h] = "Creneau"; // on crée une nouvelle entrée dans $rdv pour la demi-heure suivant le début du créneau
+				if(isset($nom_intervention))
+				{
+					$rdv[$jour][$h] = $nom_intervention[$i].": ".$prenom_patient[$i]." ".$nom_patient[$i]; // on crée une nouvelle entrée dans $rdv pour la demi-heure suivant le début du créneau
+				}
+				else
+				{
+					$rdv[$jour][$h] = $prenom_patient[$i]." ".$nom_patient[$i];
+				}
 				$j+=30; // on incrémente d'une demi-heure
 			}
 		}
@@ -127,7 +130,7 @@ foreach($creneaux as $creneau) // pour chaque créneau
 		echo "<tr><th>Heure</th>";
 		for($x = 1; $x < 8; $x++) // sur une ligne on va afficher le nom des jours
 		{
-			echo "<th>".$jours_semaine[$x]."</th>";
+			echo "<th>".$jours_semaine[$x]." ".$dates_semaine[$x]."</th>";
 		}
 		echo "</tr>";
 		for($j = 8; $j < 20; $j += 0.5) // pour chaque demi-heure de la journée
