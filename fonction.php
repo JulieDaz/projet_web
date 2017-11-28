@@ -153,6 +153,14 @@ function generate_id($id, $nom, $prenom)
     return $login_def ;
 }
 
+function generate_mdp($prenom)
+{
+    $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9) ;
+    $mdp = $random_number.$prenom ;
+
+    return $mdp ; 
+}
+
 function nom_jour($date) // fonction pour récupérer le jour de la date donnée
 {
     $jour_semaine = array(1=>"lundi", 2=>"mardi", 3=>"mercredi", 4=>"jeudi", 5=>"vendredi", 6=>"samedi", 7=>"dimanche"); // tableau avec les jours de la semaine
