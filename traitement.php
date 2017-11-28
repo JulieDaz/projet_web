@@ -2,6 +2,7 @@
 
 session_start();
 
+
 $connexion = connect() ;
 
 if(isset($_SESSION['ID']))
@@ -15,8 +16,8 @@ else
 	$mdp = $_POST['mdp'] ;
 }
 
-
-
+// $id = $_POST['ID'] ;
+// $mdp = $_POST['mdp'] ;
 
 print("<br>") ;
 
@@ -248,3 +249,4 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 			}
 		?>
 	</table>
+
