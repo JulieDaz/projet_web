@@ -118,6 +118,9 @@ CREATE TABLE Utilisateur(
         IDu       int (11) Auto_increment  NOT NULL ,
         Mdp       Varchar (25) NOT NULL ,
         User_type Varchar (25) NOT NULL ,
+        IDm       Varchar (25) ,
+        IDr       Varchar (25) ,
+        IDa       Varchar (25) ,
         PRIMARY KEY (IDu )
 )ENGINE=InnoDB;
 
@@ -167,19 +170,9 @@ CREATE TABLE a_comme(
         PRIMARY KEY (IDm ,IDp )
 )ENGINE=InnoDB;
 
-
-#------------------------------------------------------------
-# Table: est
-#------------------------------------------------------------
-
-CREATE TABLE est(
-        IDm Varchar (25) ,
-        IDu Int Auto_increment NOT NULL ,
-        IDa Varchar (25) ,
-        IDr Varchar (25) ,
-        PRIMARY KEY (IDu , IDm, IDa , IDr)
-)ENGINE=InnoDB;
-
+ALTER TABLE Utilisateur ADD CONSTRAINT FK_Utilisateur_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
+ALTER TABLE Utilisateur ADD CONSTRAINT FK_Utilisateur_IDr FOREIGN KEY (IDr) REFERENCES Responsable_d_intervention(IDr);
+ALTER TABLE Utilisateur ADD CONSTRAINT FK_Utilisateur_IDa FOREIGN KEY (IDa) REFERENCES Administrateur(IDa);
 ALTER TABLE Medecin ADD CONSTRAINT FK_Medecin_Nom_service FOREIGN KEY (Nom_service) REFERENCES Service_d_accueil(Nom_service);
 ALTER TABLE Responsable_d_intervention ADD CONSTRAINT FK_Responsable_d_intervention_Nom_intervention FOREIGN KEY (Nom_intervention) REFERENCES Type_d_intervention(Nom_intervention);
 ALTER TABLE Creneaux ADD CONSTRAINT FK_Creneaux_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
@@ -196,7 +189,3 @@ ALTER TABLE recoit ADD CONSTRAINT FK_recoit_Nom_intervention FOREIGN KEY (Nom_in
 ALTER TABLE recoit ADD CONSTRAINT FK_recoit_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
 ALTER TABLE a_comme ADD CONSTRAINT FK_a_comme_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
 ALTER TABLE a_comme ADD CONSTRAINT FK_a_comme_IDp FOREIGN KEY (IDp) REFERENCES Patient(IDp);
-ALTER TABLE est ADD CONSTRAINT FK_est_IDr FOREIGN KEY (IDr) REFERENCES Responsable_d_intervention(IDr);
-ALTER TABLE est ADD CONSTRAINT FK_est_IDu FOREIGN KEY (IDu) REFERENCES Utilisateur(IDu);
-ALTER TABLE est ADD CONSTRAINT FK_est_IDa FOREIGN KEY (IDa) REFERENCES Administrateur(IDa);
-ALTER TABLE est ADD CONSTRAINT FK_est_IDm FOREIGN KEY (IDm) REFERENCES Medecin(IDm);
