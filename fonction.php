@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = 'phpmyadmin';  // mot de passe
+      $mdp = '';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -39,7 +39,7 @@ function do_request($connexion,$request)
 }
 
 /* Récupérer les créneaux à afficher selon le type d'utilisateur */
-function get_creneaux($job, $ID, $connexion)
+function get_creneaux($job, $ID, $connexion, $intervention_admin = NULL)
 {
     if ($job == "Medecin") // s'il s'agit d'un médecin
     {
@@ -70,7 +70,25 @@ function get_creneaux($job, $ID, $connexion)
     }
     elseif ($job == "Admin")
     {
-        
+        $request_HDebut = "SELECT Heure_debut FROM creneaux WHERE Nom_intervention = '$intervention_admin'"; // requête pour récupérer l'heure de début du créneau
+        $request_HFin = "SELECT Heure_fin FROM creneaux WHERE Nom_intervention = '$intervention_admin'"; // requête pour récupérer l'heure de fin du créneau
+        $request_IDp = "SELECT IDp FROM creneaux WHERE Nom_intervention = '$intervention_admin'";
+        $Heure_debut[] = do_request($connexion, $request_HDebut); // on effectue la requête
+        $Heure_fin[] = do_request($connexion, $request_HFin); // on effectue la requête
+        $IDp_super_array[] = do_request($connexion, $request_IDp);
+        foreach($IDp_super_array as $IDp_arrays)
+        {
+            foreach($IDp_arrays as $IDp_array)
+            {
+                $IDp = $IDp_array['IDp'];
+                $request_nom = "SELECT Nom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les noms des patients
+                $request_prenom = "SELECT Prenom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les prénoms des patients
+                // $Nom_intervention[] = do_request($connexion, $request_intervention);
+                $Nom[] = do_request($connexion, $request_nom);
+                $Prenom[] = do_request($connexion, $request_prenom);
+            }
+        }
+        return array($Heure_debut,$Heure_fin,$Nom,$Prenom); // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient et le type d'intervention pour chaque créneau
     }
     elseif ($job == "Responsable")
     {
