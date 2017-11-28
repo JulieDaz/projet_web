@@ -25,7 +25,7 @@ if ($id == "" OR $mdp == ""){
 	print("Attention vous n'avez pas rempli tous les champs. Veuillez recommencer.");
  }
 else {
-	$type= "SELECT User_type, IDu, Mdp FROM Utilisateur WHERE IDu = (SELECT IDu FROM est WHERE IDm= '$id' OR IDa = '$id' OR IDr = '$id')" ;
+	$type= "SELECT User_type, IDu, Mdp FROM Utilisateur WHERE IDm= '$id' OR IDa = '$id' OR IDr = '$id'" ;
 	$get_type = mysqli_query($connexion,$type) or die('<br>Erreur SQL !<br>'.$type.'<br>'.mysqli_error($connexion));
 	$info_user = mysqli_fetch_array($get_type);
 	$usertype = $info_user[0];
@@ -168,6 +168,7 @@ foreach($data as $creneau) // pour chaque créneau
 			<input type="submit" value="Aujourd'hui" name="reset_time">
 			<input type="submit" value=">>" name="semaine_suivante">
 		</form>
+		<br>
 		<?php
 			$connexion = connect() ;
 			$jours_semaine = array(null, "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
