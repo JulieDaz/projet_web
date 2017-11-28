@@ -214,12 +214,11 @@ foreach($data as $creneau) // pour chaque créneau
 					$j+=30; // on incrémente d'une demi-heure
 				}
 			}
-
 			echo "<tr><th>Heure</th>";
 			for($x = 1; $x < 8; $x++) // sur une ligne on va afficher le nom des jours
 			{
-				$date_jour = $jours_semaine[$x]." ".$dates_semaine[$x];
-				echo "<th>".$date_jour."</th>";
+				$date_jour[$x-1] = $jours_semaine[$x]." ".$dates_semaine[$x];
+				echo "<th>".$date_jour[$x-1]."</th>";
 			}
 			echo "</tr>";
 			for($j = 8; $j < 20; $j += 0.5) // pour chaque demi-heure de la journée
