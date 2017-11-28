@@ -25,7 +25,7 @@ if ($id == "" OR $mdp == ""){
 	print("Attention vous n'avez pas rempli tous les champs. Veuillez recommencer.");
  }
 else {
-	$type= "SELECT User_type, IDu, Mdp FROM Utilisateur WHERE IDu = (SELECT IDu FROM est WHERE IDm= '$id' OR IDa = '$id' OR IDr = '$id')" ;
+	$type= "SELECT User_type, IDu, Mdp FROM Utilisateur WHERE IDm= '$id' OR IDa = '$id' OR IDr = '$id'" ;
 	$get_type = mysqli_query($connexion,$type) or die('<br>Erreur SQL !<br>'.$type.'<br>'.mysqli_error($connexion));
 	$info_user = mysqli_fetch_array($get_type);
 	$usertype = $info_user[0];
@@ -67,7 +67,7 @@ else {
 
 
 //On crée le planning
-$super_tableau_creneaux = get_creneaux($usertype,$id,$connexion);
+$super_tableau_creneaux = get_creneaux($usertype,$id,$connexion,"Prise_de_sang");
 
 foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
 {
@@ -168,6 +168,7 @@ foreach($data as $creneau) // pour chaque créneau
 			<input type="submit" value="Aujourd'hui" name="reset_time">
 			<input type="submit" value=">>" name="semaine_suivante">
 		</form>
+		<br>
 		<?php
 			$connexion = connect() ;
 			$jours_semaine = array(null, "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
@@ -213,12 +214,11 @@ foreach($data as $creneau) // pour chaque créneau
 					$j+=30; // on incrémente d'une demi-heure
 				}
 			}
-
 			echo "<tr><th>Heure</th>";
 			for($x = 1; $x < 8; $x++) // sur une ligne on va afficher le nom des jours
 			{
-				$date_jour = $jours_semaine[$x]." ".$dates_semaine[$x];
-				echo "<th>".$date_jour."</th>";
+				$date_jour[$x-1] = $jours_semaine[$x]." ".$dates_semaine[$x];
+				echo "<th>".$date_jour[$x-1]."</th>";
 			}
 			echo "</tr>";
 			for($j = 8; $j < 20; $j += 0.5) // pour chaque demi-heure de la journée

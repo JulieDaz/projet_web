@@ -14,6 +14,10 @@ if (session_start() == TRUE)
 </head>
 <body>
 
+<?php
+if(session_start())
+  session_destroy();
+?>
 
 <h1>Welcome to Medical Planner</h1>
 
