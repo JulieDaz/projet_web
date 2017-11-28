@@ -2,6 +2,7 @@
 
 session_start();
 
+
 $connexion = connect() ;
 
 if(isset($_SESSION['ID']))
@@ -15,6 +16,8 @@ else
 	$mdp = $_POST['mdp'] ;
 }
 
+// $id = $_POST['ID'] ;
+// $mdp = $_POST['mdp'] ;
 
 print("<br>") ;
 
@@ -245,3 +248,4 @@ foreach($data as $creneau) // pour chaque créneau
 			}
 		?>
 	</table>
+

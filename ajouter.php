@@ -1,7 +1,15 @@
 <?php 
 include("fonction.php"); 
 session_start() ;
+
+print($_SESSION['ID']) ;
 ?>
+
+<form method="post" action="traitement.php"> 
+<input type="submit" value="go" name="bouton_med">
+</form>
+
+
 
 
 <!DOCTYPE html>
@@ -20,24 +28,55 @@ session_start() ;
         <label>Nom</label> : <input type="text" required="on" name="nom_med">
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_med">
-        <br><br>
-        <label>Service d'accueil</label> : <select >
+        <br><br>        
+        <label>Service d'accueil</label> : <select name ="service_acc">
+        
+        <?php 
+        $connexion = connect() ;
+
+        $req_service = "SELECT Nom_service FROM Service_d_accueil" ;
+        $display_service = do_request($connexion, $req_service) ;
+        foreach ($display_service as $value) {
+            echo "<option>$value[Nom_service]</option>" ;
+        }
+        ?>
+        </select>
         <input type="submit" value="Ajouter un médecin" name="bouton_med">
 	</form>
 
-    <?php
+        <?php
 
-    if (isset($_POST['bouton_med']))
-    {
-        $connexion = connect() ;
-        $name_med = $_POST['name_med'] ;
-        $prenom_med = $_POST['prenom_med'] ;
-        //$service = $_POST[''] ;
+        if (isset($_POST['bouton_med']))
+        {
+            print('hello') ;
+            $connexion = connect() ;
+            $name_med = $_POST['nom_med'] ;
+            $prenom_med = $_POST['prenom_med'] ;
+            $service_med = $_POST['service_acc'] ;
+            $id_med = "IDm" ;
+            $id_medecin = generate_id($id_med, $name_med, $prenom_med) ;
+            $mdp_med = generate_mdp($prenom_med) ;
 
-        // $req_add_doc = "INSERT INTO Medecin ('IDm', 'Nom', 'Prenom', 'Nom_service') VALUES ('$id','$name_med','$prenom_med','$service')" ;
-        // $add_doc = do_request($connexion,$req_add_doc);
-    }
-    ?>
+            $req_add_doc = "INSERT INTO Medecin (IDm, Nom, Prenom, Nom_service) VALUES ('$id_medecin','$name_med','$prenom_med','$service_med')" ;
+            $add_doc = mysqli_query($connexion,$req_add_doc);
+
+            $req_add_userM = "INSERT INTO Utilisateur (IDu, Mdp, User_type) VALUES ('', '$mdp_med', 'Medecin')";
+            $add_userM = mysqli_query($connexion,$req_add_userM);
+            $idu = mysqli_insert_id($connexion) ;
+            print($idu) ; 
+
+            $req_add_estM = "INSERT INTO est (IDu, IDm) VALUES ('$idu','$id_medecin')" ;
+            $add_estM = mysqli_query($connexion,$req_add_estM);
+            if ($add_estM == TRUE )
+            {
+                print("");
+            }
+
+            print($id_medecin);
+            print($mdp_med);
+
+        }
+        ?>
 
 </div>
 
@@ -72,10 +111,15 @@ session_start() ;
 
         $req_add_resp = "INSERT INTO Responsable_d_intervention (IDr, Nom, Prenom) VALUES ('$id_responsable','$name_resp','$prenom_resp')" ;
         $add_resp = mysqli_query($connexion,$req_add_resp);
+
         $req_intervention = "INSERT INTO Type_d_intervention (Nom_intervention, Duree, IDr) VALUES ('$service_int', '$time', '$id_responsable')" ;
         $add_intervention = mysqli_query($connexion,$req_intervention) ;
+
         $req_update_resp = "UPDATE Responsable_d_intervention SET Nom_intervention='$service_int' WHERE IDr='$id_responsable'";
         $update_resp = mysqli_query($connexion,$req_update_resp);
+
+        $req_add_userR = "INSERT INTO est (IDu, IDr) VALUES ('','$id_responsable')" ;
+        $add_userR = mysqli_query($connexion,$req_add_userR);
         
     }
     ?>
@@ -120,13 +164,17 @@ session_start() ;
         if (isset($_POST['bouton_patient']))
         {
             $connexion = connect() ;
-            $name_pat = $_POST['nom_patient'] ;
+            $nom_pat = $_POST['nom_patient'] ;
             $prenom_pat = $_POST['prenom_patient'] ;
             $tel_pat = $_POST['tel'] ;
             $service_acc = $_POST['service_acc'] ;
 
-            $req_add_patient = "INSERT INTO Patient (IDp, Nom, Prenom, Numero_tel, Nom_service) VALUES ('','$nom_patient','$prenom_patient', $'tel', $'service_acc')" ;
-            $add_patient = mysqli_query($connexion,$req_add_resp);
+            $req_add_patient = "INSERT INTO Patient (IDp, Nom, Prenom, Numero_tel, Nom_service) VALUES ('','$nom_pat','$prenom_pat', '$tel_pat', '$service_acc')" ;
+            $add_patient = mysqli_query($connexion,$req_add_patient);
+            if($add_patient == TRUE)
+            { print("ok le patient a été ajouté");
+            }
+            else {print("try again");}
         }
         ?>
 
