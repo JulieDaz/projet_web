@@ -1,15 +1,7 @@
 <?php 
 include("fonction.php"); 
 session_start() ;
-
-print($_SESSION['ID']) ;
 ?>
-
-<form method="post" action="traitement.php"> 
-<input type="submit" value="go" name="bouton_med">
-</form>
-
-
 
 
 <!DOCTYPE html>
@@ -69,7 +61,11 @@ print($_SESSION['ID']) ;
             $add_estM = mysqli_query($connexion,$req_add_estM);
             if ($add_estM == TRUE )
             {
-                print("");
+                print("tu es un génie");
+            }
+            else {
+                print($req_add_estM);
+                print($add_estM);
             }
 
             print($id_medecin);
