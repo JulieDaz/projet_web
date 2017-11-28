@@ -1,7 +1,6 @@
 <?php
   include('fonction.php');
   $connexion = connect() ;
-
  ?>
 
 
@@ -34,10 +33,6 @@
             echo "<option>$value[Nom_intervention]";                          //On crée le menu déroulant au fil de la lecture du foreach
           }
         ?>
-
-    </form>
-
-    <form method="post" action="demande_intervention2.php">
       <input type="submit" value="Soumettre">
     </form>
 

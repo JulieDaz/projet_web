@@ -1,5 +1,5 @@
-<?php 
-include("fonction.php"); 
+<?php
+include("fonction.php");
 session_start() ;
 ?>
 
@@ -16,7 +16,7 @@ session_start() ;
 <div id="medecin">
 
 <h2> Formulaire d'ajout d'un médecin : </h2>
-    <form method="post" action=""> 
+    <form method="post" action="">
         <label>Nom</label> : <input type="text" required="on" name="nom_med">
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_med">
@@ -47,7 +47,7 @@ session_start() ;
 
 <h2> Formulaire d'ajout d'un responsable d'intervention et du service d'intervention correspondant : </h2>
 
-    <form method="post" action=""> 
+    <form method="post" action="">
         <label>Nom</label> : <input type="text" required="on" name="nom_resp">
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_resp">
@@ -76,7 +76,7 @@ session_start() ;
         $add_intervention = mysqli_query($connexion,$req_intervention) ;
         $req_update_resp = "UPDATE Responsable_d_intervention SET Nom_intervention='$service_int' WHERE IDr='$id_responsable'";
         $update_resp = mysqli_query($connexion,$req_update_resp);
-        
+
     }
     ?>
 
@@ -90,7 +90,7 @@ session_start() ;
 
 <h2> Formulaire d'ajout d'un patient : </h2>
 
-    <form method="post" action=""> 
+    <form method="post" action="">
         <label>Nom</label> : <input type="text" required="on" name="nom_patient">
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_patient">
@@ -98,8 +98,8 @@ session_start() ;
         <label>Numéro de téléphone</label> : <input type="text" required="on" name="tel">
         <br><br>
         <label>Service d'accueil</label> : <select name ="service_acc">
-        
-        <?php 
+
+        <?php
         $connexion = connect() ;
 
         $req_service = "SELECT Nom_service FROM Service_d_accueil" ;
@@ -135,4 +135,9 @@ session_start() ;
 
 
 </body>
+
+  <form method="post" action="traitement.php">
+    <input type="submit" value="Annuler">
+  </form>
+
 </html>
