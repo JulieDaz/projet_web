@@ -1,4 +1,11 @@
+<?php
 
+if (session_start() == TRUE)
+{
+  session_destroy();
+}
+
+?>
 
 <!DOCTYPE html>
 <html>
