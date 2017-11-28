@@ -11,6 +11,11 @@ session_start() ;
 </head>
 <body>
 
+<!-- Retourner au planning -->
+<form method="post" action="traitement.php"> 
+<input type="submit" value="Retourner au planning" name="retour_planning">
+</form>
+
 <!-- SECTION Medecin -->
 
 <div id="medecin">
@@ -40,7 +45,6 @@ session_start() ;
 
         if (isset($_POST['bouton_med']))
         {
-            print('hello') ;
             $connexion = connect() ;
             $name_med = $_POST['nom_med'] ;
             $prenom_med = $_POST['prenom_med'] ;
@@ -52,24 +56,8 @@ session_start() ;
             $req_add_doc = "INSERT INTO Medecin (IDm, Nom, Prenom, Nom_service) VALUES ('$id_medecin','$name_med','$prenom_med','$service_med')" ;
             $add_doc = mysqli_query($connexion,$req_add_doc);
 
-            $req_add_userM = "INSERT INTO Utilisateur (IDu, Mdp, User_type) VALUES ('', '$mdp_med', 'Medecin')";
+            $req_add_userM = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDm) VALUES ('', '$mdp_med', 'Medecin', '$id_medecin')";
             $add_userM = mysqli_query($connexion,$req_add_userM);
-            $idu = mysqli_insert_id($connexion) ;
-            print($idu) ; 
-
-            $req_add_estM = "INSERT INTO est (IDu, IDm) VALUES ('$idu','$id_medecin')" ;
-            $add_estM = mysqli_query($connexion,$req_add_estM);
-            if ($add_estM == TRUE )
-            {
-                print("tu es un génie");
-            }
-            else {
-                print($req_add_estM);
-                print($add_estM);
-            }
-
-            print($id_medecin);
-            print($mdp_med);
 
         }
         ?>
