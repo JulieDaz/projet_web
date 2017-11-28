@@ -16,8 +16,6 @@ else
 }
 
 
-
-
 print("<br>") ;
 
 if ($id == "" OR $mdp == ""){
@@ -30,6 +28,7 @@ else {
 	$usertype = $info_user[0];
 	$IDu = $info_user[1];
 	$pwd = $info_user[2] ;
+}
 
 	if ($pwd != $mdp OR $get_type == FALSE) {
 		print("Erreur : vérifiez vos informations de connexion");
@@ -62,7 +61,6 @@ else {
 
 	}
 
-}
 
 
 //On crée le planning
@@ -70,10 +68,10 @@ $super_tableau_creneaux = get_creneaux($usertype,$id,$connexion);
 
 foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
 {
-	foreach($data as $creneau) // pour chaque créneau
+foreach($data as $creneau) // pour chaque créneau
+{
+	foreach($creneau as $key) // pour chaque clé
 	{
-		foreach($creneau as $key) // pour chaque clé de chaque créneau
-		{
 			foreach($key as $value) // pour chaque valeur associée à la clé
 			{
 				if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
@@ -87,7 +85,7 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 					$date = strtotime($value); // on convertit sa valeur en format date
 					$heure_fin[] = date('G:i', $date); // on stocke l'heure de fin du rdv
 				}
-				elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe 
+				elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe
 				{
 					$nom_patient[] = $value; // on stocke le nom du patient
 				}
@@ -120,8 +118,7 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 		 if ($usertype=="Medecin") {
 			 ?>
 			 <form method="post">
-				 <p> Sélectionnez le type d'intervention souhaitée : </p>
-				 <select name="type_d_intervention">
+				 <label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
 					 <?php
 						 $request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
 						 $typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
@@ -141,7 +138,7 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 
  //----------------------------------------------------------------------------------------------------------------------------------------------------//
  //si l'utilisateur est un admin
- if ($usertype == "Admin") {
+ elseif ($usertype == "Admin") {
  	?>
  	<p>Formulaires :</p>
 
@@ -175,7 +172,7 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 			$semaine = 0; // variable pour indiquer dans quelle semaine on se trouve
 			if(isset($_POST['semaine_précédente']))
 			{
-				$semaine = $semaine - 1;	
+				$semaine = $semaine - 1;
 			}
 			elseif(isset($_POST["semaine_suivante"]))
 			{
@@ -186,7 +183,7 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 				$semaine = 0;
 			}
 			$dates_semaine = get_dates_semaines($semaine); // on récupère un tableau avec les dates de la semaine que l'on veut regarder (selon le $semaine)
-			
+
 			for($i = 0; $i < sizeof($heure_debut); $i++) // pour chaque créneau stocké
 			{
 				$j=30; // on définit un incrément
@@ -226,7 +223,7 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 				echo "<tr>";
 				for($i = 0; $i < 7; $i++) // pour chaque jour de la semaine
 				{
-					if($i == 0) 
+					if($i == 0)
 					{
 						$heures = intval($j); // prend la valeur entière de $j
 						$realPart = $j - $heures; // on regarde cb de minutes en "heures" on a
