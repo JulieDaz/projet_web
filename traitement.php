@@ -18,6 +18,7 @@ else {
 	$usertype = $info_user[0];
 	$IDu = $info_user[1];
 	$pwd = $info_user[2] ;
+}
 
 	if ($pwd != $mdp OR $get_type == FALSE) {
 		print("Erreur : vérifiez vos informations de connexion");
@@ -28,25 +29,27 @@ else {
 		case 'Medecin':
 			print("vous êtes un médecin !");
 			$_SESSION['ID'] = $id ;
+			$_SESSION['mdp'] = $mdp ;
 			$_SESSION['type'] = "Medecin" ;
 			break;
 
 		case 'Admin':
 			print("vous êtes un admin !");
 			$_SESSION['ID'] = $id ;
+			$_SESSION['mdp'] = $mdp ;
 			$_SESSION['type'] = "Administrateur" ;
 			break;
 
 		case "Responsable":
 			print("Vous êtes un responsable !");
 			$_SESSION['ID'] = $id ;
+			$_SESSION['mdp'] = $mdp ;
 			$_SESSION['type'] = "Responsable" ;
 			break;
 		}
 
 	}
 
-}
 
 
 //On crée le planning
@@ -54,37 +57,36 @@ $super_tableau_creneaux = get_creneaux($usertype,$id,$connexion);
 
 foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
 {
-	foreach($data as $creneau) // pour chaque créneau
+foreach($data as $creneau) // pour chaque créneau
+{
+	foreach($creneau as $key) // pour chaque clé
 	{
-		foreach($creneau as $key) // pour chaque clé
+		foreach($key as $value) // pour chaque valeur
 		{
-			foreach($key as $value) // pour chaque valeur
-			{
-				if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
-				        {
-				          $date = strtotime($value); // on convertit sa valeur en format date
-				          $date_rdv[] = date('d/m/y', $date); // on stocke la date de rdv
-				          $heure_debut[] = date('G:i', $date); // on stocke l'heure de début du rdv
-				        }
-				        elseif(array_key_exists('Heure_fin', $key)) // si l'information 'Heure_fin' existe
-				        {
-				          $date = strtotime($value); // on convertit sa valeur en format date
-				          $heure_fin[] = date('G:i', $date); // on stocke l'heure de fin du rdv
-				        }
-				        elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe
-				        {
-				          $nom_patient[] = $value; // on stocke le nom du patient
-				        }
-				        elseif(array_key_exists('Prenom',$key)) // si l'information 'Prenom' existe
-				        {
-				          $prenom_patient[] = $value; // on stocke le prénom du patient
-				        }
-				        elseif(array_key_exists('Nom_intervention',$key))
-				        {
-				          $nom_intervention[] = $value;
-				        }
-					}
-		}
+			if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
+			        {
+			          $date = strtotime($value); // on convertit sa valeur en format date
+			          $date_rdv[] = date('d/m/y', $date); // on stocke la date de rdv
+			          $heure_debut[] = date('G:i', $date); // on stocke l'heure de début du rdv
+			        }
+			        elseif(array_key_exists('Heure_fin', $key)) // si l'information 'Heure_fin' existe
+			        {
+			          $date = strtotime($value); // on convertit sa valeur en format date
+			          $heure_fin[] = date('G:i', $date); // on stocke l'heure de fin du rdv
+			        }
+			        elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe
+			        {
+			          $nom_patient[] = $value; // on stocke le nom du patient
+			        }
+			        elseif(array_key_exists('Prenom',$key)) // si l'information 'Prenom' existe
+			        {
+			          $prenom_patient[] = $value; // on stocke le prénom du patient
+			        }
+			        elseif(array_key_exists('Nom_intervention',$key))
+			        {
+			          $nom_intervention[] = $value;
+			        }
+				}
 	}
 }
 ?>
@@ -104,8 +106,7 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 		 if ($usertype=="Medecin") {
 			 ?>
 			 <form method="post">
-				 <p> Sélectionnez le type d'intervention souhaitée : </p>
-				 <select name="type_d_intervention">
+				 <label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
 					 <?php
 						 $request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
 						 $typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
@@ -125,7 +126,7 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 
  //----------------------------------------------------------------------------------------------------------------------------------------------------//
  //si l'utilisateur est un admin
- if ($usertype == "Admin") {
+ elseif ($usertype == "Admin") {
  	?>
  	<p>Formulaires :</p>
 
