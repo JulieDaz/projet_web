@@ -70,6 +70,7 @@ INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_
 INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("2","2017-11-19","2017-11-19 08:00:00","2017-11-19 11:00:00","2017-11-18","12","Prise_de_sang");
 INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("3","2017-11-19","2017-11-19 11:00:00","2017-11-19 14:00:00","2017-11-18","7","Dentisterie");
 INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("4","2017-11-19","2017-11-19 09:00:00","2017-11-19 10:00:00","2017-11-18","4","Radio");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("5","2017-12-06","2017-12-06 09:00:00","2017-12-06 10:00:00","2017-11-18","6","Radio");
 
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","0");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","1");
@@ -77,7 +78,7 @@ INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Hémorragie","2");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Membre_cassé","3");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Membre_cassé","4");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Grippe","5");
-INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Grippe","6");
+INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Membre_cassé","6");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Carie","7");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Grippe","8");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Diabète","9");
