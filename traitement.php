@@ -50,33 +50,40 @@ else {
 
 
 //On crée le planning
-$creneaux = get_creneaux($usertype,$id,$connexion);
+$super_tableau_creneaux = get_creneaux($usertype,$id,$connexion);
 
-foreach($creneaux as $creneau) // pour chaque créneau
+foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
 {
-	foreach($creneau as $data) // pour chaque information
+	foreach($data as $creneau) // pour chaque créneau
 	{
-		foreach($data as $value) // pour chaque valeur
+		foreach($creneau as $key) // pour chaque clé
 		{
-			if (array_key_exists('Heure_debut', $data)) // si l'information 'Heure_debut' existe
+			foreach($key as $value) // pour chaque valeur
 			{
-				$date = strtotime($value); // on convertit sa valeur en format date
-				$date_rdv[] = date('d/m/y', $date); // on stocke la date de rdv
-				$heure_debut[] = date('G:i', $date); // on stocke l'heure de début du rdv
-			}
-			elseif(array_key_exists('Heure_fin', $data)) // si l'information 'Heure_fin' existe
-			{
-				$date = strtotime($value); // on convertit sa valeur en format date
-				$heure_fin[] = date('G:i', $date); // on stocke l'heure de fin du rdv
-			}
-			elseif(array_key_exists('Nom', $data)) // si l'information 'Nom' existe
-			{
-				$nom_patient[] = $value; // on stocke le nom du patient
-			}
-			elseif(array_key_exists('Prenom',$data)) // si l'information 'Prenom' existe
-			{
-				$prenom_patient[] = $value; // on stocke le prénom du patient
-			}
+				if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
+				        {
+				          $date = strtotime($value); // on convertit sa valeur en format date
+				          $date_rdv[] = date('d/m/y', $date); // on stocke la date de rdv
+				          $heure_debut[] = date('G:i', $date); // on stocke l'heure de début du rdv
+				        }
+				        elseif(array_key_exists('Heure_fin', $key)) // si l'information 'Heure_fin' existe
+				        {
+				          $date = strtotime($value); // on convertit sa valeur en format date
+				          $heure_fin[] = date('G:i', $date); // on stocke l'heure de fin du rdv
+				        }
+				        elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe
+				        {
+				          $nom_patient[] = $value; // on stocke le nom du patient
+				        }
+				        elseif(array_key_exists('Prenom',$key)) // si l'information 'Prenom' existe
+				        {
+				          $prenom_patient[] = $value; // on stocke le prénom du patient
+				        }
+				        elseif(array_key_exists('Nom_intervention',$key))
+				        {
+				          $nom_intervention[] = $value;
+				        }
+					}
 		}
 	}
 }
