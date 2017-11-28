@@ -163,6 +163,7 @@ foreach($data as $creneau) // pour chaque créneau
 <!--Ecriture du planning, commun à tous les utilisateurs..................................................................................................-->
 		<br>
 		<table>
+		<br>
 		<form method = "POST" action = "traitement.php">
 			<input type="submit" value="<<" name="semaine_précédente">
 			<input type="submit" value="Aujourd'hui" name="reset_time">
@@ -189,7 +190,7 @@ foreach($data as $creneau) // pour chaque créneau
 			{
 				$_SESSION['nb_semaine'] = 0;
 			}
-			print($_SESSION['nb_semaine']);
+
 			$dates_semaine = get_dates_semaines($_SESSION['nb_semaine']); // on récupère un tableau avec les dates de la semaine que l'on veut regarder (selon le $semaine)
 
 			for($i = 0; $i < sizeof($heure_debut); $i++) // pour chaque créneau stocké
@@ -221,8 +222,8 @@ foreach($data as $creneau) // pour chaque créneau
 			echo "<tr><th>Heure</th>";
 			for($x = 1; $x < 8; $x++) // sur une ligne on va afficher le nom des jours
 			{
-				$date_jour[$x-1] = $jours_semaine[$x]." ".$dates_semaine[$x];
-				echo "<th>".$date_jour[$x-1]."</th>";
+				$date_jour[$x-1] = $jours_semaine[$x]." ".$dates_semaine[$x]; // on ajoute dans un tableau les valeurs des dates de la semaine
+				echo "<th>".$date_jour[$x-1]."</th>"; // affichage de la date dans le haut du tableau
 			}
 			echo "</tr>";
 			for($j = 8; $j < 20; $j += 0.5) // pour chaque demi-heure de la journée
