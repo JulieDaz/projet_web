@@ -174,10 +174,10 @@ CREATE TABLE a_comme(
 
 CREATE TABLE est(
         IDm Varchar (25) ,
-        IDu Int NOT NULL ,
+        IDu Int Auto_increment NOT NULL ,
         IDa Varchar (25) ,
         IDr Varchar (25) ,
-        PRIMARY KEY (IDm ,IDu ,IDa ,IDr )
+        PRIMARY KEY (IDu , IDm, IDa , IDr)
 )ENGINE=InnoDB;
 
 ALTER TABLE Medecin ADD CONSTRAINT FK_Medecin_Nom_service FOREIGN KEY (Nom_service) REFERENCES Service_d_accueil(Nom_service);
