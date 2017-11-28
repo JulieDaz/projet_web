@@ -1,7 +1,17 @@
 <?php include("fonction.php");
 
 session_start();
+?>
 
+<!--Début de la page HTML, commun à tous les utilisateurs..............................................................................................-->
+	<html>
+	 <head>
+			 <title>Medical Planner</title>
+			 <link rel="stylesheet" href="style.css"/>
+	 </head>
+	 <body>
+
+<?php
 
 $connexion = connect() ;
 
@@ -107,18 +117,10 @@ foreach($data as $creneau) // pour chaque créneau
 ?>
 
 
-<!--Début de la page HTML, commun à tous les utilisateurs..............................................................................................-->
-	<html>
-	 <head>
-			 <title>Medical Planner</title>
-			 <link rel="stylesheet" href="style.css"/>
-	 </head>
-	 <body>
 
-
-<!--si l'utilisateur est un médecin.....................................................................................................................-->
+<!--si l'utilisateur est un médecin ou un admin.....................................................................................................................-->
 		 <?php
-		 if ($usertype=="Medecin") {
+		 if ($usertype=="Medecin" OR $usertype =="Admin") {
 			 ?>
 			 <form method="post">
 				 <label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
@@ -126,38 +128,17 @@ foreach($data as $creneau) // pour chaque créneau
 						 $request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
 						 $typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
 						 foreach($typeIntervention as $value) {                              //On parcourt ce tableau pour récupérer les types d'intervention 1 à 1
-							 echo "<option>$value[Nom_intervention]";                          //On crée le menu déroulant au fil de la lecture du foreach
+							 echo "<option>$value[Nom_intervention]</option>";                          //On crée le menu déroulant au fil de la lecture du foreach
 						 }
 					 ?>
 				 </select>
 			 </form>
-				 <br>
-				 	<form method="post" action="demande_intervention.php">
-				 		<input type="submit" value="Demande d'intervention">
-			 		</form>
+
 		 <?php
 		 }
+		  
+		?>
 
-
- //----------------------------------------------------------------------------------------------------------------------------------------------------//
- //si l'utilisateur est un admin
- elseif ($usertype == "Admin") {
- 	?>
- 	<p>Formulaires :</p>
-
- 	 <form method="post" action="ajouter.php">
-	 	 <label id=for="Ajout">Ajouter/retirer un médecin, un responsable d'intervention ou un patient</label>
-	 	 <input type="submit" value="Valider">
-	 	 </form>
-
-	 	 <form method="post" action="ajouter2.php">
-	 	 <label for="Ajout2">Ajouter/retirer une pathologie, un service d'intervention ou un service d'accueil</label>
-	 	 <input type="submit" value="Valider">
- 	 </form>
-
- <?php
- }
- ?>
 
 
 <!--Ecriture du planning, commun à tous les utilisateurs..................................................................................................-->
@@ -248,4 +229,33 @@ foreach($data as $creneau) // pour chaque créneau
 			}
 		?>
 	</table>
+
+
+<!--si l'utilisateur est un admin-->
+<?php
+if ($usertype == "Admin") {
+ 	?>
+ 	<p>Formulaires :</p>
+
+ 	 <form method="post" action="ajouter.php">
+	 	 <label id=for="Ajout">Ajouter/retirer un médecin, un responsable d'intervention ou un patient</label>
+	 	 <input type="submit" value="Valider">
+	 	 </form>
+
+	 	 <form method="post" action="ajouter2.php">
+	 	 <label for="Ajout2">Ajouter/retirer une pathologie, un service d'intervention ou un service d'accueil</label>
+	 	 <input type="submit" value="Valider">
+ 	 </form>
+
+ <?php
+ }
+ elseif ($usertype == "Medecin") {
+	 ?>
+	<form method="post" action="demande_intervention.php">
+		<input type="submit" value="Demande d'intervention">
+	</form>
+ 
+ <?php
+ }
+ ?>
 
