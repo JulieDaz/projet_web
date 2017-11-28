@@ -163,7 +163,7 @@ foreach($data as $creneau) // pour chaque créneau
 <!--Ecriture du planning, commun à tous les utilisateurs..................................................................................................-->
 		<br>
 		<table>
-		<form method = "post" action = "traitement.php">
+		<form method = "POST" action = "traitement.php">
 			<input type="submit" value="<<" name="semaine_précédente">
 			<input type="submit" value="Aujourd'hui" name="reset_time">
 			<input type="submit" value=">>" name="semaine_suivante">
@@ -173,20 +173,24 @@ foreach($data as $creneau) // pour chaque créneau
 			$connexion = connect() ;
 			$jours_semaine = array(null, "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
 			print("<br>");
-			$semaine = 0; // variable pour indiquer dans quelle semaine on se trouve
+			if(!isset($_SESSION['nb_semaine']))
+			{
+				$_SESSION['nb_semaine'] = 0; // variable pour indiquer dans quelle semaine on se trouve
+			}
 			if(isset($_POST['semaine_précédente']))
 			{
-				$semaine = $semaine - 1;
+				$_SESSION['nb_semaine']--;
 			}
 			elseif(isset($_POST["semaine_suivante"]))
 			{
-				$semaine = $semaine + 1;
+				$_SESSION['nb_semaine']++;
 			}
 			elseif(isset($_POST["reset_time"]))
 			{
-				$semaine = 0;
+				$_SESSION['nb_semaine'] = 0;
 			}
-			$dates_semaine = get_dates_semaines($semaine); // on récupère un tableau avec les dates de la semaine que l'on veut regarder (selon le $semaine)
+			print($_SESSION['nb_semaine']);
+			$dates_semaine = get_dates_semaines($_SESSION['nb_semaine']); // on récupère un tableau avec les dates de la semaine que l'on veut regarder (selon le $semaine)
 
 			for($i = 0; $i < sizeof($heure_debut); $i++) // pour chaque créneau stocké
 			{
