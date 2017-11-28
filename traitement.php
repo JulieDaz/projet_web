@@ -115,6 +115,10 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 					 ?>
 				 </select>
 			 </form>
+				 <br>
+				 	<form method="post" action="demande_intervention.php">
+				 		<input type="submit" value="Demande d'intervention">
+			 		</form>
 		 <?php
 		 }
 
