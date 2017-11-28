@@ -67,7 +67,7 @@ else {
 
 
 //On crée le planning
-$super_tableau_creneaux = get_creneaux($usertype,$id,$connexion);
+$super_tableau_creneaux = get_creneaux($usertype,$id,$connexion,"Prise_de_sang");
 
 foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
 {
