@@ -26,9 +26,6 @@ else
 	$mdp = $_POST['mdp'] ;
 }
 
-// $id = $_POST['ID'] ;
-// $mdp = $_POST['mdp'] ;
-
 print("<br>") ;
 
 if ($id == "" OR $mdp == ""){
@@ -73,73 +70,97 @@ else {
 		}
 
 	}
+?>
 
 
+<!--si l'utilisateur est un médecin ou un admin.....................................................................................................................-->
+<?php
+if ($usertype=="Medecin" OR $usertype =="Admin") {
+?>
 
-//On crée le planning
-$super_tableau_creneaux = get_creneaux($usertype,$id,$connexion,"Prise_de_sang");
-
-foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
-{
-foreach($data as $creneau) // pour chaque créneau
-{
-	foreach($creneau as $key) // pour chaque clé
-	{
-			foreach($key as $value) // pour chaque valeur associée à la clé
+<form action="traitement.php" method="post">
+	<label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
+		<?php
+			$request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
+			$typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
+			foreach($typeIntervention as $value)                               //On parcourt ce tableau pour récupérer les types d'intervention 1 à 1
 			{
-				if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
+				if(isset($_SESSION['type_d_intervention']) and $_SESSION['type_d_intervention'] == $value['Nom_intervention'])
 				{
-					$date = strtotime($value); // on convertit sa valeur en format date
-					$date_rdv[] = date('d/m/Y', $date); // on stocke la date de rdv
-					$heure_debut[] = date('G:i', $date); // on stocke l'heure de début du rdv
+					echo "<option selected = \"selected\">$value[Nom_intervention]</option>"; // affichage par défaut du nom de l'intervention
 				}
-				elseif(array_key_exists('Heure_fin', $key)) // si l'information 'Heure_fin' existe
+				else
 				{
-					$date = strtotime($value); // on convertit sa valeur en format date
-					$heure_fin[] = date('G:i', $date); // on stocke l'heure de fin du rdv
+					echo "<option>$value[Nom_intervention]</option>"; //On crée le menu déroulant au fil de la lecture du foreach
 				}
-				elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe
+			}
+		?>
+ 		<input type="submit" value="Valider quel type d'intervention à visualiser" name="intervention">
+ 	</select>
+ </form>
+
+<?php
+	if(!isset($_POST["intervention"]) and !isset($_SESSION['type_d_intervention'])) // si pas de clic et pas de $_SESSION existant --> on vient d'arriver sur la page
+	{
+		$_SESSION['type_d_intervention'] = $typeIntervention[0]['Nom_intervention']; // on affecte la valeur par défaut du menu déroulant à $_SESSION
+	}
+	elseif(isset($_POST["intervention"]) and !isset($_SESSION['type_d_intervention'])) // si clic mais pas de $_SESSION existant --> on veut changer de visualisation
+	{
+		$_SESSION['type_d_intervention'] = $_POST["type_d_intervention"]; // on récupère la valeur donnée dans le menu déroulant après clic
+	}
+	elseif(isset($_POST["intervention"]) and isset($_SESSION['type_d_intervention'])) // si clic et $_SESSION existant --> on a déjà changé de visualisation et on veut rechanger
+	{
+		$_SESSION['type_d_intervention'] = $_POST["type_d_intervention"]; // on réaffecte $_SESSION à la valeur du menu déroulant
+	}
+
+	print("Vous visualisez les créneaux de ".$_SESSION['type_d_intervention']); // on indique le type d'intervention des créneaux que l'on visualise
+	print("<br><br>");
+
+}
+
+$_SESSION['type_d_intervention'] = NULL; // dans le cas où on considère un responsable, on a pas besoin du type d'intervention
+
+$super_tableau_creneaux = get_creneaux($usertype,$id,$connexion,$_SESSION['type_d_intervention']);
+
+if(isset($super_tableau_creneaux)) // on vérifie que des créneaux existent
+{
+	foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
+	{
+		foreach($data as $creneau) // pour chaque créneau
+		{
+			foreach($creneau as $key) // pour chaque clé
+			{
+				foreach($key as $value) // pour chaque valeur associée à la clé
 				{
-					$nom_patient[] = $value; // on stocke le nom du patient
-				}
-				elseif(array_key_exists('Prenom',$key)) // si l'information 'Prenom' existe
-				{
-					$prenom_patient[] = $value; // on stocke le prénom du patient
-				}
-				elseif(array_key_exists('Nom_intervention',$key))
-				{
-					$nom_intervention[] = $value;
+					if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
+					{
+						$date = strtotime($value); // on convertit sa valeur en format date
+						$date_rdv[] = date('d/m/Y', $date); // on stocke la date de rdv
+						$heure_debut[] = date('G:i', $date); // on stocke l'heure de début du rdv
+					}
+					elseif(array_key_exists('Heure_fin', $key)) // si l'information 'Heure_fin' existe
+					{
+						$date = strtotime($value); // on convertit sa valeur en format date
+						$heure_fin[] = date('G:i', $date); // on stocke l'heure de fin du rdv
+					}
+					elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe
+					{
+						$nom_patient[] = $value; // on stocke le nom du patient
+					}
+					elseif(array_key_exists('Prenom',$key)) // si l'information 'Prenom' existe
+					{
+						$prenom_patient[] = $value; // on stocke le prénom du patient
+					}
+					elseif(array_key_exists('Nom_intervention',$key)) // si l'information 'Nom_intervention' existe
+					{
+						$nom_intervention[] = $value; // on stocke le type de l'intervention
+					}
 				}
 			}
 		}
 	}
 }
 ?>
-
-
-
-<!--si l'utilisateur est un médecin ou un admin.....................................................................................................................-->
-		 <?php
-		 if ($usertype=="Medecin" OR $usertype =="Admin") {
-			 ?>
-			 <form method="post">
-				 <label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
-					 <?php
-						 $request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
-						 $typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
-						 foreach($typeIntervention as $value) {                              //On parcourt ce tableau pour récupérer les types d'intervention 1 à 1
-							 echo "<option>$value[Nom_intervention]</option>";                          //On crée le menu déroulant au fil de la lecture du foreach
-						 }
-					 ?>
-				 </select>
-			 </form>
-
-		 <?php
-		 }
-		  
-		?>
-
-
 
 <!--Ecriture du planning, commun à tous les utilisateurs..................................................................................................-->
 		<br>
@@ -155,49 +176,52 @@ foreach($data as $creneau) // pour chaque créneau
 			$connexion = connect() ;
 			$jours_semaine = array(null, "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
 			print("<br>");
-			if(!isset($_SESSION['nb_semaine']))
+			if(!isset($_SESSION['nb_semaine'])) // si cette variable n'existe pas, on la crée
 			{
 				$_SESSION['nb_semaine'] = 0; // variable pour indiquer dans quelle semaine on se trouve
 			}
-			if(isset($_POST['semaine_précédente']))
+			if(isset($_POST['semaine_précédente']) and $_SESSION['nb_semaine'] > 0) //  quand on clique sur le bouton "<<" et que session[nb_semaine] est supérieur à 0
 			{
-				$_SESSION['nb_semaine']--;
+				$_SESSION['nb_semaine']--; // on enlève -1 à la variable session[nb_semaine]
 			}
-			elseif(isset($_POST["semaine_suivante"]))
+			elseif(isset($_POST["semaine_suivante"])) // quand on clique sur le bouton ">>"
 			{
-				$_SESSION['nb_semaine']++;
+				$_SESSION['nb_semaine']++; // on ajoute +1 à la variable session[nb_semaine]
 			}
-			elseif(isset($_POST["reset_time"]))
+			elseif(isset($_POST["reset_time"])) // quand on clique sur le bouton Aujourd'hui
 			{
-				$_SESSION['nb_semaine'] = 0;
+				$_SESSION['nb_semaine'] = 0; // on revient à la semaine courante
 			}
 
 			$dates_semaine = get_dates_semaines($_SESSION['nb_semaine']); // on récupère un tableau avec les dates de la semaine que l'on veut regarder (selon le $semaine)
 
-			for($i = 0; $i < sizeof($heure_debut); $i++) // pour chaque créneau stocké
+			if(isset($super_tableau_creneaux))
 			{
-				$j=30; // on définit un incrément
-				$jour = ucfirst(nom_jour($date_rdv[$i])); // on récupère le jour de la date
-				if(isset($nom_intervention))
+				for($i = 0; $i < sizeof($heure_debut); $i++) // pour chaque créneau stocké
 				{
-					$rdv[$jour." ".$date_rdv[$i]][$heure_debut[$i]] = $nom_intervention[$i].": ".$prenom_patient[$i]." ".$nom_patient[$i]; // on crée une première entrée dans $rdv pour chaque créneau
-				}
-				else
-				{
-					$rdv[$jour." ".$date_rdv[$i]][$heure_debut[$i]] = $prenom_patient[$i]." ".$nom_patient[$i]; // on crée une première entrée dans $rdv pour chaque créneau
-				}
-					while(date("H:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))) < date("H:i", strtotime($heure_fin[$i]))) // tant que l'heure de début < l'heure de la fin
-				{
-					$h = date("G:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))); // on crée un mini-créneau pour réprésenter la demi-heure de créneau suivant le demi-créneau précédent
+					$j=30; // on définit un incrément
+					$jour = ucfirst(nom_jour($date_rdv[$i])); // on récupère le jour de la date
 					if(isset($nom_intervention))
 					{
-						$rdv[$jour." ".$date_rdv[$i]][$h] = $nom_intervention[$i].": ".$prenom_patient[$i]." ".$nom_patient[$i]; // on crée une nouvelle entrée dans $rdv pour la demi-heure suivant le début du créneau
+						$rdv[$jour." ".$date_rdv[$i]][$heure_debut[$i]] = $nom_intervention[$i].": ".$prenom_patient[$i]." ".$nom_patient[$i]; // on crée une première entrée dans $rdv pour chaque créneau
 					}
 					else
 					{
-						$rdv[$jour." ".$date_rdv[$i]][$h] = $prenom_patient[$i]." ".$nom_patient[$i];
+						$rdv[$jour." ".$date_rdv[$i]][$heure_debut[$i]] = $prenom_patient[$i]." ".$nom_patient[$i]; // on crée une première entrée dans $rdv pour chaque créneau
 					}
-					$j+=30; // on incrémente d'une demi-heure
+						while(date("H:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))) < date("H:i", strtotime($heure_fin[$i]))) // tant que l'heure de début < l'heure de la fin
+					{
+						$h = date("G:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))); // on crée un mini-créneau pour réprésenter la demi-heure de créneau suivant le demi-créneau précédent
+						if(isset($nom_intervention))
+						{
+							$rdv[$jour." ".$date_rdv[$i]][$h] = $nom_intervention[$i].": ".$prenom_patient[$i]." ".$nom_patient[$i]; // on crée une nouvelle entrée dans $rdv pour la demi-heure suivant le début du créneau
+						}
+						else
+						{
+							$rdv[$jour." ".$date_rdv[$i]][$h] = $prenom_patient[$i]." ".$nom_patient[$i];
+						}
+						$j+=30; // on incrémente d'une demi-heure
+					}
 				}
 			}
 			echo "<tr><th>Heure</th>";
