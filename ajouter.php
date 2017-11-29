@@ -15,8 +15,12 @@ session_start() ;
 <form method="post" action="traitement.php"> 
 <input type="submit" value="Retourner au planning" name="retour_planning">
 </form>
+<br>
+<br>
 
-<!-- SECTION Medecin -->
+<!--.....................SECTION Medecin.....................-->
+
+<!-- Ajouter un Medecin -->
 
 <div id="medecin">
 
@@ -64,7 +68,56 @@ session_start() ;
 
 </div>
 
-<!-- SECTION RESPONSABLE -->
+<!-- Supprimer un médecin-->
+
+<div>
+<h2>Formulaire de retrait d'un médecin : </h2>
+
+    <form method = "post" action = "">
+        <label>Sélectionner le médecin que vous souhaitez retirer de la base de données :</label>
+        <select name="med_supp">
+
+        <?php
+        $connexion = connect() ;
+        $req_select_med = "SELECT IDm, Nom, Prenom, Nom_service FROM Medecin" ;
+        $select_med = do_request($connexion, $req_select_med) ;
+        
+        foreach ($select_med as $med) {
+            echo "<option value=$med[IDm]>$med[Nom] $med[Prenom] : $med[Nom_service]</option>" ;
+         }
+        ?>
+        <select>
+        <input type="submit" value="Supprimer un médecin" name="bouton_med_supp">
+
+    </form>
+
+    <?php
+        if(isset($_POST['bouton_med_supp']))
+        {
+            $connexion = connect() ;
+            $med_supp = $_POST['med_supp'] ; //Récupère l'ID du médecin
+
+            $req_supp_med = "DELETE FROM Medecin WHERE IDm = '$med_supp'" ;
+            $supp_med = mysqli_query($connexion, $req_supp_med) or die('<br>Erreur SQL !<br>'.$req_supp_med.'<br>'.mysqli_error($connexion)) ;
+
+
+            if($supp_med == TRUE)
+            {
+                print("you're a genius") ;
+            }
+            else { print("naab") ;
+                print($req_supp_med);
+                print("<br>") ;
+                print($supp_med) ;
+            }
+        }
+    ?>  
+
+</div>
+
+<!--........................SECTION RESPONSABLE.........................-->
+
+<!-- Ajouter un responsable -->
 
 <div id="responsable">
 
@@ -108,11 +161,56 @@ session_start() ;
     }
     ?>
 
+</div>
 
+<!-- Supprimer un responsable -->
+
+<div>
+<h2>Formulaire de retrait d'un responsable : </h2>
+
+    <form method = "post" action = "">
+        <label>Sélectionner le responsable d'intervention que vous souhaitez retirer de la base de données :</label>
+        <select name="resp_supp">
+
+        <?php
+        $connexion = connect() ;
+        $req_select_resp = "SELECT IDr, Nom, Prenom, Nom_intervention FROM Responsable_d_intervention" ;
+        $select_resp = do_request($connexion, $req_select_resp) ;
+        
+        foreach ($select_resp as $resp) {
+            echo "<option value=$resp[IDr]>$resp[Nom] $resp[Prenom] : $resp[Nom_intervention]</option>" ;
+         }
+        ?>
+        <select>
+        <input type="submit" value="Supprimer un responsable" name="bouton_resp_supp">
+
+    </form>
+
+    <?php
+        if(isset($_POST['bouton_resp_supp']))
+        {
+            $connexion = connect() ;
+            $resp_supp = $_POST['resp_supp'] ; //Récupère l'ID du médecin
+
+            $req_supp_intervention = "DELETE FROM Type_d_intervention WHERE IDr = '$resp_supp'" ;
+            $supp_intervention = mysqli_query($connexion, $req_supp_intervention) or die('<br>Erreur SQL !<br>'.$req_supp_intervention.'<br>'.mysqli_error($connexion)) ;
+
+            $req_supp_resp = "DELETE FROM Responsable_d_intervention WHERE IDr = '$resp_supp'" ;
+            $supp_resp = mysqli_query($connexion, $req_supp_resp) or die('<br>Erreur SQL !<br>'.$req_supp_resp.'<br>'.mysqli_error($connexion)) ;
+
+
+            if($supp_resp == TRUE)
+            {
+                print("you're a genius") ;
+            }
+            
+        }
+    ?>  
 
 </div>
 
-<!-- SECTION PATIENT -->
+
+<!--.........................SECTION PATIENT.......................-->
 
 <div id="patient">
 
