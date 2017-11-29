@@ -3,10 +3,11 @@ include("fonction.php");
 session_start() ;
 ?>
 
+
 <!DOCTYPE html>
 <html>
 <head>
-     <title>Formulaire 1</title>
+     <title>Formulaire 2</title>
 </head>
 <body>
 
@@ -14,8 +15,12 @@ session_start() ;
 <form method="post" action="traitement.php"> 
 <input type="submit" value="Retourner au planning" name="retour_planning">
 </form>
+<br>
+<br>
 
-<!-- SECTION Pathologie -->
+<!--.................SECTION PATHOLOGIE................-->
+
+<!-- Ajouter une pathologie -->
 
 <div class = "patho">
 <h2> Formulaire d'ajout d'une pathologie : </h2>
@@ -30,11 +35,11 @@ session_start() ;
             <option value = "5"> Niveau 5 </option>
         </select>
         <br><br>        
-        <input type="submit" value="Ajouter une pathologie" name="bouton_patho">
+        <input type="submit" value="Ajouter une pathologie" name="bouton_patho_add">
 	</form>
 
     <?php
-    if(isset($_POST['bouton_patho']))
+    if(isset($_POST['bouton_patho_add']))
     {
         $connexion = connect() ;
         $nom_pathologie = $_POST['nom_patho'] ;
@@ -51,11 +56,12 @@ session_start() ;
 
     }
     ?>
-
 </div>
 
 
-<!-- SECTION Service accueil -->
+<!--.................SECTION SERVICE D'ACCUEIL................-->
+
+<!-- Ajouter un service d'accueil -->
 
 <div class = "service_acc">
 <h2> Formulaire d'ajout d'un service d'accueil : </h2>
@@ -64,11 +70,11 @@ session_start() ;
         <br><br>
         <label>Facturation</label> : <input type="text" required="on" name="bill">
         <br><br>        
-        <input type="submit" value="Ajouter une pathologie" name="bouton_accueil">
+        <input type="submit" value="Ajouter une pathologie" name="bouton_accueil_add">
 	</form>
 
     <?php
-    if(isset($_POST['bouton_accueil']))
+    if(isset($_POST['bouton_accueil_add']))
     {
         $connexion = connect() ;
         $service_acc = $_POST['service_acc'] ;
@@ -86,12 +92,49 @@ session_start() ;
         }
     }
     ?>
-
-
 </div>
 
+<!-- Supprimer un service d'accueil -->
 
+<div>
+<h2>Formulaire de retrait d'un service d'accueil : </h2>
 
+    <form method = "post" action = "">
+        <label>Sélectionner le service d'accueil que vous souhaitez retirer de la base de données :</label>
+        <select name="accueil">
+
+        <?php
+        $connexion = connect() ;
+        $req_select_accueil = "SELECT Nom_service FROM Service_d_accueil" ;
+        $select_accueil = do_request($connexion, $req_select_accueil) ;
+        foreach ($select_accueil as $value_accueil) {
+            echo "<option>$value_accueil[Nom_service]</option>" ;
+        }
+        ?>
+        </select>
+        <input type="submit" value="Supprimer un service d'accueil" name="bouton_accueil_supp">
+
+    </form>
+
+    <?php
+        if(isset($_POST['bouton_accueil_supp']))
+        {
+            $connexion = connect() ;
+            $accueil_supp = $_POST['accueil'] ;
+
+            $req_supp_accueil = "DELETE FROM Service_d_accueil WHERE Nom_service = '$accueil_supp'" ;
+            $supp_accueil = mysqli_query($connexion, $req_supp_accueil) ;
+
+            if($supp_accueil == TRUE)
+            {
+                print("you're a genius") ;
+            }
+            else { print("naab") ;
+            }
+        }
+    ?>  
+
+</div>
 
 </body>
 </html>
