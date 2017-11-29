@@ -74,6 +74,8 @@ else {
 
 
 <!--si l'utilisateur est un médecin ou un admin.....................................................................................................................-->
+<!-- Quel type d'intervention veut-on visualiser -->
+
 <?php
 if ($usertype=="Medecin" OR $usertype =="Admin") {
 ?>
@@ -117,6 +119,8 @@ if ($usertype=="Medecin" OR $usertype =="Admin") {
 	print("<br><br>");
 
 }
+
+// Récupération des créneaux //
 
 $_SESSION['type_d_intervention'] = NULL; // dans le cas où on considère un responsable, on a pas besoin du type d'intervention
 
