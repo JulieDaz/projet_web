@@ -12,7 +12,7 @@ session_start() ;
 <body>
 
 <!-- Retourner au planning -->
-<form method="post" action="traitement.php"> 
+<form method="post" action="traitement.php">
 <input type="submit" value="Retourner au planning" name="retour_planning">
 </form>
 
@@ -25,10 +25,10 @@ session_start() ;
         <label>Nom</label> : <input type="text" required="on" name="nom_med">
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_med">
-        <br><br>        
+        <br><br>
         <label>Service d'accueil</label> : <select name ="service_acc">
-        
-        <?php 
+
+        <?php
         $connexion = connect() ;
 
         $req_service = "SELECT Nom_service FROM Service_d_accueil" ;
@@ -102,12 +102,9 @@ session_start() ;
         $req_update_resp = "UPDATE Responsable_d_intervention SET Nom_intervention='$service_int' WHERE IDr='$id_responsable'";
         $update_resp = mysqli_query($connexion,$req_update_resp);
 
-<<<<<<< HEAD
-=======
         $req_add_userR = "INSERT INTO est (IDu, IDr) VALUES ('','$id_responsable')" ;
         $add_userR = mysqli_query($connexion,$req_add_userR);
-        
->>>>>>> 9ffcbe3e4d4ae1d4d36b80fe0864ef7160bf9dcd
+
     }
     ?>
 

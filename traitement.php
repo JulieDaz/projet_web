@@ -81,10 +81,10 @@ $super_tableau_creneaux = get_creneaux($usertype,$id,$connexion,"Prise_de_sang")
 
 foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
 {
-foreach($data as $creneau) // pour chaque créneau
-{
-	foreach($creneau as $key) // pour chaque clé
+	foreach($data as $creneau) // pour chaque créneau
 	{
+		foreach($creneau as $key) // pour chaque clé
+		{
 			foreach($key as $value) // pour chaque valeur associée à la clé
 			{
 				if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
