@@ -227,9 +227,7 @@ function get_dates_semaines($semaine) // argument = nb de semaines passées ou f
         {
             list($jour,$mois,$annee) = explode("/", $date_du_jour);
             $days_back = $k+1;
-            // print($k);
             $date_lundi = date("d/m/Y", mktime(0,0,0,$mois,$jour-$days_back,$annee));
-            // print($date_lundi);
         }
     }
     for($d = 1; $d <= 8; $d++)
@@ -239,4 +237,39 @@ function get_dates_semaines($semaine) // argument = nb de semaines passées ou f
     }
     return $dates_semaine;
 }
+
+function sousbooking($connexion, $type_intervention)
+{
+    $request_sous_booking = "SELECT Heure_debut FROM creneaux WHERE Nom_intervention = '$type_intervention' AND TIME(Heure_debut) = '18:00:00'";
+    $creneau_sous_booking = do_request($connexion, $request_sous_booking);
+    if(empty($creneau_sous_booking[0]))
+    {
+        print("Le créneau de sous-booking est vide");
+
+    }
+}
+
+function surbooking($connexion, $type_intervention, $IDp)
+{
+    $date_du_jour = date("Y-m-d");
+    $request_creneaux_du_jour = "SELECT Heure_debut, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention'";
+    $creneaux_du_jour = do_request($connexion, $request_creneaux_du_jour);
+    for($i=0; $i < sizeof($creneaux_du_jour); $i++)
+    {
+        $creneaux_du_jour[$i]['Niveau_priorité'] = $niveau_priorité[$i][0]['Niveau_priorite'];
+    }
+    $nb_creneau = 0;
+    $creneau_déplacé['Heure_début'] = '';
+    $creneau_déplacé['IDp'] = $IDp;
+    $creneau_déplacé['Niveau_priorite'] = 10;
+    print_r($creneau_déplacé);
+    while($creneau_déplacé['Niveau_priorite'] != 1 or date('G:i', $creneau_déplacé['Heure_debut']) < date('G:i', mktime(18,0,0,0,0,0)))
+    {
+        $creneau_déplacé = array_shift($creneaux_du_jour[$nb_creneau]);
+        list($annee,$mois,$jour) = explode("-", $date_du_jour);
+        $date_du_jour = date("Y-m-d", mktime(0,0,0,$mois,$jour+1,$annee));
+        $nb_creneau++;
+    }
+}
+
 ?>
