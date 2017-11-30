@@ -55,7 +55,8 @@ CREATE TABLE Creneaux(
         Heure_fin               Datetime NOT NULL ,
         Date_priseRDV           Date NOT NULL ,
         IDp                     Int NOT NULL ,
-        Nom_intervention        Varchar (25)  ,
+        Nom_intervention        Varchar (25) ,
+        Niveau_priorite         Int ,
         PRIMARY KEY (IDc )
 )ENGINE=InnoDB;
 
