@@ -251,23 +251,21 @@ function sousbooking($connexion, $type_intervention)
     }
 }
 
-function surbooking($connexion, $type_intervention, $IDp)
+function surbooking($connexion, $type_intervention, $IDp, $tps = 0)
 {
     $date_du_jour = date("Y-m-d");
-    $heure_now = '13:25:12' ;
+    $heure_now = '15:25:12' ;
     //$heure_now = date("G:i:s");
     print($heure_now) ;
-    $request_creneaux_du_jour = "SELECT TIME(Heure_debut) as Heure_debut, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = '$date_du_jour'";
-    $creneaux_du_jour = do_request($connexion, $request_creneaux_du_jour);
+    $request_creneaux = "SELECT TIME(Heure_debut) as Heure_debut, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = '$date_du_jour'";
+    $creneaux = do_request($connexion, $request_creneaux);
 
-    for ($i = 0 ; $i < sizeof($creneaux_du_jour) ; $i++)
+    for ($i = 0 ; $i < sizeof($creneaux) ; $i++)
     {
-        if ($creneaux_du_jour[$i]['Heure_debut'] < $heure_now)
+        if ($creneaux[$i]['Heure_debut'] < $heure_now)
         {
-            unset($creneaux_du_jour[$i]) ;
-            $creneaux_du_jour = array_values($creneaux_du_jour) ;
-            // print("<br>");
-            // print($i) ;
+            unset($creneaux[$i]) ;
+            $creneaux_du_jour = array_values($creneaux) ;
         }
         
     }
