@@ -252,24 +252,77 @@ function sousbooking($connexion, $type_intervention)
 function surbooking($connexion, $type_intervention, $IDp)
 {
     $date_du_jour = date("Y-m-d");
-    $request_creneaux_du_jour = "SELECT Heure_debut, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention'";
+    $heure_now = '13:25:12' ;
+    //$heure_now = date("G:i:s");
+    print($heure_now) ;
+    $request_creneaux_du_jour = "SELECT TIME(Heure_debut) as Heure_debut, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = '$date_du_jour'";
     $creneaux_du_jour = do_request($connexion, $request_creneaux_du_jour);
-    for($i=0; $i < sizeof($creneaux_du_jour); $i++)
+
+    for ($i = 0 ; $i < sizeof($creneaux_du_jour) ; $i++)
     {
-        $creneaux_du_jour[$i]['Niveau_priorité'] = $niveau_priorité[$i][0]['Niveau_priorite'];
+        if ($creneaux_du_jour[$i]['Heure_debut'] < $heure_now)
+        {
+            unset($creneaux_du_jour[$i]) ;
+            $creneaux_du_jour = array_values($creneaux_du_jour) ;
+            // print("<br>");
+            // print($i) ;
+        }
+        
     }
+
+    print_r($creneaux_du_jour) ;
     $nb_creneau = 0;
-    $creneau_déplacé['Heure_début'] = '';
-    $creneau_déplacé['IDp'] = $IDp;
-    $creneau_déplacé['Niveau_priorite'] = 10;
-    print_r($creneau_déplacé);
-    while($creneau_déplacé['Niveau_priorite'] != 1 or date('G:i', $creneau_déplacé['Heure_debut']) < date('G:i', mktime(18,0,0,0,0,0)))
-    {
-        $creneau_déplacé = array_shift($creneaux_du_jour[$nb_creneau]);
-        list($annee,$mois,$jour) = explode("-", $date_du_jour);
-        $date_du_jour = date("Y-m-d", mktime(0,0,0,$mois,$jour+1,$annee));
-        $nb_creneau++;
+    $creneau_flottant['Heure_debut'] = '';
+    $creneau_flottant['IDp'] = $IDp;
+    $creneau_flottant['Niveau_priorite'] = 10;
+    print("<br>") ;
+    print("<br>") ;
+
+    print_r($creneau_flottant);
+    $i = 0 ;
+
+    $size = sizeof($creneaux_du_jour) ;
+
+    while ($i < $size) {
+        
+        if ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
+        {
+            print("<br><br>") ;
+
+            print("avant switch flottant = ");
+            print_r($creneau_flottant);
+            print("<br>");
+            print("avant switch jour = ");
+            print_r($creneaux_du_jour[$i]);
+
+            print("<br>");
+
+            $test['IDp'] = $creneau_flottant['IDp'] ; 
+            $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ; 
+
+            $creneau_flottant['IDp'] = $creneaux_du_jour[$i]['IDp'] ;
+            $creneau_flottant['Niveau_priorite'] = $creneaux_du_jour[$i]['Niveau_priorite'] ;
+
+            $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
+            $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] ;
+
+            print(" le niveau est : ") ;
+            print($creneau_flottant['Niveau_priorite']) ;
+            print("<br>") ;
+            print("i = ") ;
+            print($i) ;
+            print("<br>") ;
+            print("creneau flottant = ") ;
+            print_r($creneau_flottant);
+            print("<br>") ;
+            print("creneaux du jour = ") ;        
+            print_r($creneaux_du_jour[$i]);
+            
+        }
+
+        ++$i ;
     }
+
 }
 
 ?>
