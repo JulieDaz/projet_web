@@ -215,4 +215,52 @@ function get_dates_semaines($semaine) // argument = nb de semaines passées ou f
     }
     return $dates_semaine;
 }
+
+function getCreneauxIndisponibles($typeIntervention){
+  $connexion = connect();
+  $request = "SELECT `Heure_debut`,`Heure_fin`
+            FROM `creneaux`
+            WHERE `Nom_intervention` LIKE '$typeIntervention'";
+  $reponse = do_request($connexion, $request);
+  return $reponse;    //On récupère les creneaux indisponibles
+}
+
+
+function getDureeIntervention($typeIntervention){
+  $connexion = connect();
+  $request = "SELECT `Duree`
+              FROM `type_d_intervention`
+              WHERE `Nom_intervention` LIKE '$typeIntervention'";
+  return do_request($connexion, $request) ;
+}
+
+
+function getCreneauxDisponibles($date, $duree){
+ $connection = connect();
+ $request = "SELECT *
+             FROM creneaux
+             WHERE Heure_debut LIKE '$date'";
+ $reponse = do_request($connexion, $request);
+
+//si la requête SQL renvoie un résultat vide alors le créneau est disponible (car absent de la BD)
+   if(empty($reponse)){
+     // $date = date_create($date);
+     // $dateDebutRecherche = date_add($date, date_interval_create_from_date_string($duree.' minutes'));
+     // $date = date_format($date, 'Y-m-d H:i:s');
+     $date = date("Y-m-d 8:00") ;   //donne la date du jour à 8h00
+     $dateDebutRecherche = date_add($date, date_interval_create_from_date_string('1 days'));
+     $request = "SELECT * FROM creneaux WHERE Heure_debut LIKE $date";
+     $reponse = do_request($connexion, $request);
+
+       if (empty($reponse))
+        return TRUE;
+      else
+        return FALSE;
+
+  }
+ }
+
+//mktime(0,0,0,$mois,$jour+$d,$annee)
+
+
 ?>

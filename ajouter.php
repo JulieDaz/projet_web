@@ -168,8 +168,4 @@ session_start() ;
 
 </body>
 
-  <form method="post" action="traitement.php">
-    <input type="submit" value="Annuler">
-  </form>
-
 </html>

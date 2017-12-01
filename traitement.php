@@ -26,9 +26,6 @@ else
 	$mdp = $_POST['mdp'] ;
 }
 
-// $id = $_POST['ID'] ;
-// $mdp = $_POST['mdp'] ;
-
 print("<br>") ;
 
 if ($id == "" OR $mdp == ""){
@@ -128,7 +125,7 @@ foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans
 						 $request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
 						 $typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
 						 foreach($typeIntervention as $value) {                              //On parcourt ce tableau pour récupérer les types d'intervention 1 à 1
-							 echo "<option>$value[Nom_intervention]</option>";                          //On crée le menu déroulant au fil de la lecture du foreach
+							 echo "<option value='$value[Nom_intervention]'> $value[Nom_intervention] </option>";                          //On crée le menu déroulant au fil de la lecture du foreach
 						 }
 					 ?>
 				 </select>
@@ -254,11 +251,11 @@ if ($usertype == "Admin") {
 
  <?php
  }
+ 
+ //----- Si l'utilisateur est un médecin -----//
  elseif ($usertype == "Medecin") {
 	 ?>
-	<form method="post" action="demande_intervention.php">
-		<input type="submit" value="Demande d'intervention">
-	</form>
+	<a class="bouton" href="demande_intervention.php">Demande d'intervention </a>
 
  <?php
  }
