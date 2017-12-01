@@ -114,15 +114,15 @@ if ($usertype=="Medecin" OR $usertype =="Admin") {
 	{
 		$_SESSION['type_d_intervention'] = $_POST["type_d_intervention"]; // on réaffecte $_SESSION à la valeur du menu déroulant
 	}
-
 	print("Vous visualisez les créneaux de ".$_SESSION['type_d_intervention']); // on indique le type d'intervention des créneaux que l'on visualise
 	print("<br><br>");
-
 }
 
 // Récupération des créneaux //
-
-$_SESSION['type_d_intervention'] = NULL; // dans le cas où on considère un responsable, on a pas besoin du type d'intervention
+if($usertype == 'Responsable')
+{
+	$_SESSION['type_d_intervention'] = NULL; // dans le cas où on considère un responsable, on a pas besoin du type d'intervention
+}
 
 $super_tableau_creneaux = get_creneaux($usertype,$id,$connexion,$_SESSION['type_d_intervention']);
 
