@@ -80,22 +80,12 @@ else {
 if ($usertype=="Medecin" OR $usertype =="Admin") {
 ?>
 
-<<<<<<< HEAD
-foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
-{
-	foreach($data as $creneau) // pour chaque créneau
-	{
-		foreach($creneau as $key) // pour chaque clé
-		{
-			foreach($key as $value) // pour chaque valeur associée à la clé
-=======
 <form action="traitement.php" method="post">
 	<label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
 		<?php
 			$request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
 			$typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
 			foreach($typeIntervention as $value)                               //On parcourt ce tableau pour récupérer les types d'intervention 1 à 1
->>>>>>> fae6f22c825a4afca62f74d8acbe2b2c87a9bdb0
 			{
 				if(isset($_SESSION['type_d_intervention']) and $_SESSION['type_d_intervention'] == $value['Nom_intervention'])
 				{
