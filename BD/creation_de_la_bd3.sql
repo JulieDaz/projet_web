@@ -51,8 +51,8 @@ CREATE TABLE Administrateur(
 CREATE TABLE Creneaux(
         IDc                     int (11) Auto_increment  NOT NULL ,
         Date_creneau            Date NOT NULL ,
-        Heure_debut             Datetime NOT NULL ,
-        Heure_fin               Datetime NOT NULL ,
+        Heure_debut             Varchar (25) NOT NULL ,
+        Heure_fin               Varchar (25) NOT NULL ,
         Date_priseRDV           Date NOT NULL ,
         IDp                     Int NOT NULL ,
         Nom_intervention        Varchar (25) ,
