@@ -384,12 +384,12 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0)
 
         ++$i ;
     }
-    // if(date("G:i:s", strtotime($creneaux_du_jour[$i]['Heure_fin'])) <= "18:00:00")
-    // {
-    //     $heure_fin_intervention = date("G:i:s", strtotime("+".$duree." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])))
-    //     $insert_request = "INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ('', '$date_considérée', '$creneaux_du_jour[$i]['Heure_fin']', '$heure_fin_intervention', '$date_du_jour', '$creneaux_du_jour[$i]['IDp']', '$type_intervention', '$creneaux_du_jour[$i]['Niveau_priorite']')";
-    //     $insertion = do_request($connexion, $insert_request);
-    // }
+    if(date("G:i:s", strtotime($creneaux_du_jour[$i]['Heure_fin'])) <= "18:00:00")
+    {
+        $heure_fin_intervention = date("G:i:s", strtotime("+".$duree." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])))
+        $insert_request = "INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ('', '$date_considérée', '$creneaux_du_jour[$i]['Heure_fin']', '$heure_fin_intervention', '$date_du_jour', '$creneaux_du_jour[$i]['IDp']', '$type_intervention', '$creneaux_du_jour[$i]['Niveau_priorite']')";
+        $insertion = do_request($connexion, $insert_request);
+    }
 
 }
 
