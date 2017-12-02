@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = '';  // mot de passe
+      $mdp = 'phpmyadmin';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -79,7 +79,7 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
     }
     elseif ($job == "Admin")
     {
-        $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE Nom_intervention = '$intervention_admin'";              
+        $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE Nom_intervention = '$intervention_admin'";
         $Nom_intervention[] = do_request($connexion, $request_intervention);
         if(empty($Nom_intervention[0]))
         {
@@ -100,7 +100,7 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
                     $IDp = $IDp_array['IDp'];
                     $request_nom = "SELECT Nom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les noms des patients
                     $request_prenom = "SELECT Prenom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les prénoms des patients
-                    $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE Nom_intervention = '$intervention_admin'"; // requête pour récupérer le type d'intervention    
+                    $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE Nom_intervention = '$intervention_admin'"; // requête pour récupérer le type d'intervention
                     $Nom_intervention[] = do_request($connexion, $request_intervention);
                     $Nom[] = do_request($connexion, $request_nom);
                     $Prenom[] = do_request($connexion, $request_prenom);
@@ -202,7 +202,7 @@ function generate_mdp($prenom)
     $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9) ;
     $mdp = $random_number.$prenom ;
 
-    return $mdp ; 
+    return $mdp ;
 }
 
 function nom_jour($date) // fonction pour récupérer le jour de la date donnée
@@ -218,7 +218,7 @@ function nom_jour($date) // fonction pour récupérer le jour de la date donnée
 function get_dates_semaines($semaine) // argument = nb de semaines passées ou futures
 {
     $semaine = $semaine * 7;
-    $jours_semaine = array(null, "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");    
+    $jours_semaine = array(null, "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche");
     $date = date('d/m/Y');
     list($jour,$mois,$annee) = explode("/", $date);
     $date_du_jour = date('d/m/y', mktime(0,0,0,$mois,$jour+$semaine,$annee));
@@ -239,6 +239,52 @@ function get_dates_semaines($semaine) // argument = nb de semaines passées ou f
     }
     return $dates_semaine;
 }
+
+function getCreneauxIndisponibles($typeIntervention){
+  $connexion = connect();
+  $request = "SELECT `Heure_debut`,`Heure_fin`
+            FROM `creneaux`
+            WHERE `Nom_intervention` LIKE '$typeIntervention'";
+  $reponse = do_request($connexion, $request);
+  return $reponse;    //On récupère les creneaux indisponibles
+}
+
+
+function getDureeIntervention($typeIntervention){
+  $connexion = connect();
+  $request = "SELECT `Duree`
+              FROM `type_d_intervention`
+              WHERE `Nom_intervention` LIKE '$typeIntervention'";
+  return do_request($connexion, $request) ;
+}
+
+
+function getCreneauxDisponibles($date, $duree){
+ $connection = connect();
+ $request = "SELECT *
+             FROM creneaux
+             WHERE Heure_debut LIKE '$date'";
+ $reponse = do_request($connexion, $request);
+
+//si la requête SQL renvoie un résultat vide alors le créneau est disponible (car absent de la BD)
+   if(empty($reponse)){
+     // $date = date_create($date);
+     // $dateDebutRecherche = date_add($date, date_interval_create_from_date_string($duree.' minutes'));
+     // $date = date_format($date, 'Y-m-d H:i:s');
+     $date = date("Y-m-d 8:00") ;   //donne la date du jour à 8h00
+     $dateDebutRecherche = date_add($date, date_interval_create_from_date_string('1 days'));
+     $request = "SELECT * FROM creneaux WHERE Heure_debut LIKE $date";
+     $reponse = do_request($connexion, $request);
+
+       if (empty($reponse))
+        return TRUE;
+      else
+        return FALSE;
+
+  }
+ }
+
+//mktime(0,0,0,$mois,$jour+$d,$annee)
 
 function sousbooking($connexion, $type_intervention)
 {
@@ -267,7 +313,7 @@ function surbooking($connexion, $type_intervention, $IDp, $tps = 0)
             unset($creneaux[$i]) ;
             $creneaux_du_jour = array_values($creneaux) ;
         }
-        
+
     }
 
     print_r($creneaux_du_jour) ;
@@ -284,7 +330,7 @@ function surbooking($connexion, $type_intervention, $IDp, $tps = 0)
     $size = sizeof($creneaux_du_jour) ;
 
     while ($i < $size) {
-        
+
         if ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
         {
             print("<br><br>") ;
@@ -297,8 +343,8 @@ function surbooking($connexion, $type_intervention, $IDp, $tps = 0)
 
             print("<br>");
 
-            $test['IDp'] = $creneau_flottant['IDp'] ; 
-            $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ; 
+            $test['IDp'] = $creneau_flottant['IDp'] ;
+            $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
 
             $creneau_flottant['IDp'] = $creneaux_du_jour[$i]['IDp'] ;
             $creneau_flottant['Niveau_priorite'] = $creneaux_du_jour[$i]['Niveau_priorite'] ;
@@ -315,9 +361,9 @@ function surbooking($connexion, $type_intervention, $IDp, $tps = 0)
             print("creneau flottant = ") ;
             print_r($creneau_flottant);
             print("<br>") ;
-            print("creneaux du jour = ") ;        
+            print("creneaux du jour = ") ;
             print_r($creneaux_du_jour[$i]);
-            
+
         }
 
         ++$i ;

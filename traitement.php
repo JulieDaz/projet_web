@@ -80,12 +80,22 @@ else {
 if ($usertype=="Medecin" OR $usertype =="Admin") {
 ?>
 
+<<<<<<< HEAD
+foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
+{
+	foreach($data as $creneau) // pour chaque créneau
+	{
+		foreach($creneau as $key) // pour chaque clé
+		{
+			foreach($key as $value) // pour chaque valeur associée à la clé
+=======
 <form action="traitement.php" method="post">
 	<label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
 		<?php
 			$request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
 			$typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
 			foreach($typeIntervention as $value)                               //On parcourt ce tableau pour récupérer les types d'intervention 1 à 1
+>>>>>>> fae6f22c825a4afca62f74d8acbe2b2c87a9bdb0
 			{
 				if(isset($_SESSION['type_d_intervention']) and $_SESSION['type_d_intervention'] == $value['Nom_intervention'])
 				{
@@ -165,6 +175,31 @@ if(isset($super_tableau_creneaux)) // on vérifie que des créneaux existent
 	}
 }
 ?>
+
+
+
+<!--si l'utilisateur est un médecin ou un admin.....................................................................................................................-->
+		 <?php
+		 if ($usertype=="Medecin" OR $usertype =="Admin") {
+			 ?>
+			 <form method="post">
+				 <label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
+					 <?php
+						 $request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
+						 $typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
+						 foreach($typeIntervention as $value) {                              //On parcourt ce tableau pour récupérer les types d'intervention 1 à 1
+							 echo "<option value='$value[Nom_intervention]'> $value[Nom_intervention] </option>";                          //On crée le menu déroulant au fil de la lecture du foreach
+						 }
+					 ?>
+				 </select>
+			 </form>
+
+		 <?php
+		 }
+
+		?>
+
+
 
 <!--Ecriture du planning, commun à tous les utilisateurs..................................................................................................-->
 		<br>
@@ -282,13 +317,12 @@ if ($usertype == "Admin") {
 
  <?php
  }
+
+ //----- Si l'utilisateur est un médecin -----//
  elseif ($usertype == "Medecin") {
 	 ?>
-	<form method="post" action="demande_intervention.php">
-		<input type="submit" value="Demande d'intervention">
-	</form>
- 
+	<a class="bouton" href="demande_intervention.php">Demande d'intervention </a>
+
  <?php
  }
  ?>
-

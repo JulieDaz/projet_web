@@ -35,3 +35,15 @@ td.time
 {
     width:5%;
 }
+
+.bouton {
+	padding:6px 0 6px 0;
+	font:bold 13px Arial;
+	background:#f5f5f5;
+	color:#555;
+	border-radius:2px;
+	width:100px;
+	border:1px solid #ccc;
+	box-shadow:1px 1px 3px #999;
+}
+}

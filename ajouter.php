@@ -1,5 +1,5 @@
-<?php 
-include("fonction.php"); 
+<?php
+include("fonction.php");
 session_start() ;
 ?>
 
@@ -12,7 +12,7 @@ session_start() ;
 <body>
 
 <!-- Retourner au planning -->
-<form method="post" action="traitement.php"> 
+<form method="post" action="traitement.php">
 <input type="submit" value="Retourner au planning" name="retour_planning">
 </form>
 <br>
@@ -25,14 +25,14 @@ session_start() ;
 <div id="medecin">
 
 <h2> Formulaire d'ajout d'un médecin : </h2>
-    <form method="post" action=""> 
+    <form method="post" action="">
         <label>Nom</label> : <input type="text" required="on" name="nom_med">
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_med">
-        <br><br>        
+        <br><br>
         <label>Service d'accueil</label> : <select name ="service_acc">
-        
-        <?php 
+
+        <?php
         $connexion = connect() ;
 
         $req_service = "SELECT Nom_service FROM Service_d_accueil" ;
@@ -123,7 +123,7 @@ session_start() ;
 
 <h2> Formulaire d'ajout d'un responsable d'intervention et du service d'intervention correspondant : </h2>
 
-    <form method="post" action=""> 
+    <form method="post" action="">
         <label>Nom</label> : <input type="text" required="on" name="nom_resp">
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_resp">
@@ -157,7 +157,7 @@ session_start() ;
 
         $req_add_userR = "INSERT INTO est (IDu, IDr) VALUES ('','$id_responsable')" ;
         $add_userR = mysqli_query($connexion,$req_add_userR);
-        
+
     }
     ?>
 
@@ -216,7 +216,7 @@ session_start() ;
 
 <h2> Formulaire d'ajout d'un patient : </h2>
 
-    <form method="post" action=""> 
+    <form method="post" action="">
         <label>Nom</label> : <input type="text" required="on" name="nom_patient">
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_patient">
@@ -224,8 +224,8 @@ session_start() ;
         <label>Numéro de téléphone</label> : <input type="text" required="on" name="tel">
         <br><br>
         <label>Service d'accueil</label> : <select name ="service_acc">
-        
-        <?php 
+
+        <?php
         $connexion = connect() ;
 
         $req_service = "SELECT Nom_service FROM Service_d_accueil" ;
@@ -265,4 +265,5 @@ session_start() ;
 
 
 </body>
+
 </html>
