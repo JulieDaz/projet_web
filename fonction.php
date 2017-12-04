@@ -226,6 +226,7 @@ function generate_id($id, $nom, $prenom)
 
 function generate_mdp($prenom)
 {
+    $prenom=mb_strtolower($prenom) ;
     $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9) ;
     $mdp = $random_number.$prenom ;
 
@@ -332,17 +333,42 @@ function check_carac($word)
 }
 
 
-function check_number($number, $type) 
-{
-    switch ($variable) {
-        case 'value':
-            # code...
-            break;
-        
-        default:
-            # code...
-            break;
+// function check_number($number, $type) 
+// {
+//     switch ($type) {
+//         case 'phone':
+//             if (preg_match("#^0[1-8]([-. ]?[0-9]{2}){4}$#", $number))
+//             {
+//                 print("Le numéro de téléphone est valide") ;
+//             }
+//             else {
+//                 print("caca") ;
+//             }
+//             break;
 
+//         case 'bill':
+//             if (preg_match("#^[1-9][0-9]#", $number))
+//             {
+//                 print("Le chiffre est valide") ;
+//             }
+//             else {
+//                 print("caca") ;
+//             }
+//             break;        
+        
+//         case 'time':
+//             $modulo = $number % 30 ;
+//             if ($modulo == 0)
+//             {
+//                 print("La durée est bien un multiple de 30") ;
+//             }
+//             else 
+//             {
+//                 print("prout") ;
+//             }
+//             break;
+//     }
+// }
 
 
 function sousbooking($connexion, $type_intervention)
@@ -449,7 +475,7 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
     if(empty($creneaux_du_jour))
     {
         $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime('08:00:00')));
-        $insert_request = "INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ('', '$date_considérée', '08:00:00', '$creneau_heure_fin', '$date_du_jour', '$creneau_flottant['IDp']', '$type_intervention', '$creneau_flottant['Niveau_priorite']')";
+        $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '08:00:00', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
         mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
     }
     else
@@ -460,7 +486,7 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
             if($dernier_creneau + $duree_intervention <= "18:00:00")
             {
                 $heure_fin_intervention = date("H:i:s", strtotime("+".$duree." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])));
-                $insert_request = "INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ('', '$date_considérée', '$creneaux_du_jour[$i]['Heure_fin']', '$heure_fin_intervention', '$date_du_jour', '$creneaux_du_jour[$i]['IDp']', '$type_intervention', '$creneaux_du_jour[$i]['Niveau_priorite']')";
+                $insert_request = "INSERT INTO creneaux(IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '$creneaux_du_jour[$i]['Heure_fin']', '$heure_fin_intervention', '$date_du_jour', '$creneaux_du_jour[$i]['IDp']', '$type_intervention', '$creneaux_du_jour[$i]['Niveau_priorite']')";
                 mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$request.'<br>'.mysqli_error($connexion));
             }
             else
