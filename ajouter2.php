@@ -93,20 +93,26 @@ session_start() ;
 
         if (check_carac($service_acc) == TRUE)
         {
-            $req_add_acc = "INSERT INTO Service_d_accueil (Nom_service, Facture) VALUES ('$service_acc', '$bill')" ;
-            $add_acc = mysqli_query($connexion, $req_add_acc) ;
-
-            if($add_acc==TRUE)
+            if (preg_match("#^0[1-8]([-. ]?[0-9]{2}){4}$#", $bill))
             {
-                print("Le service d'accueil a été correctement ajouté");
+                $req_add_acc = "INSERT INTO Service_d_accueil (Nom_service, Facture) VALUES ('$service_acc', '$bill')" ;
+                $add_acc = mysqli_query($connexion, $req_add_acc) ;
+
+                if($add_acc==TRUE)
+                {
+                    print("Le service d'accueil a été correctement ajouté");
+                }
+                else{
+                    print("Ce service d'accueil existe déjà dans la base de données. Veuillez insérer un autre nom.");
+                }
             }
-            else{
-                print("Ce service d'accueil existe déjà dans la base de données. Veuillez insérer un autre nom.");
-            }
+            else {
+                print("Erreur : le montant de la facturation doit être un entier") ;
+            }   
         }
         else 
         {
-            print("Erreur : vous avez entré des caractères non tolérés.") ;
+            print("Erreur : le nom du service d'accueille comprend des caractères non tolérés.") ;
         }
 
         
