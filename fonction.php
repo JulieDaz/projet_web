@@ -292,6 +292,30 @@ function getCreneauxDisponibles($date, $duree){
 
 //mktime(0,0,0,$mois,$jour+$d,$annee)
 
+
+function check_carac($word)
+{
+    $word_changed = ucfirst(mb_strtolower($word, 'UTF-8')) ;
+
+    if (preg_match("#^[A-Z][a-zàâäéèêëïùüû]+[' -]?[a-zàâäéèêëïùüû]+$#", $word_changed))
+    {
+        return $word_changed ;
+    }
+}
+
+function check_number($number, $type) 
+{
+    switch ($variable) {
+        case 'value':
+            # code...
+            break;
+        
+        default:
+            # code...
+            break;
+    }
+}
+
 function sousbooking($connexion, $type_intervention)
 {
     $request_sous_booking = "SELECT Heure_debut FROM creneaux WHERE Nom_intervention = '$type_intervention' AND TIME(Heure_debut) = '18:00:00'";
@@ -303,94 +327,94 @@ function sousbooking($connexion, $type_intervention)
     }
 }
 
-function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0)
-{
-    $date_du_jour = date("Y-m-d");
-    list($annee, $mois, $jour) = explode("-", $date_du_jour);
-    $date_considérée = date("Y-m-d", mktime(0,0,0,$mois, $jour+$nb_jours, $annee));
-    $nb_jours++;
-    // $heure_now = '13:25:12' ;
-    $heure_now = date("G:i:s");
-    print($heure_now) ;
-    print("<br><br>");
-    $request_durée = "SELECT Duree FROM type_d_intervention WHERE Nom_intervention = '$type_intervention'";
-    $duree = do_request($connexion, $request_durée);
-    $request_creneaux = "SELECT IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = '$date_considérée'";
-    $creneaux = do_request($connexion, $request_creneaux);
+// function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0)
+// {
+//     $date_du_jour = date("Y-m-d");
+//     list($annee, $mois, $jour) = explode("-", $date_du_jour);
+//     $date_considérée = date("Y-m-d", mktime(0,0,0,$mois, $jour+$nb_jours, $annee));
+//     $nb_jours++;
+//     // $heure_now = '13:25:12' ;
+//     $heure_now = date("G:i:s");
+//     print($heure_now) ;
+//     print("<br><br>");
+//     $request_durée = "SELECT Duree FROM type_d_intervention WHERE Nom_intervention = '$type_intervention'";
+//     $duree = do_request($connexion, $request_durée);
+//     $request_creneaux = "SELECT IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = '$date_considérée'";
+//     $creneaux = do_request($connexion, $request_creneaux);
 
-    $duree_intervention = $duree[0]['Duree'];
+//     $duree_intervention = $duree[0]['Duree'];
 
-    for ($i = 0 ; $i < sizeof($creneaux) ; $i++)
-    {
-        if ($creneaux[$i]['Date_creneau']." ".$creneaux[$i]['Heure_debut'] < $date_considérée." ".$heure_now)
-        {
-            unset($creneaux[$i]) ;
-            $creneaux_du_jour = array_values($creneaux) ;
-        }
+//     for ($i = 0 ; $i < sizeof($creneaux) ; $i++)
+//     {
+//         if ($creneaux[$i]['Date_creneau']." ".$creneaux[$i]['Heure_debut'] < $date_considérée." ".$heure_now)
+//         {
+//             unset($creneaux[$i]) ;
+//             $creneaux_du_jour = array_values($creneaux) ;
+//         }
 
-    }
+//     }
 
-    $nb_creneau = 0;
-    $creneau_flottant['Heure_debut'] = '';
-    $creneau_flottant['IDp'] = $IDp;
-    $creneau_flottant['Niveau_priorite'] = 10;
-    print_r($creneaux_du_jour) ;
-    print("<br>") ;
-    print("<br>") ;
-    print_r($creneau_flottant);
+//     $nb_creneau = 0;
+//     $creneau_flottant['Heure_debut'] = '';
+//     $creneau_flottant['IDp'] = $IDp;
+//     $creneau_flottant['Niveau_priorite'] = 10;
+//     print_r($creneaux_du_jour) ;
+//     print("<br>") ;
+//     print("<br>") ;
+//     print_r($creneau_flottant);
 
-    $i = 0 ;
+//     $i = 0 ;
 
-    $size = sizeof($creneaux_du_jour) ;
+//     $size = sizeof($creneaux_du_jour) ;
 
-    while ($i < $size) {
+//     while ($i < $size) {
 
-        if ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
-        {
-            print("<br><br>") ;
+//         if ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
+//         {
+//             print("<br><br>") ;
 
-            print("avant switch flottant = ");
-            print_r($creneau_flottant);
-            print("<br>");
-            print("avant switch jour = ");
-            print_r($creneaux_du_jour[$i]);
+//             print("avant switch flottant = ");
+//             print_r($creneau_flottant);
+//             print("<br>");
+//             print("avant switch jour = ");
+//             print_r($creneaux_du_jour[$i]);
 
-            print("<br>");
+//             print("<br>");
 
-            $test['IDp'] = $creneau_flottant['IDp'] ;
-            $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
+//             $test['IDp'] = $creneau_flottant['IDp'] ;
+//             $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
 
-            $creneau_flottant['IDp'] = $creneaux_du_jour[$i]['IDp'] ;
-            $creneau_flottant['Niveau_priorite'] = $creneaux_du_jour[$i]['Niveau_priorite'] ;
+//             $creneau_flottant['IDp'] = $creneaux_du_jour[$i]['IDp'] ;
+//             $creneau_flottant['Niveau_priorite'] = $creneaux_du_jour[$i]['Niveau_priorite'] ;
 
-            $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
-            $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] ;
+//             $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
+//             $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] ;
 
-            print(" le niveau est : ") ;
-            print($creneau_flottant['Niveau_priorite']) ;
-            print("<br>") ;
-            print("i = ") ;
-            print($i) ;
-            print("<br>") ;
-            print("creneau flottant = ") ;
-            print_r($creneau_flottant);
-            print("<br>") ;
-            print("creneaux du jour = ") ;
-            print_r($creneaux_du_jour[$i]);
+//             print(" le niveau est : ") ;
+//             print($creneau_flottant['Niveau_priorite']) ;
+//             print("<br>") ;
+//             print("i = ") ;
+//             print($i) ;
+//             print("<br>") ;
+//             print("creneau flottant = ") ;
+//             print_r($creneau_flottant);
+//             print("<br>") ;
+//             print("creneaux du jour = ") ;
+//             print_r($creneaux_du_jour[$i]);
 
-            $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite']." WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
-            do_request($connexion, $update_request);
-        }
+//             $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite']." WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
+//             do_request($connexion, $update_request);
+//         }
 
-        ++$i ;
-    }
-    if(date("G:i:s", strtotime($creneaux_du_jour[$i]['Heure_fin'])) <= "18:00:00")
-    {
-        $heure_fin_intervention = date("G:i:s", strtotime("+".$duree." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])))
-        $insert_request = "INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ('', '$date_considérée', '$creneaux_du_jour[$i]['Heure_fin']', '$heure_fin_intervention', '$date_du_jour', '$creneaux_du_jour[$i]['IDp']', '$type_intervention', '$creneaux_du_jour[$i]['Niveau_priorite']')";
-        $insertion = do_request($connexion, $insert_request);
-    }
+//         ++$i ;
+//     }
+//     if(date("G:i:s", strtotime($creneaux_du_jour[$i]['Heure_fin'])) <= "18:00:00")
+//     {
+//         $heure_fin_intervention = date("G:i:s", strtotime("+".$duree." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])))
+//         $insert_request = "INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ('', '$date_considérée', '$creneaux_du_jour[$i]['Heure_fin']', '$heure_fin_intervention', '$date_du_jour', '$creneaux_du_jour[$i]['IDp']', '$type_intervention', '$creneaux_du_jour[$i]['Niveau_priorite']')";
+//         $insertion = do_request($connexion, $insert_request);
+//     }
 
-}
+// }
 
 ?>
