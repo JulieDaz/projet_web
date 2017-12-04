@@ -34,7 +34,7 @@ session_start() ;
             <option value = "4"> Niveau 4 </option>
             <option value = "5"> Niveau 5 </option>
         </select>
-        <br><br>        
+        <br><br>
         <input type="submit" value="Ajouter une pathologie" name="bouton_patho_add">
 	</form>
 
@@ -45,14 +45,25 @@ session_start() ;
         $nom_pathologie = $_POST['nom_patho'] ;
         $niveau_urgence = $_POST['urgence'] ;
 
-        $req_add_patho = "INSERT INTO Pathologie (Nom_pathologie, Niveau_urgence) VALUES ('$nom_pathologie', '$niveau_urgence')" ;
-        $add_patho = mysqli_query($connexion, $req_add_patho) ;
-
-        if($add_patho == TRUE)
+        if (check_carac($nom_pathologie) == TRUE)
         {
-            print("you're a genius") ;
+            $req_add_patho = "INSERT INTO Pathologie (Nom_pathologie, Niveau_urgence) VALUES ('$nom_pathologie', '$niveau_urgence')" ;
+            $add_patho = mysqli_query($connexion, $req_add_patho) ;
+
+            if($add_patho == TRUE)
+            {
+                print("La pathologie a été correctement ajouté.") ;
+            }
+            else { 
+                print("Cette pathologie existe déjà dans la base de données. Veuillez insérer un autre nom.");
+            }
         }
-        else { print("naab");}
+        else {
+            print("Erreur : vous avez entré des caractères non tolérés.") ;
+        }
+
+
+        
 
     }
     ?>
@@ -80,16 +91,25 @@ session_start() ;
         $service_acc = $_POST['service_acc'] ;
         $bill = $_POST['bill'] ;
 
-        $req_add_acc = "INSERT INTO Service_d_accueil (Nom_service, Facture) VALUES ('$service_acc', '$bill')" ;
-        $add_acc = mysqli_query($connexion, $req_add_acc) ;
-
-        if($add_acc==TRUE)
+        if (check_carac($service_acc) == TRUE)
         {
-            print("you're a genius");
+            $req_add_acc = "INSERT INTO Service_d_accueil (Nom_service, Facture) VALUES ('$service_acc', '$bill')" ;
+            $add_acc = mysqli_query($connexion, $req_add_acc) ;
+
+            if($add_acc==TRUE)
+            {
+                print("Le service d'accueil a été correctement ajouté");
+            }
+            else{
+                print("Ce service d'accueil existe déjà dans la base de données. Veuillez insérer un autre nom.");
+            }
         }
-        else{
-            print("you're a caca");
+        else 
+        {
+            print("Erreur : vous avez entré des caractères non tolérés.") ;
         }
+
+        
     }
     ?>
 </div>
