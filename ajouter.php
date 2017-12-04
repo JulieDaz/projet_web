@@ -57,15 +57,22 @@ session_start() ;
             $id_medecin = generate_id($id_med, $name_med, $prenom_med) ;
             $mdp_med = generate_mdp($prenom_med) ;
 
-            $req_add_doc = "INSERT INTO Medecin (IDm, Nom, Prenom, Nom_service) VALUES ('$id_medecin','$name_med','$prenom_med','$service_med')" ;
-            $add_doc = mysqli_query($connexion,$req_add_doc);
+            if (check_carac($name_med) == TRUE AND check_carac($prenom_med) == TRUE)
+            {
+                $req_add_doc = "INSERT INTO Medecin (IDm, Nom, Prenom, Nom_service) VALUES ('$id_medecin','$name_med','$prenom_med','$service_med')" ;
+                $add_doc = mysqli_query($connexion,$req_add_doc);
 
-            $req_add_userM = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDm) VALUES ('', '$mdp_med', 'Medecin', '$id_medecin')";
-            $add_userM = mysqli_query($connexion,$req_add_userM);
+                $req_add_userM = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDm) VALUES ('', '$mdp_med', 'Medecin', '$id_medecin')";
+                $add_userM = mysqli_query($connexion,$req_add_userM);
+            }
+            else {
+                print("Erreur : l'un des champs comprend des caractères non tolérés.") ;
+            }
+
+    
 
         }
         ?>
-
 </div>
 
 <!-- Supprimer un médecin-->
@@ -103,12 +110,7 @@ session_start() ;
 
             if($supp_med == TRUE)
             {
-                print("you're a genius") ;
-            }
-            else { print("naab") ;
-                print($req_supp_med);
-                print("<br>") ;
-                print($supp_med) ;
+                print("Le médecin a été correctement supprimé de la base de donnée.") ;
             }
         }
     ?>  
@@ -145,19 +147,41 @@ session_start() ;
         $time = $_POST['time'] ;
         $id_resp = "IDr" ;
         $id_responsable = generate_id($id_resp, $name_resp, $prenom_resp) ;
+        $mdp_resp = generate_mdp($prenom_resp) ;
 
-        $req_add_resp = "INSERT INTO Responsable_d_intervention (IDr, Nom, Prenom) VALUES ('$id_responsable','$name_resp','$prenom_resp')" ;
-        $add_resp = mysqli_query($connexion,$req_add_resp);
+        if (check_carac($name_resp) == TRUE AND check_carac($prenom_resp) == TRUE AND check_carac($service_int) == TRUE)
+        {
+            $modulo = $time%30 ;
+            if($modulo == 0 )
+            {
+                $req_add_resp = "INSERT INTO Responsable_d_intervention (IDr, Nom, Prenom) VALUES ('$id_responsable','$name_resp','$prenom_resp')" ;
+                $add_resp = mysqli_query($connexion,$req_add_resp);
 
-        $req_intervention = "INSERT INTO Type_d_intervention (Nom_intervention, Duree, IDr) VALUES ('$service_int', '$time', '$id_responsable')" ;
-        $add_intervention = mysqli_query($connexion,$req_intervention) ;
+                $req_intervention = "INSERT INTO Type_d_intervention (Nom_intervention, Duree, IDr) VALUES ('$service_int', '$time', '$id_responsable')" ;
+                $add_intervention = mysqli_query($connexion,$req_intervention) ;
 
-        $req_update_resp = "UPDATE Responsable_d_intervention SET Nom_intervention='$service_int' WHERE IDr='$id_responsable'";
-        $update_resp = mysqli_query($connexion,$req_update_resp);
+                $req_update_resp = "UPDATE Responsable_d_intervention SET Nom_intervention='$service_int' WHERE IDr='$id_responsable'";
+                $update_resp = mysqli_query($connexion,$req_update_resp);
 
-        $req_add_userR = "INSERT INTO est (IDu, IDr) VALUES ('','$id_responsable')" ;
-        $add_userR = mysqli_query($connexion,$req_add_userR);
+                $req_add_userR = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDr) VALUES ('', '$mdp_resp', 'Responsable', '$id_responsable')" ;
+                $add_userR = mysqli_query($connexion,$req_add_userR);
 
+                if ($add_intervention == TRUE )
+                {
+                    print("L'ajout d'un responsable d'intervention et de son service ont été réalisé avec succès.") ;
+                    print("<br>Vos identifiants sont les suivants : login = "."$id_responsable"." et mot de passe = "."$mdp_resp") ;
+                }
+                else {
+                    print("Erreur : le type d'intevention existe déjà dans la base de données.") ;
+                }
+            }
+            else {
+                print("Erreur : la durée d'intervention est invalide. Merci de rentrer une durée en minutes et qui soit un multiple de 30.");
+            }
+        }
+        else {
+            print("Erreur : l'un des champs comprend des caractères non tolérés.") ; 
+        }
     }
     ?>
 
@@ -201,9 +225,8 @@ session_start() ;
 
             if($supp_resp == TRUE)
             {
-                print("you're a genius") ;
+                print("Le responsable d'intervention a été correctement supprimé de la base de donnée.") ;
             }
-            
         }
     ?>  
 
@@ -254,7 +277,7 @@ session_start() ;
             $req_add_patient = "INSERT INTO Patient (IDp, Nom, Prenom, Numero_tel, Nom_service) VALUES ('','$nom_pat','$prenom_pat', '$tel_pat', '$service_acc')" ;
             $add_patient = mysqli_query($connexion,$req_add_patient);
             if($add_patient == TRUE)
-            { print("ok le patient a été ajouté");
+            { print("Le patient a été ajouté avec succès.");
             }
             else {print("try again");}
         }
