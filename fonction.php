@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = 'phpmyadmin';  // mot de passe
+      $mdp = '';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -66,25 +66,14 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
             foreach($IDp_from_medecin as $IDp_array) // pour chaque ID patient récupéré
             {
                 $IDp = $IDp_array['IDp']; // on va chercher la valeur contenue par la clé 'IDp'
-<<<<<<< HEAD
-                $request_HDebut = "SELECT Heure_debut FROM creneaux WHERE IDp = '$IDp'"; // requête pour récupérer l'heure de début du créneau
-                $request_HFin = "SELECT Heure_fin FROM creneaux WHERE IDp = '$IDp'"; // requête pour récupérer l'heure de fin du créneau
-                $request_date_creneau = "SELECT Date_creneau FROM creneaux WHERE Nom_intervention = '$intervention_admin_med'";
-                $request_IDc = "SELECT IDc FROM creneaux WHERE IDp = '$IDp'"; // requête pour récupérer les ID créneaux pour chaque patient
-=======
                 $request_HDebut = "SELECT Heure_debut FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de début du créneau
                 $request_HFin = "SELECT Heure_fin FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de fin du créneau
                 $request_date_creneau = "SELECT Date_creneau FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'";
                 $request_IDc = "SELECT IDc FROM creneaux WHERE  Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer les ID créneaux pour chaque patient
->>>>>>> cb45e208db2ef38e0a2e675f900aaea5c24fa121
                 $IDc_super_array[] = do_request($connexion, $request_IDc);
                 $Date_creneau[] = do_request($connexion, $request_date_creneau);
                 $Heure_debut[] = do_request($connexion, $request_HDebut); // on effectue la requête
                 $Heure_fin[] = do_request($connexion, $request_HFin); // on effectue la requête
-<<<<<<< HEAD
-                $Date_creneau[] = do_request($connexion, $request_date_creneau);
-=======
->>>>>>> cb45e208db2ef38e0a2e675f900aaea5c24fa121
             }
             $patient_ayant_intervention = 0;
             for($i = 0; $i < sizeof($IDc_super_array); $i++)
