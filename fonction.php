@@ -45,9 +45,19 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
     {
         $request_IDp = "SELECT IDp FROM a_comme WHERE IDm='$ID'"; // requête pour récupérer les ID patients du médecin considéré
         $IDp_from_medecin = do_request($connexion,$request_IDp); // on effectue la requête --> tableau de tableau
-        $request_intervention = "SELECT IDc FROM creneaux WHERE Nom_intervention = '$intervention_admin_med'";
-        $Nom_intervention = do_request($connexion, $request_intervention);
-        if(empty($IDp_from_medecin[0]) or empty($Nom_intervention[0]))
+        $patient_ayant_intervention = 0;
+        foreach($IDp_from_medecin as $IDp_array)
+        {
+            $IDp = $IDp_array['IDp'];
+            $request_intervention = "SELECT IDc FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'";
+            $nom_intervention = do_request($connexion, $request_intervention);
+            if(!empty($nom_intervention[0]))
+            {
+                $patient_ayant_intervention++;
+            }
+            $Nom_intervention[] = $nom_intervention;
+        }
+        if(empty($IDp_from_medecin[0]) or $patient_ayant_intervention == 0)
         {
             print("Vos patients n'ont pas de créneaux de ce type ou vous n'avez pas de patients.");
         }
@@ -65,18 +75,29 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
                 $Heure_debut[] = do_request($connexion, $request_HDebut); // on effectue la requête
                 $Heure_fin[] = do_request($connexion, $request_HFin); // on effectue la requête
             }
-            foreach($IDc_super_array as $IDc_arrays) // super tableau
+            $patient_ayant_intervention = 0;
+            for($i = 0; $i < sizeof($IDc_super_array); $i++)
             {
-                foreach($IDc_arrays as $IDc_array) // pour chaque créneau récupéré
+                if(!empty($IDc_super_array[$i][0]))
                 {
-                    $IDc = $IDc_array['IDc']; // on va chercher la valeur contenue par la clé 'IDc'
-                    $request_nom = "SELECT Nom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les noms des patients
-                    $request_prenom = "SELECT Prenom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les prénoms des patients
-                    $Nom[] = do_request($connexion, $request_nom);
-                    $Prenom[] = do_request($connexion, $request_prenom);
+                    $patient_ayant_intervention++;
                 }
             }
-            return array($Heure_debut,$Heure_fin,$Date_creneau,$Nom,$Prenom); // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient pour chaque créneau
+            if($patient_ayant_intervention > 0)
+            {
+                foreach($IDc_super_array as $IDc_arrays) // super tableau
+                {
+                    foreach($IDc_arrays as $IDc_array) // pour chaque créneau récupéré
+                    {
+                        $IDc = $IDc_array['IDc']; // on va chercher la valeur contenue par la clé 'IDc'
+                        $request_nom = "SELECT Nom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les noms des patients
+                        $request_prenom = "SELECT Prenom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les prénoms des patients
+                        $Nom[] = do_request($connexion, $request_nom);
+                        $Prenom[] = do_request($connexion, $request_prenom);
+                    }
+                }
+                return array($Heure_debut,$Heure_fin,$Date_creneau,$Nom,$Prenom); // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient pour chaque créneau    
+            }
         }
     }
     elseif ($job == "Admin")
