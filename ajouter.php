@@ -30,6 +30,8 @@ session_start() ;
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_med">
         <br><br>
+        <label>Adresse email</label> : <input type="text" required="on" name="mail_med">
+        <br><br>
         <label>Service d'accueil</label> : <select name ="service_acc">
 
         <?php
@@ -53,17 +55,24 @@ session_start() ;
             $name_med = $_POST['nom_med'] ;
             $prenom_med = $_POST['prenom_med'] ;
             $service_med = $_POST['service_acc'] ;
+            $mail_med = $_POST['mail_med'] ;
             $id_med = "IDm" ;
             $id_medecin = generate_id($id_med, $name_med, $prenom_med) ;
             $mdp_med = generate_mdp($prenom_med) ;
 
             if (check_carac($name_med) == TRUE AND check_carac($prenom_med) == TRUE)
             {
-                $req_add_doc = "INSERT INTO Medecin (IDm, Nom, Prenom, Nom_service) VALUES ('$id_medecin','$name_med','$prenom_med','$service_med')" ;
-                $add_doc = mysqli_query($connexion,$req_add_doc);
+                if (check_mail($mail_med == TRUE))
+                {
+                    $req_add_doc = "INSERT INTO Medecin (IDm, Nom, Prenom, Nom_service) VALUES ('$id_medecin','$name_med','$prenom_med','$service_med')" ;
+                    $add_doc = mysqli_query($connexion,$req_add_doc);
 
-                $req_add_userM = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDm) VALUES ('', '$mdp_med', 'Medecin', '$id_medecin')";
-                $add_userM = mysqli_query($connexion,$req_add_userM);
+                    $req_add_userM = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDm) VALUES ('', '$mdp_med', 'Medecin', '$id_medecin')";
+                    $add_userM = mysqli_query($connexion,$req_add_userM);
+                }
+                else {
+                    print("Erreur : l'adresse mail est invalide.") ;
+                }
             }
             else {
                 print("Erreur : l'un des champs comprend des caractères non tolérés.") ;
@@ -130,6 +139,8 @@ session_start() ;
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_resp">
         <br><br>
+        <label>Adresse email</label> : <input type="text" required="on" name="mail_resp">
+        <br><br>
         <label>Nom du service d'intervention</label> : <input type="text" required="on" name="intervention">
         <br><br>
         <label>Durée de l'intervention (en minutes)</label> : <input type="text" required="on" name="time">
@@ -145,38 +156,45 @@ session_start() ;
         $prenom_resp = $_POST['prenom_resp'] ;
         $service_int = $_POST['intervention'] ;
         $time = $_POST['time'] ;
+        $mail_resp = $_POST['mail_resp'] ;
         $id_resp = "IDr" ;
         $id_responsable = generate_id($id_resp, $name_resp, $prenom_resp) ;
         $mdp_resp = generate_mdp($prenom_resp) ;
 
         if (check_carac($name_resp) == TRUE AND check_carac($prenom_resp) == TRUE AND check_carac($service_int) == TRUE)
         {
-            $modulo = $time%30 ;
-            if($modulo == 0 )
+            if (check_mail($mail_resp)==TRUE)
             {
-                $req_add_resp = "INSERT INTO Responsable_d_intervention (IDr, Nom, Prenom) VALUES ('$id_responsable','$name_resp','$prenom_resp')" ;
-                $add_resp = mysqli_query($connexion,$req_add_resp);
-
-                $req_intervention = "INSERT INTO Type_d_intervention (Nom_intervention, Duree, IDr) VALUES ('$service_int', '$time', '$id_responsable')" ;
-                $add_intervention = mysqli_query($connexion,$req_intervention) ;
-
-                $req_update_resp = "UPDATE Responsable_d_intervention SET Nom_intervention='$service_int' WHERE IDr='$id_responsable'";
-                $update_resp = mysqli_query($connexion,$req_update_resp);
-
-                $req_add_userR = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDr) VALUES ('', '$mdp_resp', 'Responsable', '$id_responsable')" ;
-                $add_userR = mysqli_query($connexion,$req_add_userR);
-
-                if ($add_intervention == TRUE )
+                $modulo = $time%30 ;
+                if($modulo == 0 )
                 {
-                    print("L'ajout d'un responsable d'intervention et de son service ont été réalisé avec succès.") ;
-                    print("<br>Vos identifiants sont les suivants : login = "."$id_responsable"." et mot de passe = "."$mdp_resp") ;
+                    $req_add_resp = "INSERT INTO Responsable_d_intervention (IDr, Nom, Prenom) VALUES ('$id_responsable','$name_resp','$prenom_resp')" ;
+                    $add_resp = mysqli_query($connexion,$req_add_resp);
+
+                    $req_intervention = "INSERT INTO Type_d_intervention (Nom_intervention, Duree, IDr) VALUES ('$service_int', '$time', '$id_responsable')" ;
+                    $add_intervention = mysqli_query($connexion,$req_intervention) ;
+
+                    $req_update_resp = "UPDATE Responsable_d_intervention SET Nom_intervention='$service_int' WHERE IDr='$id_responsable'";
+                    $update_resp = mysqli_query($connexion,$req_update_resp);
+
+                    $req_add_userR = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDr) VALUES ('', '$mdp_resp', 'Responsable', '$id_responsable')" ;
+                    $add_userR = mysqli_query($connexion,$req_add_userR);
+
+                    if ($add_intervention == TRUE )
+                    {
+                        print("L'ajout d'un responsable d'intervention et de son service ont été réalisé avec succès.") ;
+                        print("<br>Vos identifiants sont les suivants : login = "."$id_responsable"." et mot de passe = "."$mdp_resp") ;
+                    }
+                    else {
+                        print("Erreur : le type d'intevention existe déjà dans la base de données.") ;
+                    }
                 }
                 else {
-                    print("Erreur : le type d'intevention existe déjà dans la base de données.") ;
+                    print("Erreur : la durée d'intervention est invalide. Merci de rentrer une durée en minutes et qui soit un multiple de 30.");
                 }
             }
             else {
-                print("Erreur : la durée d'intervention est invalide. Merci de rentrer une durée en minutes et qui soit un multiple de 30.");
+                print("Erreur : l'adresse email est invalide.") ;
             }
         }
         else {

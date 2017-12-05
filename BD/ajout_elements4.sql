@@ -7,33 +7,33 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO';
 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0;
 
-INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`) VALUES ("M_JMeduse","Méduse","Jean","Radiologie");
-INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`) VALUES ("M_ALamin","Lamin","André","Radiologie");
-INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`) VALUES ("M_RDupont","Dupont","Roger","Chirurgie");
-INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`) VALUES ("M_MDaramont","Daramont","Michelle","Chirurgie");
-INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`) VALUES ("M_VDunkel","Dunkel","Valentine","Dentisterie");
-INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`) VALUES ("M_MFriedman","Friedman","Marc","Analyse_sanguine");
-INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`) VALUES ("M_DJackson","Jackson","Dan","Analyse_sanguine");
+INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`,`Mail`) VALUES ("M_JMeduse","Méduse","Jean","Imagerie médicale","jean.meduse@gmail.com");
+INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`,`Mail`) VALUES ("M_ALamin","Lamin","André","Imagerie médicale","a.lamin@outlook.fr");
+INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`,`Mail`) VALUES ("M_RDupont","Dupont","Roger","Chirurgie","roger.dupont@gmail.com");
+INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`,`Mail`) VALUES ("M_MDaramont","Daramont","Michelle","Chirurgie","michmich_daramont@outlook.fr");
+INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`,`Mail`) VALUES ("M_VDunkel","Dunkel","Valentine","Odontologie","val.dunkel@gmail.com");
+INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`,`Mail`) VALUES ("M_MFriedman","Friedman","Marc","Pédiatrie","marc.friedman@outlook.com");
+INSERT INTO `medecin` (`IDm`,`Nom`,`Prenom`,`Nom_service`,`Mail`) VALUES ("M_DJackson","Jackson","Dan","Pédiatrie","jackson.d@gmail.com");
 
 INSERT INTO `administrateur`(`IDa`, `Nom`, `Prenom`) VALUES ("A_ISomer","Somer","Ian");
 
-INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Radio","60", "R_JMRadioguy");
-INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Prise_de_sang","30", "R_HBloodman");
+INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Radiologie","60", "R_JMRadioguy");
+INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Prise de sang","30", "R_HBloodman");
 INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("IRM","60", "R_MIrman");
 INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Chirurgie","180", "R_MChirurguy");
-INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Dentisterie","30", "R_JDentis");
-INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Gynécologie","60", "R_EOlvira");
+INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Extraction dentaire","30", "R_JDentis");
+INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Demande de contraception","60", "R_EOlvira");
 
-INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`) VALUES ("R_JMRadioguy","Radioguy","Jean-Michel","Radio");
-INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`) VALUES ("R_HBloodman","Bloodman","Henri","Prise de sang");
-INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`) VALUES ("R_MIrman","Irman","Marcus","IRM");
-INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`) VALUES ("R_MChirurguy","Chirurguy","Miles","Chirurgie");
-INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`) VALUES ("R_JDentis","Dentis","Jeanne","Dentisterie");
-INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`) VALUES ("R_EOlvira","Olvira","Etienne","Gynécologie");
+INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_JMRadioguy","Radioguy","Jean-Michel","Radiologie","j-m.radioguy@gmail.com");
+INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_HBloodman","Bloodman","Henri","Prise de sang","henri.bloodman@gmail.com");
+INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_MIrman","Irman","Marcus","IRM","irman_marcus@gmail.com");
+INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_MChirurguy","Chirurguy","Miles","Chirurgie","miles.chirurguy@outlook.fr");
+INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_JDentis","Dentis","Jeanne","Extraction dentaire","jeanne_dentis@gmail.com");
+INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_EOlvira","Olvira","Etienne","Demande de contraception","etienne_ol@gmail.com");
 
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Rhume","1");
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Grippe","2");
-INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Membre_cassé","5");
+INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Jambe cassé","5");
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Hépatite","3");
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Cancer","4");
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Diabète","3");
@@ -60,38 +60,38 @@ INSERT INTO `a_comme`(`IDm`, `IDp`) VALUES ("M_VDunkel","5");
 INSERT INTO `a_comme`(`IDm`, `IDp`) VALUES ("M_MDaramont","11");
 INSERT INTO `a_comme`(`IDm`, `IDp`) VALUES ("M_MFriedman","3");
 
-INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Radiologie","250");
+INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Imagerie médicale","250");
 INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Chirurgie","250");
-INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Dentisterie","250");
-INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Analyse_sanguine","250");
+INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Odontologie","250");
+INSERT INTO `service_d_accueil`(`Nom_service`, `Facture`) VALUES ("Pédiatrie","250");
 
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("0","2017-11-28","08:00:00","09:00:00","2017-11-18","3","IRM");
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("1","2017-12-05","08:00:00","08:30:00","2017-11-18","9","Prise_de_sang");
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("2","2017-12-05","09:00:00","09:30:00","2017-11-18","12","Prise_de_sang");
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("3","2017-12-04","11:00:00","14:00:00","2017-11-18","7","Dentisterie");
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("4","2017-11-28","09:00:00","10:00:00","2017-11-18","4","Chirurgie");
-INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("5","2017-12-06","09:00:00","10:00:00","2017-11-18","6","Gynécologie");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("0","2017-11-28","08:00:00","09:00:00","2017-11-18","3","Radiologie");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("1","2017-12-05","08:00:00","08:30:00","2017-11-18","9","Prise de sang");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("2","2017-12-05","09:00:00","09:30:00","2017-11-18","12","Prise de sang");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("3","2017-12-04","11:00:00","14:00:00","2017-11-18","7","Extraction dentaire");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("4","2017-11-28","09:00:00","10:00:00","2017-11-18","4","Radiologie");
+INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`) VALUES ("5","2017-12-06","09:00:00","10:00:00","2017-11-18","6","Radiologie");
 
 -- Test surbooking
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ("6","2017-12-05","08:00:00","09:00:00","2017-11-18","6","Radio","5");
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ("7","2017-12-05","09:00:00","10:00:00","2017-11-18","6","Radio","5");
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ("8","2017-12-05","10:00:00","11:00:00","2017-11-18","7","Radio","5");
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("9","2017-12-05","11:00:00","12:00:00","2017-11-18","8","Radio","5");
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("10","2017-12-05","12:00:00","13:00:00","2017-11-18","9","Radio","5");
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("11","2017-12-05","13:00:00","14:00:00","2017-11-18","10","Radio","4");
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("13","2017-12-05","14:00:00","15:00:00","2017-11-18","12","Radio","4");
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("14","2017-12-05","15:00:00","16:00:00","2017-11-18","6","Radio","3");
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("15","2017-12-05","16:00:00","17:00:00","2017-11-18","7","Radio","3");
-INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("16","2017-12-05","17:00:00","18:00:00","2017-11-18","2","Radio","2");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ("6","2017-12-04","08:00:00","09:00:00","2017-11-18","4","Radiologie","5");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ("7","2017-12-02","09:00:00","10:00:00","2017-11-18","6","Radiologie","5");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ("8","2017-12-02","10:00:00","11:00:00","2017-11-18","7","Radiologie","5");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("9","2017-12-02","11:00:00","12:00:00","2017-11-18","8","Radiologie","5");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("10","2017-12-02","12:00:00","13:00:00","2017-11-18","9","Radiologie","5");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("11","2017-12-02","13:00:00","14:00:00","2017-11-18","10","Radiologie","4");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("13","2017-12-02","14:00:00","15:00:00","2017-11-18","12","Radiologie","4");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("14","2017-12-02","15:00:00","16:00:00","2017-11-18","6","Radiologie","3");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("15","2017-12-02","16:00:00","17:00:00","2017-11-18","7","Radiologie","3");
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("16","2017-12-02","17:00:00","18:00:00","2017-11-18","2","Radiologie","2");
 
 
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","0");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","1");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Hémorragie","2");
-INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Membre_cassé","3");
-INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Membre_cassé","4");
+INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Jambe cassée","3");
+INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Jambe cassée","4");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Grippe","5");
-INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Membre_cassé","6");
+INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Jambe cassée","6");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Carie","7");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Grippe","8");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Diabète","9");
@@ -99,11 +99,11 @@ INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Cancer","10");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Cancer","11");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Diabète","12");
 
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Radio","3");
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Radio","4");
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Dentisterie","7");
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Prise_de_sang","9");
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Prise_de_sang","12");
+INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Radiologie","3");
+INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Radiologie","4");
+INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Extraction dentaire","7");
+INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Prise de sang","9");
+INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Prise de sang","12");
 
 INSERT INTO `peut_visualiser`(`IDm`, `IDc`, `IDr`, `IDa`) VALUES ("M_JMeduse","1","R_JMRadioguy","A_ISomer");
 INSERT INTO `peut_visualiser`(`IDm`, `IDc`, `IDr`, `IDa`) VALUES ("M_ALamin","2","R_HBloodman","A_ISomer");
@@ -126,18 +126,18 @@ INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDr`) VALUES ("11","18642mi
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDr`) VALUES ("12","13587jeanne", "Responsable","R_JDentis");
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDr`) VALUES ("13","78634etienne", "Responsable","R_EOlvira");
 
-UPDATE `type_d_intervention` SET `IDr`="R_JMRadioguy" WHERE `Nom_intervention`="Radio";
-UPDATE `type_d_intervention` SET `IDr`="R_HBloodman" WHERE `Nom_intervention`="Prise_de_sang";
+UPDATE `type_d_intervention` SET `IDr`="R_JMRadioguy" WHERE `Nom_intervention`="Imagerie médicale";
+UPDATE `type_d_intervention` SET `IDr`="R_HBloodman" WHERE `Nom_intervention`="¨Prise de sang";
 UPDATE `type_d_intervention` SET `IDr`="R_MIrman" WHERE `Nom_intervention`="IRM";
 UPDATE `type_d_intervention` SET `IDr`="R_MChirurguy" WHERE `Nom_intervention`="Chirurgie";
-UPDATE `type_d_intervention` SET `IDr`="R_JDentis" WHERE `Nom_intervention`="Dentisterie";
-UPDATE `type_d_intervention` SET `IDr`="R_EOlvira" WHERE `Nom_intervention`="Gynécologie";
+UPDATE `type_d_intervention` SET `IDr`="R_JDentis" WHERE `Nom_intervention`="Extraction dentaire";
+UPDATE `type_d_intervention` SET `IDr`="R_EOlvira" WHERE `Nom_intervention`="Demande de contraception";
 
 UPDATE `patient` SET `Nom_service`="Radiologie" WHERE `IDp`="3";
 UPDATE `patient` SET `Nom_service`="Radiologie" WHERE `IDp`="4";
-UPDATE `patient` SET `Nom_service`="Dentisterie" WHERE `IDp`="7";
-UPDATE `patient` SET `Nom_service`="Analyse_sanguine" WHERE `IDp`="9";
-UPDATE `patient` SET `Nom_service`="Analyse_sanguine" WHERE `IDp`="12";
+UPDATE `patient` SET `Nom_service`="Odontologie" WHERE `IDp`="7";
+UPDATE `patient` SET `Nom_service`="Pédiatrie" WHERE `IDp`="9";
+UPDATE `patient` SET `Nom_service`="Pédiatrie" WHERE `IDp`="12";
 
 UPDATE `patient` SET `Niveau_priorite`= "5" WHERE `IDp`= "3";
 UPDATE `patient` SET `Niveau_priorite`= "5" WHERE `IDp`= "4";
