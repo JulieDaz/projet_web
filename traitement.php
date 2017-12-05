@@ -126,43 +126,42 @@ if($usertype == 'Responsable')
 
 $super_tableau_creneaux = get_creneaux($usertype,$id,$connexion,$_SESSION['type_d_intervention']);
 
+// print_r($super_tableau_creneaux);
+
 if(isset($super_tableau_creneaux)) // on vérifie que des créneaux existent
 {
-	foreach($super_tableau_creneaux as $data) // pour chaque type d'information dans le super tableau (heure début, fin, nom patient...)
+	foreach($super_tableau_creneaux as $creneau) // pour chaque créneau
 	{
-		foreach($data as $creneau) // pour chaque créneau
+		foreach($creneau as $key) // pour chaque clé
 		{
-			foreach($creneau as $key) // pour chaque clé
+			foreach($key as $value) // pour chaque valeur associée à la clé
 			{
-				foreach($key as $value) // pour chaque valeur associée à la clé
+				if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
 				{
-					if (array_key_exists('Heure_debut', $key)) // si l'information 'Heure_debut' existe
-					{
-						$heureDebut = strtotime($value); // on convertit sa valeur en format date
-						$heure_debut[] = date('G:i', $heureDebut); // on stocke l'heure de début du rdv
-					}
-					elseif(array_key_exists('Heure_fin', $key)) // si l'information 'Heure_fin' existe
-					{
-						$heureFin = strtotime($value); // on convertit sa valeur en format date
-						$heure_fin[] = date('G:i', $heureFin); // on stocke l'heure de fin du rdv
-					}
-					elseif(array_key_exists('Date_creneau',$key))
-					{
-						$date = strtotime($value);
-						$date_creneau[] = date('d/m/Y', $date);
-					}
-					elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe
-					{
-						$nom_patient[] = $value; // on stocke le nom du patient
-					}
-					elseif(array_key_exists('Prenom',$key)) // si l'information 'Prenom' existe
-					{
-						$prenom_patient[] = $value; // on stocke le prénom du patient
-					}
-					elseif(array_key_exists('Nom_intervention',$key)) // si l'information 'Nom_intervention' existe
-					{
-						$nom_intervention[] = $value; // on stocke le type de l'intervention
-					}
+					$heureDebut = strtotime($value); // on convertit sa valeur en format date
+					$heure_debut[] = date("G:i", $heureDebut); // on stocke l'heure de début du rdv
+				}
+				elseif(array_key_exists('Heure_fin', $key)) // si l'information 'Heure_fin' existe
+				{
+					$heureFin = strtotime($value); // on convertit sa valeur en format date
+					$heure_fin[] = date("G:i", $heureFin); // on stocke l'heure de fin du rdv
+				}
+				elseif(array_key_exists('Date_creneau',$key))
+				{
+					$date = strtotime($value);
+					$date_creneau[] = date('d/m/Y', $date);
+				}
+				elseif(array_key_exists('Nom', $key)) // si l'information 'Nom' existe
+				{
+					$nom_patient[] = $value; // on stocke le nom du patient
+				}
+				elseif(array_key_exists('Prenom',$key)) // si l'information 'Prenom' existe
+				{
+					$prenom_patient[] = $value; // on stocke le prénom du patient
+				}
+				elseif(array_key_exists('Nom_intervention',$key)) // si l'information 'Nom_intervention' existe
+				{
+					$nom_intervention[] = $value; // on stocke le type de l'intervention
 				}
 			}
 		}
@@ -219,7 +218,7 @@ if(isset($super_tableau_creneaux)) // on vérifie que des créneaux existent
 					}
 						while(date("H:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))) < date("H:i", strtotime($heure_fin[$i]))) // tant que l'heure de début < l'heure de la fin
 					{
-						$h = date("H:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))); // on crée un mini-créneau pour réprésenter la demi-heure de créneau suivant le demi-créneau précédent
+						$h = date("G:i", strtotime("+".$j." minute", strtotime($heure_debut[$i]))); // on crée un mini-créneau pour réprésenter la demi-heure de créneau suivant le demi-créneau précédent
 						if(isset($nom_intervention))
 						{
 							$rdv[$jour." ".$date_creneau[$i]][$h] = $nom_intervention[$i].": ".$prenom_patient[$i]." ".$nom_patient[$i]; // on crée une nouvelle entrée dans $rdv pour la demi-heure suivant le début du créneau
