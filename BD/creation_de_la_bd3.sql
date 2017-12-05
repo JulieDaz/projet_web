@@ -15,6 +15,7 @@ CREATE TABLE Medecin(
         Nom         Varchar (25) NOT NULL ,
         Prenom      Varchar (25) NOT NULL ,
         Nom_service Varchar (25) , 
+        Mail        Varchar (25) NOT NULL ,
         PRIMARY KEY (IDm )
 )ENGINE=InnoDB;
 
@@ -28,6 +29,8 @@ CREATE TABLE Responsable_d_intervention(
         Nom              Varchar (25) NOT NULL ,
         Prenom           Varchar (25) NOT NULL ,
         Nom_intervention Varchar (25) ,
+        Mail             Varchar (25) NOT NULL ,
+
         PRIMARY KEY (IDr )
 )ENGINE=InnoDB;
 
