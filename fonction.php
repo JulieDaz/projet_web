@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = 'phpmyadmin';  // mot de passe
+      $mdp = '';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -45,9 +45,19 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
     {
         $request_IDp = "SELECT IDp FROM a_comme WHERE IDm='$ID'"; // requête pour récupérer les ID patients du médecin considéré
         $IDp_from_medecin = do_request($connexion,$request_IDp); // on effectue la requête --> tableau de tableau
-        $request_intervention = "SELECT IDc FROM creneaux WHERE Nom_intervention = '$intervention_admin_med'";
-        $Nom_intervention = do_request($connexion, $request_intervention);
-        if(empty($IDp_from_medecin[0]) or empty($Nom_intervention[0]))
+        $patient_ayant_intervention = 0;
+        foreach($IDp_from_medecin as $IDp_array)
+        {
+            $IDp = $IDp_array['IDp'];
+            $request_intervention = "SELECT IDc FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'";
+            $nom_intervention = do_request($connexion, $request_intervention);
+            if(!empty($nom_intervention[0]))
+            {
+                $patient_ayant_intervention++;
+            }
+            $Nom_intervention[] = $nom_intervention;
+        }
+        if(empty($IDp_from_medecin[0]) or $patient_ayant_intervention == 0)
         {
             print("Vos patients n'ont pas de créneaux de ce type ou vous n'avez pas de patients.");
         }
@@ -56,30 +66,30 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
             foreach($IDp_from_medecin as $IDp_array) // pour chaque ID patient récupéré
             {
                 $IDp = $IDp_array['IDp']; // on va chercher la valeur contenue par la clé 'IDp'
-
                 $request_HDebut = "SELECT Heure_debut FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de début du créneau
                 $request_HFin = "SELECT Heure_fin FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de fin du créneau
                 $request_date_creneau = "SELECT Date_creneau FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'";
                 $request_IDc = "SELECT IDc FROM creneaux WHERE  Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer les ID créneaux pour chaque patient
-
-                $IDc_super_array[] = do_request($connexion, $request_IDc);
-                $Date_creneau[] = do_request($connexion, $request_date_creneau);
-                $Heure_debut[] = do_request($connexion, $request_HDebut); // on effectue la requête
-                $Heure_fin[] = do_request($connexion, $request_HFin); // on effectue la requête
-
+                $IDc_array = do_request($connexion, $request_IDc);
+                $Date_creneau = do_request($connexion, $request_date_creneau);
+                $Heure_debut = do_request($connexion, $request_HDebut); // on effectue la requête
+                $Heure_fin = do_request($connexion, $request_HFin); // on effectue la requête
             }
-            foreach($IDc_super_array as $IDc_arrays) // super tableau
+            foreach($IDc_array as $IDc_key) // pour chaque créneau récupéré
             {
-                foreach($IDc_arrays as $IDc_array) // pour chaque créneau récupéré
-                {
-                    $IDc = $IDc_array['IDc']; // on va chercher la valeur contenue par la clé 'IDc'
-                    $request_nom = "SELECT Nom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les noms des patients
-                    $request_prenom = "SELECT Prenom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les prénoms des patients
-                    $Nom[] = do_request($connexion, $request_nom);
-                    $Prenom[] = do_request($connexion, $request_prenom);
-                }
+                $IDc = $IDc_key['IDc']; // on va chercher la valeur contenue par la clé 'IDc'
+                $request_nom = "SELECT Nom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les noms des patients
+                $request_prenom = "SELECT Prenom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les prénoms des patients
+                $Nom = do_request($connexion, $request_nom);
+                $Prenom = do_request($connexion, $request_prenom);
+                $Nom_array[] = $Nom[0];
+                $Prenom_array[] = $Prenom[0];
             }
-            return array($Heure_debut,$Heure_fin,$Date_creneau,$Nom,$Prenom); // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient pour chaque créneau
+            for($i = 0; $i < sizeof($Heure_debut); $i++)
+            {
+                $res[$i] = array($Heure_debut[$i], $Heure_fin[$i], $Date_creneau[$i], $Nom_array[$i], $Prenom_array[$i], $Nom_intervention[$i]);
+            }
+            return $res; // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient et le type d'intervention pour chaque créneau
         }
     }
     elseif ($job == "Admin")
@@ -96,24 +106,28 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
             $request_HFin = "SELECT Heure_fin FROM creneaux WHERE Nom_intervention = '$intervention_admin_med'"; // requête pour récupérer l'heure de fin du créneau
             $request_date_creneau = "SELECT Date_creneau FROM creneaux WHERE Nom_intervention = '$intervention_admin_med'";
             $request_IDp = "SELECT IDp FROM creneaux WHERE Nom_intervention = '$intervention_admin_med'";
-            $Heure_debut[] = do_request($connexion, $request_HDebut); // on effectue la requête
-            $Heure_fin[] = do_request($connexion, $request_HFin); // on effectue la requête
-            $Date_creneau[] = do_request($connexion, $request_date_creneau);
-            $IDp_super_array[] = do_request($connexion, $request_IDp);
-            foreach($IDp_super_array as $IDp_arrays)
+            $Heure_debut = do_request($connexion, $request_HDebut); // on effectue la requête
+            $Heure_fin = do_request($connexion, $request_HFin); // on effectue la requête
+            $Date_creneau = do_request($connexion, $request_date_creneau);
+            $IDp_array = do_request($connexion, $request_IDp);
+            foreach($IDp_array as $IDp_key)
             {
-                foreach($IDp_arrays as $IDp_array)
-                {
-                    $IDp = $IDp_array['IDp'];
-                    $request_nom = "SELECT Nom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les noms des patients
-                    $request_prenom = "SELECT Prenom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les prénoms des patients
-                    $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE Nom_intervention = '$intervention_admin_med'"; // requête pour récupérer le type d'intervention
-                    $Nom_intervention[] = do_request($connexion, $request_intervention);
-                    $Nom[] = do_request($connexion, $request_nom);
-                    $Prenom[] = do_request($connexion, $request_prenom);
-                }
+                $IDp = $IDp_key['IDp'];
+                $request_nom = "SELECT Nom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les noms des patients
+                $request_prenom = "SELECT Prenom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les prénoms des patients
+                $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE Nom_intervention = '$intervention_admin_med'"; // requête pour récupérer le type d'intervention
+                $Nom_intervention = do_request($connexion, $request_intervention);
+                $Nom = do_request($connexion, $request_nom);
+                $Prenom = do_request($connexion, $request_prenom);
+                $Nom_array[] = $Nom[0];
+                $Prenom_array[] = $Prenom[0];
             }
-            return array($Heure_debut,$Heure_fin,$Date_creneau,$Nom,$Prenom,$Nom_intervention); // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient et le type d'intervention pour chaque créneau
+
+            for($i = 0; $i < sizeof($Heure_debut); $i++)
+            {
+                $res[$i] = array($Heure_debut[$i], $Heure_fin[$i], $Date_creneau[$i], $Nom_array[$i], $Prenom_array[$i], $Nom_intervention[$i]);
+            }
+            return $res; // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient et le type d'intervention pour chaque créneau
         }
     }
     elseif ($job == "Responsable")
@@ -133,24 +147,27 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
                 $request_HFin = "SELECT Heure_fin FROM creneaux WHERE Nom_intervention = '$nom_intervention'"; // requête pour récupérer l'heure de fin du créneau
                 $request_date_creneau = "SELECT Date_creneau FROM creneaux WHERE Nom_intervention = '$nom_intervention'";
                 $request_IDp = "SELECT IDp FROM creneaux WHERE Nom_intervention = '$nom_intervention'"; // requête pour récupérer l'IDp selon le type d'intervention
-                $Heure_debut[] = do_request($connexion, $request_HDebut); // on effectue la requête
-                $Heure_fin[] = do_request($connexion, $request_HFin); // on effectue la requête
-                $Date_creneau[] = do_request($connexion, $request_date_creneau);
-                $IDp_super_array[] = do_request($connexion, $request_IDp); // on effectue la requête
+                $Heure_debut = do_request($connexion, $request_HDebut); // on effectue la requête
+                $Heure_fin = do_request($connexion, $request_HFin); // on effectue la requête
+                $Date_creneau = do_request($connexion, $request_date_creneau);
+                $IDp_array = do_request($connexion, $request_IDp); // on effectue la requête
             }
-            foreach($IDp_super_array as $IDp_arrays)
+            foreach($IDp_array as $IDp_key)
             {
-                foreach($IDp_arrays as $IDp_array)
-                {
-                    $IDp = $IDp_array['IDp'];
-                    $request_nom = "SELECT Nom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les noms des patients
-                    $request_prenom = "SELECT Prenom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les prénoms des patients
-                    $Nom_intervention[] = do_request($connexion, $request_intervention);
-                    $Nom[] = do_request($connexion, $request_nom);
-                    $Prenom[] = do_request($connexion, $request_prenom);
-                }
+                $IDp = $IDp_key['IDp'];
+                $request_nom = "SELECT Nom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les noms des patients
+                $request_prenom = "SELECT Prenom FROM patient WHERE IDp ='$IDp'"; // requête pour récupérer les prénoms des patients
+                $Nom_intervention = do_request($connexion, $request_intervention);
+                $Nom = do_request($connexion, $request_nom);
+                $Prenom = do_request($connexion, $request_prenom);
+                $Nom_array[] = $Nom[0];
+                $Prenom_array[] = $Prenom[0];
             }
-            return array($Heure_debut,$Heure_fin,$Date_creneau,$Nom,$Prenom,$Nom_intervention); // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient et le type d'intervention pour chaque créneau
+            for($i = 0; $i < sizeof($Heure_debut); $i++)
+            {
+                $res[$i] = array($Heure_debut[$i], $Heure_fin[$i], $Date_creneau[$i], $Nom_array[$i], $Prenom_array[$i], $Nom_intervention[$i]);
+            }
+            return $res; // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient et le type d'intervention pour chaque créneau
         }
     }
 }
@@ -208,6 +225,7 @@ function generate_id($id, $nom, $prenom)
 
 function generate_mdp($prenom)
 {
+    $prenom=mb_strtolower($prenom) ;
     $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9) ;
     $mdp = $random_number.$prenom ;
 
@@ -302,6 +320,64 @@ function getDureeIntervention($typeIntervention){
 
 //mktime(0,0,0,$mois,$jour+$d,$annee)
 
+
+function check_carac($word)
+{
+    $word_changed = ucfirst(mb_strtolower($word, 'UTF-8')) ;
+
+    if (preg_match("#^[A-Z][a-zàâäéèêëïùüû]+[' -]?[a-zàâäéèêëïùüû]+$#", $word_changed))
+    {
+        return $word_changed ;
+    }
+}
+
+function check_mail($mail)
+{
+    $mail_changed = strtolower($mail) ;
+    if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $mail_changed))
+    {
+        return $mail_changed ;
+    }
+}
+
+// function check_number($number, $type)
+// {
+//     switch ($type) {
+//         case 'phone':
+//             if (preg_match("#^0[1-8]([-. ]?[0-9]{2}){4}$#", $number))
+//             {
+//                 print("Le numéro de téléphone est valide") ;
+//             }
+//             else {
+//                 print("caca") ;
+//             }
+//             break;
+
+//         case 'bill':
+//             if (preg_match("#^[1-9][0-9]#", $number))
+//             {
+//                 print("Le chiffre est valide") ;
+//             }
+//             else {
+//                 print("caca") ;
+//             }
+//             break;
+
+//         case 'time':
+//             $modulo = $number % 30 ;
+//             if ($modulo == 0)
+//             {
+//                 print("La durée est bien un multiple de 30") ;
+//             }
+//             else
+//             {
+//                 print("prout") ;
+//             }
+//             break;
+//     }
+// }
+
+
 function sousbooking($connexion, $type_intervention)
 {
     $request_sous_booking = "SELECT Heure_debut FROM creneaux WHERE Nom_intervention = '$type_intervention' AND TIME(Heure_debut) = '18:00:00'";
@@ -313,17 +389,20 @@ function sousbooking($connexion, $type_intervention)
     }
 }
 
+
 function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $creneau_flottant = NULL)
 {
     $date_du_jour = date("Y-m-d");
     list($annee, $mois, $jour) = explode("-", $date_du_jour);
     $date_considérée = date("Y-m-d", mktime(0,0,0,$mois, $jour+$nb_jours, $annee));
-    // print($date_considérée);
-    $heure_now = '08:00:00' ;
-    // $heure_now = date("G:i:s");
+    print($date_considérée);
+    // $heure_now = '08:00:00' ;
+    $heure_now = date("H:i:s");
 
-    print($heure_now) ;
+    // print($heure_now) ;
     print("<br><br>");
+
+    print($nb_jours);
 
     $request_durée = "SELECT Duree FROM type_d_intervention WHERE Nom_intervention = '$type_intervention'";
     $duree = do_request($connexion, $request_durée);
@@ -338,7 +417,6 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
     {
         if (strtotime($creneaux[$i]['Date_creneau']." ".$creneaux[$i]['Heure_debut']) <= strtotime($date_considérée." ".$heure_now))
         {
-            print("stuff");
             unset($creneaux[$i]) ;
             $creneaux_du_jour = array_values($creneaux) ;
         }
@@ -356,10 +434,10 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
         $creneaux_du_jour = $creneaux;
     }
 
-    print_r($creneaux_du_jour) ;
-    print("<br>") ;
-    print("<br>") ;
-    print_r($creneau_flottant);
+    // print_r($creneaux_du_jour) ;
+    // print("<br>") ;
+    // print("<br>") ;
+    // print_r($creneau_flottant);
 
     $i = 0 ;
     $size = sizeof($creneaux_du_jour) ;
@@ -368,13 +446,13 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
 
         if ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
         {
-            print("<br><br>") ;
-            print("avant switch flottant = ");
-            print_r($creneau_flottant);
-            print("<br>");
-            print("avant switch jour = ");
-            print_r($creneaux_du_jour[$i]);
-            print("<br>");
+            // print("<br><br>") ;
+            // print("avant switch flottant = ");
+            // print_r($creneau_flottant);
+            // print("<br>");
+            // print("avant switch jour = ");
+            // print_r($creneaux_du_jour[$i]);
+            // print("<br>");
 
             $test['IDp'] = $creneau_flottant['IDp'] ;
             $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
@@ -385,17 +463,17 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
             $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
             $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] ;
 
-            print(" le niveau est : ") ;
-            print($creneau_flottant['Niveau_priorite']) ;
-            print("<br>") ;
-            print("i = ") ;
-            print($i) ;
-            print("<br>") ;
-            print("creneau flottant = ") ;
-            print_r($creneau_flottant);
-            print("<br>") ;
-            print("creneaux du jour = ") ;
-            print_r($creneaux_du_jour[$i]);
+            // print(" le niveau est : ") ;
+            // print($creneau_flottant['Niveau_priorite']) ;
+            // print("<br>") ;
+            // print("i = ") ;
+            // print($i) ;
+            // print("<br>") ;
+            // print("creneau flottant = ") ;
+            // print_r($creneau_flottant);
+            // print("<br>") ;
+            // print("creneaux du jour = ") ;
+            // print_r($creneaux_du_jour[$i]);
 
             $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite']." WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
             mysqli_query($connexion,$update_request) or die('<br>Erreur SQL !<br>'.$request.'<br>'.mysqli_error($connexion));
@@ -403,21 +481,33 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
         ++$i ;
     }
 
-    $dernier_creneau = date("G:i:s", strtotime($creneaux_du_jour[$i-1]['Heure_fin']));
-
-    if($dernier_creneau <= "18:00:00")
+    if(empty($creneaux_du_jour))
     {
-        if($dernier_creneau + $duree_intervention <= "18:00:00")
+        $creneau_heure_debut = "08:00:00";
+        $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($creneau_heure_debut)));
+        // print($creneau_heure_fin);
+        $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '$creneau_heure_debut', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
+        mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
+    }
+    else
+    {
+        $dernier_creneau = date("H:i:s", strtotime($creneaux_du_jour[$i-1]['Heure_fin']));
+        if($dernier_creneau <= "18:00:00")
         {
-            $heure_fin_intervention = date("G:i:s", strtotime("+".$duree." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])));
-            $insert_request = "INSERT INTO `creneaux`(`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ('', '$date_considérée', '$creneaux_du_jour[$i]['Heure_fin']', '$heure_fin_intervention', '$date_du_jour', '$creneaux_du_jour[$i]['IDp']', '$type_intervention', '$creneaux_du_jour[$i]['Niveau_priorite']')";
-            mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$request.'<br>'.mysqli_error($connexion));
-        }
-        else
-        {
-            surbooking($connexion, $type_intervention, $IDp, $nb_jours++, $creneau_flottant);
+            if(date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($dernier_creneau))) <= "18:00:00")
+            {
+                $heure_fin_intervention = date("H:i:s", strtotime("+".$duree." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])));
+                $insert_request = "INSERT INTO creneaux(IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '$creneaux_du_jour[$i]['Heure_fin']', '$heure_fin_intervention', '$date_du_jour', '$creneaux_du_jour[$i]['IDp']', '$type_intervention', '$creneaux_du_jour[$i]['Niveau_priorite']')";
+                mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$request.'<br>'.mysqli_error($connexion));
+            }
+            else
+            {
+                $nb_jours++;
+                surbooking($connexion, $type_intervention, $IDp, $nb_jours, $creneau_flottant);
+            }
         }
     }
 }
+
 
 ?>

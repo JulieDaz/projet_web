@@ -30,6 +30,8 @@ session_start() ;
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_med">
         <br><br>
+        <label>Adresse email</label> : <input type="text" required="on" name="mail_med">
+        <br><br>
         <label>Service d'accueil</label> : <select name ="service_acc">
 
         <?php
@@ -53,19 +55,48 @@ session_start() ;
             $name_med = $_POST['nom_med'] ;
             $prenom_med = $_POST['prenom_med'] ;
             $service_med = $_POST['service_acc'] ;
+            $mail_med = $_POST['mail_med'] ;
             $id_med = "IDm" ;
             $id_medecin = generate_id($id_med, $name_med, $prenom_med) ;
             $mdp_med = generate_mdp($prenom_med) ;
 
-            $req_add_doc = "INSERT INTO Medecin (IDm, Nom, Prenom, Nom_service) VALUES ('$id_medecin','$name_med','$prenom_med','$service_med')" ;
-            $add_doc = mysqli_query($connexion,$req_add_doc);
+            if (check_carac($name_med) == TRUE AND check_carac($prenom_med) == TRUE)
+            {
+                if (check_mail($mail_med) == TRUE)
+                {
+                
+                    $req_exist_med = "SELECT * FROM Medecin WHERE Nom = '$name_med' AND Prenom = '$prenom_med' AND Mail = '$mail_med' AND Nom_service = '$service_med'" ;
+                    $exist_med = do_request($connexion, $req_exist_med) ; 
 
-            $req_add_userM = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDm) VALUES ('', '$mdp_med', 'Medecin', '$id_medecin')";
-            $add_userM = mysqli_query($connexion,$req_add_userM);
+                    if (empty($exist_med))
+                    {
+                        $req_add_doc = "INSERT INTO Medecin (IDm, Nom, Prenom, Nom_service) VALUES ('$id_medecin','$name_med','$prenom_med','$service_med')" ;
+                        $add_doc = mysqli_query($connexion,$req_add_doc);
 
+                        $req_add_userM = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDm) VALUES ('', '$mdp_med', 'Medecin', '$id_medecin')";
+                        $add_userM = mysqli_query($connexion,$req_add_userM);
+
+                        if($add_doc == TRUE AND $add_userM == TRUE )
+                        {
+                            print("Le médecin a été ajouté avec succès.") ;
+                        }
+                        else {
+                            print("Erreur : une erreur s'est produite") ;
+                        }
+                    }
+                    else {
+                        print("Ce médecin existe déjà dans la base de données.") ;
+                    }
+                }
+                else {
+                    print("Erreur : l'adresse mail est invalide.") ;
+                }
+            }
+            else {
+                print("Erreur : l'un des champs comprend des caractères non tolérés.") ;
+            }
         }
         ?>
-
 </div>
 
 <!-- Supprimer un médecin-->
@@ -103,12 +134,7 @@ session_start() ;
 
             if($supp_med == TRUE)
             {
-                print("you're a genius") ;
-            }
-            else { print("naab") ;
-                print($req_supp_med);
-                print("<br>") ;
-                print($supp_med) ;
+                print("Le médecin a été correctement supprimé de la base de donnée.") ;
             }
         }
     ?>  
@@ -128,6 +154,8 @@ session_start() ;
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_resp">
         <br><br>
+        <label>Adresse email</label> : <input type="text" required="on" name="mail_resp">
+        <br><br>
         <label>Nom du service d'intervention</label> : <input type="text" required="on" name="intervention">
         <br><br>
         <label>Durée de l'intervention (en minutes)</label> : <input type="text" required="on" name="time">
@@ -143,21 +171,68 @@ session_start() ;
         $prenom_resp = $_POST['prenom_resp'] ;
         $service_int = $_POST['intervention'] ;
         $time = $_POST['time'] ;
+        $mail_resp = $_POST['mail_resp'] ;
         $id_resp = "IDr" ;
         $id_responsable = generate_id($id_resp, $name_resp, $prenom_resp) ;
+        $mdp_resp = generate_mdp($prenom_resp) ;
 
-        $req_add_resp = "INSERT INTO Responsable_d_intervention (IDr, Nom, Prenom) VALUES ('$id_responsable','$name_resp','$prenom_resp')" ;
-        $add_resp = mysqli_query($connexion,$req_add_resp);
+        if (check_carac($name_resp) == TRUE AND check_carac($prenom_resp) == TRUE AND check_carac($service_int) == TRUE)
+        {
+            if (check_mail($mail_resp)==TRUE)
+            {
+                $modulo = $time%30 ;
+                if($modulo == 0 )
+                {
+                    $req_exist_resp = "SELECT * FROM Responsable_d_intervention WHERE Nom = '$name_resp' AND Prenom = '$prenom_resp' AND Mail = '$mail_resp'" ;
+                    $exist_resp = do_request($connexion, $req_exist_resp) ;
 
-        $req_intervention = "INSERT INTO Type_d_intervention (Nom_intervention, Duree, IDr) VALUES ('$service_int', '$time', '$id_responsable')" ;
-        $add_intervention = mysqli_query($connexion,$req_intervention) ;
+                    if (empty($exist_resp))
+                    {
+                        $req_exist_intervention = "SELECT * FROM Type_d_intervention WHERE Nom_intervention = '$service_int'" ;
+                        $exist_intervention = do_request($connexion, $req_exist_intervention) ;
 
-        $req_update_resp = "UPDATE Responsable_d_intervention SET Nom_intervention='$service_int' WHERE IDr='$id_responsable'";
-        $update_resp = mysqli_query($connexion,$req_update_resp);
+                        if (empty($exist_intervention))
+                        {
+                            $req_add_resp = "INSERT INTO Responsable_d_intervention (IDr, Nom, Prenom) VALUES ('$id_responsable','$name_resp','$prenom_resp')" ;
+                            $add_resp = mysqli_query($connexion,$req_add_resp);
 
-        $req_add_userR = "INSERT INTO est (IDu, IDr) VALUES ('','$id_responsable')" ;
-        $add_userR = mysqli_query($connexion,$req_add_userR);
+                            $req_intervention = "INSERT INTO Type_d_intervention (Nom_intervention, Duree, IDr) VALUES ('$service_int', '$time', '$id_responsable')" ;
+                            $add_intervention = mysqli_query($connexion,$req_intervention) ;
 
+                            $req_update_resp = "UPDATE Responsable_d_intervention SET Nom_intervention='$service_int' WHERE IDr='$id_responsable'";
+                            $update_resp = mysqli_query($connexion,$req_update_resp);
+
+                            $req_add_userR = "INSERT INTO Utilisateur (IDu, Mdp, User_type, IDr) VALUES ('', '$mdp_resp', 'Responsable', '$id_responsable')" ;
+                            $add_userR = mysqli_query($connexion,$req_add_userR);
+
+                            if ($add_intervention == TRUE AND $add_resp == TRUE AND $update_resp==TRUE AND $add_userR == TRUE)
+                            {
+                                print("L'ajout d'un responsable d'intervention et de son service ont été réalisé avec succès.") ;
+                                print("<br>Les identifiants de connexion sont les suivants : login = "."$id_responsable"." et mot de passe = "."$mdp_resp") ;
+                            }
+                            else {
+                                print("Erreur : une erreur s'est produite." );
+                            }
+                        }
+                        else {
+                            print("Erreur : le type d'intervention existe déjà dans la base de données.") ;
+                        }
+                    }
+                    else {
+                        print("Erreur : ce responsable existe déjà dans la base de données.") ;
+                    }                    
+                }
+                else {
+                    print("Erreur : la durée d'intervention est invalide. Merci de rentrer une durée en minutes et qui soit un multiple de 30.");
+                }
+            }
+            else {
+                print("Erreur : l'adresse email est invalide.") ;
+            }
+        }
+        else {
+            print("Erreur : l'un des champs comprend des caractères non tolérés.") ; 
+        }
     }
     ?>
 
@@ -201,9 +276,8 @@ session_start() ;
 
             if($supp_resp == TRUE)
             {
-                print("you're a genius") ;
+                print("Le responsable d'intervention a été correctement supprimé de la base de donnée.") ;
             }
-            
         }
     ?>  
 
@@ -251,12 +325,40 @@ session_start() ;
             $tel_pat = $_POST['tel'] ;
             $service_acc = $_POST['service_acc'] ;
 
-            $req_add_patient = "INSERT INTO Patient (IDp, Nom, Prenom, Numero_tel, Nom_service) VALUES ('','$nom_pat','$prenom_pat', '$tel_pat', '$service_acc')" ;
-            $add_patient = mysqli_query($connexion,$req_add_patient);
-            if($add_patient == TRUE)
-            { print("ok le patient a été ajouté");
+            if (check_carac($nom_pat) == TRUE AND check_carac($prenom_pat) == TRUE)
+            {
+                if (preg_match("#^0[1-8]([-. ]?[0-9]{2}){4}$#", $tel_pat))
+                {
+                    $req_exist_pat = "SELECT * FROM Patient WHERE Nom = '$nom_pat' AND Prenom = '$prenom_pat' AND Numero_tel = '$tel_pat' AND Nom_service = '$service_acc'" ;
+                    $exist_pat = do_request($connexion, $req_exist_pat) ; 
+
+                    if (empty($exist_pat))
+                    {
+                        $req_add_patient = "INSERT INTO Patient (IDp, Nom, Prenom, Numero_tel, Nom_service) VALUES ('','$nom_pat','$prenom_pat', '$tel_pat', '$service_acc')" ;
+                        $add_patient = mysqli_query($connexion,$req_add_patient);
+                        
+                        if($add_patient == TRUE)
+                        { 
+                            print("Le patient a été ajouté avec succès.");
+                        }
+                        else 
+                        {
+                            print("Erreur : le patient n'a pas pu être ajouté.");
+                        }
+                    }
+                    else 
+                    {
+                        print("Ce patient existe déjà dans la base de données.") ;
+                    } 
+                } 
+                else {
+                    print("Erreur : le numéro de téléphone est invalide.") ;
+                }
             }
-            else {print("try again");}
+            else 
+            {
+                print("Erreur : l'un des champs comprend des caractères non tolérés.") ;
+            }
         }
         ?>
 
