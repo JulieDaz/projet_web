@@ -1,15 +1,16 @@
 <?php include("fonction.php");
 
 session_start();
+
 ?>
 
-<!--Début de la page HTML, commun à tous les utilisateurs..............................................................................................-->
+<!--Début de la page HTML, commune à tous les utilisateurs..............................................................................................-->
 	<html>
-	 <head>
-			 <title>Medical Planner</title>
-			 <link rel="stylesheet" href="style.css"/>
-	 </head>
-	 <body>
+	<head>
+		<title>Medical Planner</title>
+		<link rel="stylesheet" href="style.css"/>
+	</head>
+	<body>
 
 <?php
 
@@ -28,10 +29,12 @@ else
 
 print("<br>") ;
 
-if ($id == "" OR $mdp == ""){
+if ($id == "" OR $mdp == "")
+{
 	print("Attention vous n'avez pas rempli tous les champs. Veuillez recommencer.");
- }
-else {
+}
+else 
+{
 	$type= "SELECT User_type, IDu, Mdp FROM Utilisateur WHERE IDm= '$id' OR IDa = '$id' OR IDr = '$id'" ;
 	$get_type = mysqli_query($connexion,$type) or die('<br>Erreur SQL !<br>'.$type.'<br>'.mysqli_error($connexion));
 	$info_user = mysqli_fetch_array($get_type);
@@ -40,36 +43,35 @@ else {
 	$pwd = $info_user[2] ;
 }
 
-	if ($pwd != $mdp OR $get_type == FALSE) {
-		print("Erreur : vérifiez vos informations de connexion");
-		exit();
+if ($pwd != $mdp OR $get_type == FALSE) {
+	$_SESSION['erreur'] = "Login ou mdp invalide" ;
+	header("Location:index.php") ;
+}
+else {
+	switch ($usertype) {
+	case 'Medecin':
+		print("vous êtes un médecin !");
+		$_SESSION['ID'] = $id ;
+		$_SESSION['mdp'] = $mdp;
+		$_SESSION['type'] = "Medecin" ;
+		break;
+
+	case 'Admin':
+		print("vous êtes un admin !");
+		$_SESSION['ID'] = $id ;
+		$_SESSION['mdp'] = $mdp;
+		$_SESSION['type'] = "Administrateur" ;
+		break;
+
+	case "Responsable":
+		print("Vous êtes un responsable !");
+		$_SESSION['ID'] = $id ;
+		$_SESSION['mdp'] = $mdp;
+		$_SESSION['type'] = "Responsable" ;
+		break;
 	}
 
-	else {
-		switch ($usertype) {
-		case 'Medecin':
-			print("vous êtes un médecin !");
-			$_SESSION['ID'] = $id ;
-			$_SESSION['mdp'] = $mdp;
-			$_SESSION['type'] = "Medecin" ;
-			break;
-
-		case 'Admin':
-			print("vous êtes un admin !");
-			$_SESSION['ID'] = $id ;
-			$_SESSION['mdp'] = $mdp;
-			$_SESSION['type'] = "Administrateur" ;
-			break;
-
-		case "Responsable":
-			print("Vous êtes un responsable !");
-			$_SESSION['ID'] = $id ;
-			$_SESSION['mdp'] = $mdp;
-			$_SESSION['type'] = "Responsable" ;
-			break;
-		}
-
-	}
+}
 ?>
 
 
