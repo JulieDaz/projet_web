@@ -47,15 +47,24 @@ session_start() ;
 
         if (check_carac($nom_pathologie) == TRUE)
         {
-            $req_add_patho = "INSERT INTO Pathologie (Nom_pathologie, Niveau_urgence) VALUES ('$nom_pathologie', '$niveau_urgence')" ;
-            $add_patho = mysqli_query($connexion, $req_add_patho) ;
+            $req_exist_patho = "SELECT * FROM Pathologie WHERE Nom_pathologie = '$nom_pathologie'" ;
+            $exist_patho = do_request($connexion, $req_exist_patho) ;
 
-            if($add_patho == TRUE)
+            if (empty($exist_patho))
             {
-                print("La pathologie a été correctement ajouté.") ;
+                $req_add_patho = "INSERT INTO Pathologie (Nom_pathologie, Niveau_urgence) VALUES ('$nom_pathologie', '$niveau_urgence')" ;
+                $add_patho = mysqli_query($connexion, $req_add_patho) ;
+
+                if($add_patho == TRUE)
+                {
+                    print("La pathologie a été correctement ajouté.") ;
+                }
+                else { 
+                    print("Erreur : La pathologie n'a pas pu être ajoutée.");
+                }
             }
-            else { 
-                print("Cette pathologie existe déjà dans la base de données. Veuillez insérer un autre nom.");
+            else {
+                print("Erreur : cette pathologie existe déjà dans la base de données. Veuillez insérer un autre nom.");
             }
         }
         else {
@@ -93,17 +102,28 @@ session_start() ;
 
         if (check_carac($service_acc) == TRUE)
         {
-            if (preg_match("#^0[1-8]([-. ]?[0-9]{2}){4}$#", $bill))
+            if (preg_match("#^[1-9][0-9]#", $bill))
             {
-                $req_add_acc = "INSERT INTO Service_d_accueil (Nom_service, Facture) VALUES ('$service_acc', '$bill')" ;
-                $add_acc = mysqli_query($connexion, $req_add_acc) ;
+                $req_exist_service = "SELECT * FROM Service_d_accueil WHERE Nom_service = '$service_acc'" ;
+                $exist_service = do_request($connexion, $req_exist_service) ;
 
-                if($add_acc==TRUE)
+                if(empty($exist_service))
                 {
-                    print("Le service d'accueil a été correctement ajouté");
+                    $req_add_acc = "INSERT INTO Service_d_accueil (Nom_service, Facture) VALUES ('$service_acc', '$bill')" ;
+                    $add_acc = mysqli_query($connexion, $req_add_acc) ;
+
+                    if($add_acc==TRUE)
+                    {
+                        print("Le service d'accueil a été correctement ajouté");
+                    }
+                    else
+                    {
+                        print("Erreur : le service d'accueil n'a pas pu être ajouté.");
+                    }
                 }
-                else{
-                    print("Ce service d'accueil existe déjà dans la base de données. Veuillez insérer un autre nom.");
+                else {
+                    print("Erreur : ce service d'accueil existe déjà dans la base de données. Veuillez insérer un autre nom.");
+
                 }
             }
             else {
