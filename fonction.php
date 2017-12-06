@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = 'phpmyadmin';  // mot de passe
+      $mdp = '';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -390,6 +390,7 @@ function sousbooking($connexion, $type_intervention, $IDp)
 
     $request_sous_booking = "SELECT Heure_debut FROM creneaux WHERE Nom_intervention = '$type_intervention' AND TIME(Heure_debut) = '".date("H:i:s", strtotime("-".$duree_intervention." minute", strtotime("20:00:00")))."' AND Date_creneau = '$date'";
     $creneau_sous_booking = do_request($connexion, $request_sous_booking);
+
     if(empty($creneau_sous_booking[0]))
     {
         $creneau_flottant['Heure_debut'] = '';
@@ -423,11 +424,13 @@ function sousbooking($connexion, $type_intervention, $IDp)
 
         while ($i < $size) 
         {
+            print($creneaux_du_jour[$i-1]['Heure_fin']);
+            print($creneaux_du_jour[$i]['Heure_debut']);
             if($creneaux_du_jour[$i-1]['Heure_fin'] != $creneaux_du_jour[$i]['Heure_debut'])
             {
                 print("Y a un trou!");
             }
-            if ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
+            elseif ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
             {
                 $test['IDp'] = $creneau_flottant['IDp'] ;
                 $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
@@ -453,12 +456,11 @@ function sousbooking($connexion, $type_intervention, $IDp)
 
 function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $creneau_flottant = NULL)
 {
+    $connexion = connect();
     $date_du_jour = date("Y-m-d");
     list($annee, $mois, $jour) = explode("-", $date_du_jour);
     $date_considérée = date("Y-m-d", mktime(0,0,0,$mois, $jour+$nb_jours, $annee));
     $heure_now = date("H:i:s");
-
-    print("<br><br>");
 
     $request_durée = "SELECT Duree FROM type_d_intervention WHERE Nom_intervention = '$type_intervention'";
     $duree = do_request($connexion, $request_durée);
@@ -478,6 +480,13 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
         }
     }
 
+        print($date_considérée);
+    print("<br><br>");    
+    print_r($creneaux);
+    print("<br><br>");
+
+    print_r($creneaux_du_jour);
+
     if(!isset($creneau_flottant))
     {
         $creneau_flottant['Heure_debut'] = '';
@@ -492,6 +501,8 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
 
     $i = 0 ;
     $size = sizeof($creneaux_du_jour) ;
+
+    print("<br><br>");
 
     while ($i < $size) {
 
@@ -520,6 +531,7 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
         }
         if(strtotime($heure_now) > strtotime("-".$duree_intervention." minute", strtotime("20:00:00")))
         {
+            deconnect($connexion);
             $nb_jours++;
             surbooking($connexion, $type_intervention, $IDp, $nb_jours, $creneau_flottant);
         }
@@ -542,6 +554,7 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
         }
         else
         {
+            deconnect($connexion);
             $nb_jours++;
             surbooking($connexion, $type_intervention, $IDp, $nb_jours, $creneau_flottant);
         }

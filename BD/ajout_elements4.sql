@@ -99,6 +99,8 @@ INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_p
 INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("29","2017-12-07","18:00:00","19:00:00","2017-11-18","3","Radiologie","2");
 INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`,`Niveau_priorite`) VALUES ("30","2017-12-07","19:00:00","20:00:00","2017-11-18","5","Radiologie","2");
 
+INSERT INTO `creneaux`(`IDc`,`Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`) VALUES ("31","2017-12-08","08:00:00","09:00:00","2017-11-18","4","Radiologie","5");
+
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","0");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","1");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Hémorragie","2");
