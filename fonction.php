@@ -294,34 +294,6 @@ function getDureeIntervention($typeIntervention){
 }
 
 
-// function getCreneauxDisponibles($date, $duree){
-//  $connection = connect();
-//  $request = "SELECT *
-//              FROM creneaux
-//              WHERE Heure_debut LIKE '$date'";
-//  $reponse = do_request($connexion, $request);
-//
-// //si la requête SQL renvoie un résultat vide alors le créneau est disponible (car absent de la BD)
-//    if(empty($reponse)){
-//      // $date = date_create($date);
-//      // $dateDebutRecherche = date_add($date, date_interval_create_from_date_string($duree.' minutes'));
-//      // $date = date_format($date, 'Y-m-d H:i:s');
-//      $date = date("Y-m-d 8:00") ;   //donne la date du jour à 8h00
-//      $dateDebutRecherche = date_add($date, date_interval_create_from_date_string('1 days'));
-//      $request = "SELECT * FROM creneaux WHERE Heure_debut LIKE $date";
-//      $reponse = do_request($connexion, $request);
-//
-//        if (empty($reponse))
-//         return TRUE;
-//       else
-//         return FALSE;
-//
-//   }
-//  }
-
-//mktime(0,0,0,$mois,$jour+$d,$annee)
-
-
 function check_carac($word)
 {
     $word_changed = ucfirst(mb_strtolower($word, 'UTF-8')) ;
