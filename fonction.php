@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = '';  // mot de passe
+      $mdp = 'phpmyadmin';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -91,7 +91,7 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
             {
                 $res[$i] = array($Heure_debut[$i], $Heure_fin[$i], $Date_creneau[$i], $Nom_array[$i], $Prenom_array[$i], $Nom_intervention_array[$i]);
             }
-            return $res; // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient et le type d'intervention pour chaque créneau    
+            return $res; // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient et le type d'intervention pour chaque créneau
         }
     }
     elseif ($job == "Admin")
@@ -168,7 +168,7 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
             }
             for($i = 0; $i < sizeof($Heure_debut); $i++)
             {
-                $res[$i] = array($Heure_debut[$i], $Heure_fin[$i], $Date_creneau[$i], $Nom_array[$i], $Prenom_array[$i], $Nom_intervention_array[$i]);                
+                $res[$i] = array($Heure_debut[$i], $Heure_fin[$i], $Date_creneau[$i], $Nom_array[$i], $Prenom_array[$i], $Nom_intervention_array[$i]);
             }
             return $res; // super tableau dans lequel on a l'heure de debut et fin, le nom et prenom du patient et le type d'intervention pour chaque créneau
         }
@@ -343,7 +343,7 @@ function check_mail($mail)
     }
 }
 
-// function check_number($number, $type) 
+// function check_number($number, $type)
 // {
 //     switch ($type) {
 //         case 'phone':
@@ -364,15 +364,15 @@ function check_mail($mail)
 //             else {
 //                 print("caca") ;
 //             }
-//             break;        
-        
+//             break;
+
 //         case 'time':
 //             $modulo = $number % 30 ;
 //             if ($modulo == 0)
 //             {
 //                 print("La durée est bien un multiple de 30") ;
 //             }
-//             else 
+//             else
 //             {
 //                 print("prout") ;
 //             }
@@ -525,7 +525,7 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
         }
         else
         {
-            $creneau_heure_debut = "08:00:00";        
+            $creneau_heure_debut = "08:00:00";
             $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($creneau_heure_debut)));
             $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '$creneau_heure_debut', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
             mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));

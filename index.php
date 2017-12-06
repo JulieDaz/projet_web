@@ -1,12 +1,3 @@
-<?php
-
-if (session_start() == TRUE)
-{
-  session_destroy();
-}
-
-?>
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -14,10 +5,6 @@ if (session_start() == TRUE)
 	</head>
 	<body>
 
-<?php
-if(session_start())
-  session_destroy();
-?>
 
 	<h1>Welcome to Medical Planner</h1>
 
@@ -30,6 +17,16 @@ if(session_start())
 	  <input type="submit" value="Se connecter">
 	</form>
 
+<?php
+if (session_start() == TRUE)
+{
+	if (isset($_SESSION['erreur']))
+	{
+		print("Erreur : identifiant ou mot de passe incorrect") ;
+	}
+	session_destroy();
+}
+?>
 
 	</body>
 </html>
