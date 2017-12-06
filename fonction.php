@@ -454,17 +454,21 @@ function sousbooking($connexion, $type_intervention, $IDp)
 }
 
 
-function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $creneau_flottant = NULL)
+function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $creneau_flottant = NULL, $heure_now = NULL)
 {
     $connexion = connect();
     $date_du_jour = date("Y-m-d");
     list($annee, $mois, $jour) = explode("-", $date_du_jour);
     $date_considérée = date("Y-m-d", mktime(0,0,0,$mois, $jour+$nb_jours, $annee));
-    $heure_now = date("H:i:s");
+
+    if(!isset($heure_now))
+    {
+        $heure_now = date("H:i:s");        
+    }
 
     $request_durée = "SELECT Duree FROM type_d_intervention WHERE Nom_intervention = '$type_intervention'";
     $duree = do_request($connexion, $request_durée);
-    $request_creneaux = "SELECT IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = '$date_considérée'";
+    $request_creneaux = "SELECT IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = DATE('$date_considérée')";
     $creneaux = do_request($connexion, $request_creneaux);
 
     $duree_intervention = $duree[0]['Duree'];
@@ -473,19 +477,12 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
 
     for ($i = 0 ; $i < $taille ; $i++)
     {
-        if (strtotime($creneaux[$i]['Date_creneau']." ".$creneaux[$i]['Heure_debut']) <= strtotime($date_considérée." ".$heure_now))
+        if (strtotime($creneaux[$i]['Date_creneau']." ".$creneaux[$i]['Heure_debut']) < strtotime($date_considérée." ".$heure_now))
         {
             unset($creneaux[$i]) ;
             $creneaux_du_jour = array_values($creneaux) ;
         }
     }
-
-        print($date_considérée);
-    print("<br><br>");    
-    print_r($creneaux);
-    print("<br><br>");
-
-    print_r($creneaux_du_jour);
 
     if(!isset($creneau_flottant))
     {
@@ -504,9 +501,13 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
 
     print("<br><br>");
 
-    while ($i < $size) {
-
-        if ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
+    while ($i < $size) 
+    {
+        if($creneaux_du_jour[$i-1]['Heure_fin'] != $creneaux_du_jour[$i]['Heure_debut'])
+        {
+            $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '$creneau_heure_debut', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
+        }
+        elseif ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
         {
             $test['IDp'] = $creneau_flottant['IDp'] ;
             $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
@@ -533,7 +534,7 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
         {
             deconnect($connexion);
             $nb_jours++;
-            surbooking($connexion, $type_intervention, $IDp, $nb_jours, $creneau_flottant);
+            surbooking($connexion, $type_intervention, $IDp, $nb_jours, $creneau_flottant, "08:00:00");
         }
         else
         {
@@ -556,7 +557,7 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
         {
             deconnect($connexion);
             $nb_jours++;
-            surbooking($connexion, $type_intervention, $IDp, $nb_jours, $creneau_flottant);
+            surbooking($connexion, $type_intervention, $IDp, $nb_jours, $creneau_flottant, "08:00:00");
         }
     }
 }
