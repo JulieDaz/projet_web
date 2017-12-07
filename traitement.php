@@ -308,7 +308,5 @@ elseif ($usertype == "Responsable") {
 	<a class="bouton_relief" href="urgence.php">Demande d'urgence</a>
 
 <?php
-print("<br><br>") ;
-print($_SESSION['intervention']) ;
 }
 ?>
