@@ -277,17 +277,12 @@ $_SESSION['intervention'] = $nom_intervention[0] ;
 <?php
 if ($usertype == "Admin") {
  	?>
- 	<p>Formulaires :</p>
+ 	<h3>Formulaires :</h3>
+	<p>Ajouter/retirer un médecin, un responsable d'intervention ou un patient :</p>
+	<a class="bouton_relief" href="ajouter.php">Accéder au formulaire</a>
 
- 	<form method="post" action="ajouter.php">
-	 	<label id=for="Ajout">Ajouter/retirer un médecin, un responsable d'intervention ou un patient</label>
-	 	<input type="submit" value="Valider">
-	 	</form>
-
-	 	<form method="post" action="ajouter2.php">
-	 	<label for="Ajout2">Ajouter/retirer une pathologie ou un service d'accueil</label>
-	 	<input type="submit" value="Valider">
- 	</form>
+	<p>Ajouter/retirer une pathologie ou un service d'accueil :</p>
+	<a class="bouton_relief" href="ajouter2.php">Accéder au formulaire</a>
 
 <?php
 }

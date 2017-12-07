@@ -9,14 +9,12 @@ session_start() ;
 <head>
     <title>Formulaire 1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
 
 <!-- Retourner au planning -->
-<form method="post" action="traitement.php">
-<input type="submit" value="Retourner au planning" name="retour_planning">
-</form>
+<a class="bouton_relief" href="traitement.php">Retourner au planning</a>
 <br>
 <br>
 
