@@ -172,6 +172,7 @@ if(isset($super_tableau_creneaux)) // on vérifie que des créneaux existent
 		}
 	}
 }
+$_SESSION['intervention'] = $nom_intervention[0] ;
 ?>
 
 <!--Ecriture du planning, commun à tous les utilisateurs..................................................................................................-->
@@ -278,25 +279,36 @@ if ($usertype == "Admin") {
  	?>
  	<p>Formulaires :</p>
 
- 	 <form method="post" action="ajouter.php">
-	 	 <label id=for="Ajout">Ajouter/retirer un médecin, un responsable d'intervention ou un patient</label>
-	 	 <input type="submit" value="Valider">
-	 	 </form>
+ 	<form method="post" action="ajouter.php">
+	 	<label id=for="Ajout">Ajouter/retirer un médecin, un responsable d'intervention ou un patient</label>
+	 	<input type="submit" value="Valider">
+	 	</form>
 
-	 	 <form method="post" action="ajouter2.php">
-	 	 <label for="Ajout2">Ajouter/retirer une pathologie, un service d'intervention ou un service d'accueil</label>
-	 	 <input type="submit" value="Valider">
- 	 </form>
+	 	<form method="post" action="ajouter2.php">
+	 	<label for="Ajout2">Ajouter/retirer une pathologie ou un service d'accueil</label>
+	 	<input type="submit" value="Valider">
+ 	</form>
 
- <?php
- }
+<?php
+}
 
  //----- Si l'utilisateur est un médecin -----//
- elseif ($usertype == "Medecin") {
-	 ?>
+elseif ($usertype == "Medecin") {
+	?>
 	<br>
 	<a class="bouton_relief" href="demande_intervention.php">Demande d'intervention </a>
 
- <?php
- }
- ?>
+<?php
+}
+
+elseif ($usertype == "Responsable") {
+	?>
+	<br>
+	<p>Effectuer une demande d'urgence : </p>
+	<a class="bouton_relief" href="urgence.php">Demande d'urgence</a>
+
+<?php
+print("<br><br>") ;
+print($_SESSION['intervention']) ;
+}
+?>

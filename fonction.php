@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = 'phpmyadmin';  // mot de passe
+      $mdp = '';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -329,43 +329,6 @@ function check_mail($mail)
         return $mail_changed ;
     }
 }
-
-// function check_number($number, $type)
-// {
-//     switch ($type) {
-//         case 'phone':
-//             if (preg_match("#^0[1-8]([-. ]?[0-9]{2}){4}$#", $number))
-//             {
-//                 print("Le numéro de téléphone est valide") ;
-//             }
-//             else {
-//                 print("caca") ;
-//             }
-//             break;
-
-//         case 'bill':
-//             if (preg_match("#^[1-9][0-9]#", $number))
-//             {
-//                 print("Le chiffre est valide") ;
-//             }
-//             else {
-//                 print("caca") ;
-//             }
-//             break;
-
-//         case 'time':
-//             $modulo = $number % 30 ;
-//             if ($modulo == 0)
-//             {
-//                 print("La durée est bien un multiple de 30") ;
-//             }
-//             else
-//             {
-//                 print("prout") ;
-//             }
-//             break;
-//     }
-// }
 
 
 function sousbooking($connexion, $type_intervention, $IDp)
