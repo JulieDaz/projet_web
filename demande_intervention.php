@@ -38,7 +38,7 @@
       <input type="submit" value="Soumettre">
     </form>
 
-    <a class="bouton" href="traitement.php">Annuler</a>
+    <a class="bouton_relief" href="traitement.php">Annuler</a>
 
 
   </body>
