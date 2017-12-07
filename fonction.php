@@ -212,15 +212,30 @@ function print_creneaux($array) // pas d'utilité
 
 function generate_id($id, $nom, $prenom)
 {
-    $first_letter = $prenom[0] ;
-    $login = $first_letter.$nom ;
+    $connexion = connect();
+    $first_letter_prenom = $prenom[0] ;
+    $first_letter_nom = $nom[0] ;
+    $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9) ;
+    $login = $first_letter_prenom.$first_letter_nom.$random_number ;
 
     switch ($id) {
         case 'IDm':
             $login_def = "M_".$login ;
+            $req_exist_loginM = "SELECT IDm FROM Medecin WHERE IDm = '$login_def' " ;
+            $exist_loginM = do_request($connexion, $req_exist_loginM) ;
+            if (!empty($exist_loginM)) {
+                print("oklm") ;
+                generate_id($id, $nom, $prenom) ;
+            }
             break;
         case 'IDr':
             $login_def = "R_".$login ;
+            $req_exist_loginR = "SELECT IDr FROM Responsable WHERE IDr = '$login_def' " ;
+            $exist_loginM = do_request($connexion, $req_exist_loginM) ;
+            if (!empty($exist_loginM)) {
+                print("oklm") ;
+                generate_id($id, $nom, $prenom) ;
+            }
             break;
     }
     return $login_def ;
