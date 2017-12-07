@@ -8,9 +8,12 @@ session_start();
 	<html>
 	<head>
 		<title>Medical Planner</title>
-		<link rel="stylesheet" href="style.css"/>
+		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
+
+	<a class="bouton_relief" href="index.php">Déconnexion</a>
+	<br>
 
 <?php
 
@@ -291,7 +294,8 @@ if ($usertype == "Admin") {
  //----- Si l'utilisateur est un médecin -----//
  elseif ($usertype == "Medecin") {
 	 ?>
-	<a class="bouton" href="demande_intervention.php">Demande d'intervention </a>
+	<br>
+	<a class="bouton_relief" href="demande_intervention.php">Demande d'intervention </a>
 
  <?php
  }
