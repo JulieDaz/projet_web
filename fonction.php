@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = 'phpmyadmin';  // mot de passe
+      $mdp = '';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -135,7 +135,9 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
     elseif ($job == "Responsable")
     {
         $request_intervention = "SELECT Nom_intervention FROM type_d_intervention WHERE IDr = '$ID'"; // requête pour récupérer le nom de l'intervention selon l'ID du responsable
+        print($request_intervention);
         $nom_intervention_arrays = do_request($connexion, $request_intervention);
+        print_r($nom_intervention_arrays);
         if(empty($nom_intervention_arrays[0]))
         {
             print("Il n'y a pas de créneaux à récupérer de votre type.");
@@ -384,8 +386,9 @@ function sousbooking($connexion, $type_intervention, $IDp)
         print("Sousbooking");
         $creneau_flottant['IDp'] = $IDp;
         $creneau_flottant['Niveau_priorite'] = 10;
+        $creneau_flottant['Deplacement'] = 0;
 
-        $request_creneaux = "SELECT IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = DATE('$date')"; // requête de récupération des créneaux du jour
+        $request_creneaux = "SELECT IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Niveau_priorite, Deplacement FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = DATE('$date')"; // requête de récupération des créneaux du jour
         $creneaux = do_request($connexion, $request_creneaux); // stockage des creneaux
     
         $nb_creneaux = sizeof($creneaux); // nb de créneaux dans la journée
@@ -418,7 +421,7 @@ function sousbooking($connexion, $type_intervention, $IDp)
             $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($creneau_heure_debut)));
             if(strtotime($creneau_heure_fin) < strtotime("20:00:00")) // si l'heure de fin du créneau que l'on veut créer ne dépasse pas 20:00
             {
-                $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date', '$creneau_heure_debut', '$creneau_heure_fin', '$date', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
+                $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite, Deplacement) VALUES ('', '$date', '$creneau_heure_debut', '$creneau_heure_fin', '$date', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].", ".$creneau_flottant['Deplacement'].")";
                 mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
                 return;
             }
@@ -435,11 +438,11 @@ function sousbooking($connexion, $type_intervention, $IDp)
                 {
                     if($i == 0)
                     {
-                        if(strtotime("-".$duree_intervention." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])) > strtotime($heure_now)) // si l'heure de fin - duree intervention > heure de maintenant
+                        if(strtotime("-".$duree_intervention." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])) > strtotime($heure_now)) // si l'heure de début - duree intervention > heure de maintenant
                         {
                             $creneau_heure_debut = date("H:i:s", strtotime("-".$duree_intervention." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])));
                             $creneau_heure_fin = date("H:i:s", strtotime($creneaux_du_jour[$i]['Heure_debut']));
-                            $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date', '$creneau_heure_debut', '$creneau_heure_fin', '$date', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
+                            $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date', '$creneau_heure_debut', '$creneau_heure_fin', '$date', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].", ".$creneau_flottant['Deplacement'].")";
                             mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
                             return; 
                         }
@@ -449,7 +452,7 @@ function sousbooking($connexion, $type_intervention, $IDp)
                     {
                         $creneau_heure_debut = $creneaux_du_jour[$i]['Heure_fin'];
                         $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($creneaux_du_jour[$i]['Heure_fin'])));
-                        $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date', '$creneau_heure_debut', '$creneau_heure_fin', '$date', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
+                        $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date', '$creneau_heure_debut', '$creneau_heure_fin', '$date', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].", ".$creneau_flottant['Deplacement'].")";
                         mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
                         return; 
                     }
@@ -460,23 +463,32 @@ function sousbooking($connexion, $type_intervention, $IDp)
                     {
                         $dernier_creneau = date("H:i:s", strtotime($creneaux_du_jour[$i]['Heure_fin']));
                         $heure_fin_intervention = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($dernier_creneau)));
-                        $insert_request = "INSERT INTO creneaux(IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date', '".$dernier_creneau."', '$heure_fin_intervention', '$date', '".$creneau_flottant['IDp']."', '$type_intervention', '".$creneau_flottant['Niveau_priorite']."')";
+                        $insert_request = "INSERT INTO creneaux(IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date', '".$dernier_creneau."', '$heure_fin_intervention', '$date', '".$creneau_flottant['IDp']."', '$type_intervention', '".$creneau_flottant['Niveau_priorite']."', ".$creneau_flottant['Deplacement'].")";
                         mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
                         return;
                     }
                 }
                 if ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'] and $heure_now < $creneaux_du_jour[$i]['Heure_debut']) // si le créneau flottant a un niveau de priorité > au créneau du jour considéré
                 {
+                    print("Le créneau flottant concerne le patient d'ID ".$creneau_flottant['IDp'].".");
+                    print("<br>");
+                    print("Le créneau que l'on va déplacer est : ".$creneaux_du_jour[$i]['Heure_debut']."-".$creneaux_du_jour[$i]['Heure_fin']." le ".$creneaux_du_jour[$i]['Date_creneau'].".");
+                    print("<br><br>");
+    
                     $test['IDp'] = $creneau_flottant['IDp'] ;
                     $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
-        
+                    $test['Deplacement'] = $creneau_flottant['Deplacement'];
+    
                     $creneau_flottant['IDp'] = $creneaux_du_jour[$i]['IDp'] ;
                     $creneau_flottant['Niveau_priorite'] = $creneaux_du_jour[$i]['Niveau_priorite'] ;
-        
+                    $creneau_flottant['Deplacement'] = $creneaux_du_jour[$i]['Deplacement'];
+    
                     $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
-                    $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] ;
-        
-                    $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite']." WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
+                    $creneaux_du_jour[$i]['Deplacement'] = $test['Deplacement'] + 1;
+                    $ajout_priorite = intval($creneaux_du_jour[$i]['Deplacement']);
+                    $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] + $ajout_priorite;
+            
+                    $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite'].", Deplacement = '".$creneau_flottant['Deplacement']."' WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
                     mysqli_query($connexion,$update_request) or die('<br>Erreur SQL !<br>'.$update_request.'<br>'.mysqli_error($connexion));
                 }
                 ++$i ;
@@ -499,6 +511,7 @@ function sousbooking($connexion, $type_intervention, $IDp)
 
 function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $nb_jours = 0, $creneau_flottant = NULL, $heure_now = NULL)
 {
+    print("<br><br>");
     $date_du_jour = date("Y-m-d"); // on récupère la date du jour
     list($annee, $mois, $jour) = explode("-", $date_du_jour);
     $date_considérée = date("Y-m-d", mktime(0,0,0,$mois, $jour+$nb_jours, $annee)); // on décale le jour si on est dans la récursivité
@@ -512,9 +525,10 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
     {
         $creneau_flottant['IDp'] = $IDp;
         $creneau_flottant['Niveau_priorite'] = 10;
+        $creneau_flottant['Deplacement'] = 0;
     }         
 
-    $request_creneaux = "SELECT IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = DATE('$date_considérée')"; // requête pour récupérer les créneaux du jour
+    $request_creneaux = "SELECT IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Niveau_priorite, Deplacement FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = DATE('$date_considérée')"; // requête pour récupérer les créneaux du jour
     $creneaux = do_request($connexion, $request_creneaux); // stockage des créneaux
 
     $nb_creneaux = sizeof($creneaux); // stockage du nb de créneaux
@@ -544,7 +558,7 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
         {
             $creneau_heure_debut = "08:00:00"; // on passe l'heure à 8h
             $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($creneau_heure_debut)));
-            $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '$creneau_heure_debut', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
+            $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '$creneau_heure_debut', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].", ".$creneau_flottant['Deplacement'].")";
             mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
             return;
         }
@@ -555,14 +569,26 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
 
         $i = 0 ;
 
-        while ($i < $size)
+        while ($i < $size) // on parcourt les créneaux de la journée
         {
-            if($i != $size - 1)
+            if($i != $size - 1) // tant qu'on a pas atteint le dernier créneau
             {
+                if($i == 0) // si on considère le premier créneau
+                {
+                    if(strtotime("-".$duree_intervention." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])) > strtotime($heure_now)) // si l'heure de début - duree intervention > heure de maintenant
+                    {
+                        $creneau_heure_debut = date("H:i:s", strtotime("-".$duree_intervention." minute", strtotime($creneaux_du_jour[$i]['Heure_debut'])));
+                        $creneau_heure_fin = date("H:i:s", strtotime($creneaux_du_jour[$i]['Heure_debut']));
+                        $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '$creneau_heure_debut', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].", ".$creneau_flottant['Deplacement'].")";
+                        mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
+                        return; 
+                    }
+                }
+
                 if($creneaux_du_jour[$i]['Heure_fin'] != $creneaux_du_jour[$i+1]['Heure_debut'])
                 {
                     $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($creneaux_du_jour[$i]['Heure_fin'])));
-                    $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '".$creneaux_du_jour[$i]['Heure_fin']."', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
+                    $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '".$creneaux_du_jour[$i]['Heure_fin']."', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].", ".$creneau_flottant['Deplacement'].")";
                     mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
                     return;
                 }
@@ -574,23 +600,32 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
                 {
                     $dernier_creneau = date("H:i:s", strtotime($creneaux_du_jour[$i]['Heure_fin']));
                     $heure_fin_intervention = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($dernier_creneau)));
-                    $insert_request = "INSERT INTO creneaux(IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '".$dernier_creneau."', '$heure_fin_intervention', '$date_du_jour', '".$creneau_flottant['IDp']."', '$type_intervention', '".$creneau_flottant['Niveau_priorite']."')";
+                    $insert_request = "INSERT INTO creneaux(IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '".$dernier_creneau."', '$heure_fin_intervention', '$date_du_jour', '".$creneau_flottant['IDp']."', '$type_intervention', '".$creneau_flottant['Niveau_priorite']."', ".$creneau_flottant['Deplacement'].")";
                     mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
                     return;
                 }
             }
             if ( $creneau_flottant['Niveau_priorite'] > $creneaux_du_jour[$i]['Niveau_priorite'])
             {
+                print("Le créneau flottant concerne le patient d'ID ".$creneau_flottant['IDp'].".");
+                print("<br>");
+                print("Le créneau que l'on va déplacer est : ".$creneaux_du_jour[$i]['Heure_debut']."-".$creneaux_du_jour[$i]['Heure_fin']." le ".$creneaux_du_jour[$i]['Date_creneau'].".");
+                print("<br><br>");
+                
                 $test['IDp'] = $creneau_flottant['IDp'] ;
                 $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
+                $test['Deplacement'] = $creneau_flottant['Deplacement'];
 
                 $creneau_flottant['IDp'] = $creneaux_du_jour[$i]['IDp'] ;
                 $creneau_flottant['Niveau_priorite'] = $creneaux_du_jour[$i]['Niveau_priorite'] ;
+                $creneau_flottant['Deplacement'] = $creneaux_du_jour[$i]['Deplacement'];
 
                 $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
-                $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] ;
+                $creneaux_du_jour[$i]['Deplacement'] = $test['Deplacement'] + 1;
+                $ajout_priorite = intval($creneaux_du_jour[$i]['Deplacement']);
+                $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] + $ajout_priorite;
 
-                $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite']." WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
+                $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite'].", Deplacement = '".$creneau_flottant['Deplacement']."' WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
                 mysqli_query($connexion,$update_request) or die('<br>Erreur SQL !<br>'.$update_request.'<br>'.mysqli_error($connexion));
             }
             ++$i ;
