@@ -90,7 +90,6 @@ session_start() ;
                     $req_idpatient = "SELECT IDp FROM Patient WHERE Nom = '$nom_patient' AND Prenom = '$prenom_patient' AND Numero_tel = '$tel_patient' AND Nom_service = '$service_acc'" ;
                     $idpatient = do_request($connexion, $req_idpatient) ;
                     $IDp = $idpatient[0]['IDp'] ;
-                    print($IDp) ;
 
                     # on ajoute l'IDp et la patho dans la table souffre
                     $req_add_souffre = "INSERT INTO souffre (Nom_pathologie, IDp) VALUES ('$nom_patho', '$IDp)" ;
