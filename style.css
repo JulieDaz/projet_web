@@ -11,22 +11,22 @@ caption /* Titre du tableau */
 table /* Le tableau en lui-même */
 {
    margin: auto; /* Centre le tableau */
-   border: 4px outset green; /* Bordure du tableau avec effet 3D (outset) */
+   border: 2px outset rgb(0, 70, 128); /* Bordure du tableau avec effet 3D (outset) */
    border-collapse: collapse; /* Colle les bordures entre elles */
    width:100%;
 }
 th /* Les cellules d'en-tête */
 {
-   background-color: #006600;
+   background-color: #095f9494;
    color: white;
    font-size: 1.1em;
    font-family: Arial, "Arial Black", Times, "Times New Roman", serif;
-   border:1px solid red;
+   border:1px solid rgb(0, 70, 128);
 }
 
 td /* Les cellules normales */
 {
-   border: 1px solid black;
+   border: 1px solid rgb(0, 70, 128);
    font-family: "Comic Sans MS", "Trebuchet MS", Times, "Times New Roman", serif;
    text-align: center; /* Tous les textes des cellules seront centrés*/
    padding: 5px; /* Petite marge intérieure aux cellules pour éviter que le texte touche les bordures */
@@ -34,6 +34,22 @@ td /* Les cellules normales */
 td.time
 {
     width:5%;
+}
+
+/*Mise en forme*/
+
+.bouton_relief {
+color: white;
+background-color: #000080;
+text-decoration: none;
+text-align: center;
+padding: 5px;
+border: 2px outset #c0c0c0;
+}
+
+.bouton_relief:hover {
+background-color: #6495ED;
+border: 2px inset #c0c0c0;
 }
 
 .bouton {

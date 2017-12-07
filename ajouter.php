@@ -7,7 +7,9 @@ session_start() ;
 <!DOCTYPE html>
 <html>
 <head>
-     <title>Formulaire 1</title>
+    <title>Formulaire 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 </head>
 <body>
 

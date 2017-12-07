@@ -38,7 +38,7 @@
       <input type="submit" value="Soumettre">
     </form>
 
-    <a class="bouton" href="traitement.php">Annuler</a>
+    <a class="bouton_relief" href="traitement.php">Annuler</a>
 
 
   </body>
@@ -67,23 +67,26 @@ if ($_POST == TRUE) {
     $creneauxProposes= array() ;   //on initialise un tableau vide
 
     foreach ($creneauxIndisponibles as $value) {    // On parcourt le tableau contenant l'ensemble des créneaux indisponibles
-      $Date_creneau[] = $value['Date_creneau'] ;
+      $date_creneau[] = $value['Date_creneau'] ;
+      $heure_debut_creneau[] = $value['Heure_debut'] ;
+      $heure_fin_creneau[] = $value['Heure_fin'] ;
     }
 
-    for($i = 0; $i < count($creneauxIndisponibles); $i++)
-    {
-        $creneauxIndispo[$i] = array($Date_creneau[$i]);
-        echo $creneauxIndispo[0] ;
-    }
+    // for($i = 0; $i < count($creneauxIndisponibles); $i++)
+    // {
+    //     $creneauxIndispo[$i] = array($date_creneau[$i],$heure_debut_creneau[$i],$heure_fin_creneau[$i]);
+    // }
 
 
-    /*while (count($creneauxProposes) < 100) {   // Tant qu'on n'a pas 5 créneaux à proposer
+    while (count($creneauxProposes) < 100) {   // Tant qu'on n'a pas 5 créneaux à proposer
 
+      for ($i=0; $i < count($creneauxIndisponibles) ; $i++) { 
 
-
-        if ($date == $value['Date_creneau'] && $horaire == $value['Heure_debut']) {   // On vérifie si le créneau est déjà pris ou pas
+        if ($date == $date_creneau[$i] && $horaire == $heure_debut_creneau[$i]) {   // On vérifie si le créneau est déjà pris ou pas
           $creneauRecherche = $value['Date_creneau'].' '.$value['Heure_fin'] ;     // Si c'est le cas, on passe directement au créneau suivant
         }
+
+      }
 
 
       //si le créneau est libre, alors on le stocke dans une liste de créneaux proposés
@@ -112,7 +115,8 @@ if ($_POST == TRUE) {
     foreach ($creneauxProposes as$value) {
       echo $value ;
       echo '</br>' ;
-    }*/
+    }
+
   }
 
 
