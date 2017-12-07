@@ -60,6 +60,7 @@ CREATE TABLE Creneaux(
         IDp                     Int NOT NULL ,
         Nom_intervention        Varchar (25) ,
         Niveau_priorite         Int ,
+        Deplacement             Int ,
         PRIMARY KEY (IDc )
 )ENGINE=InnoDB;
 
