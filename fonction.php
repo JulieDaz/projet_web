@@ -135,9 +135,8 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
     elseif ($job == "Responsable")
     {
         $request_intervention = "SELECT Nom_intervention FROM type_d_intervention WHERE IDr = '$ID'"; // requête pour récupérer le nom de l'intervention selon l'ID du responsable
-        print($request_intervention);
         $nom_intervention_arrays = do_request($connexion, $request_intervention);
-        print_r($nom_intervention_arrays);
+        
         if(empty($nom_intervention_arrays[0]))
         {
             print("Il n'y a pas de créneaux à récupérer de votre type.");
