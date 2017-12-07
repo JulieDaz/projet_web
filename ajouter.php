@@ -79,6 +79,8 @@ session_start() ;
                         if($add_doc == TRUE AND $add_userM == TRUE )
                         {
                             print("Le médecin a été ajouté avec succès.") ;
+                            print("<br>Les identifiants de connexion sont les suivants : login = "."$id_medecin"." et mot de passe = "."$mdp_med") ;
+
                         }
                         else {
                             print("Erreur : une erreur s'est produite") ;

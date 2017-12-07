@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = '';  // mot de passe
+      $mdp = 'phpmyadmin';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -79,7 +79,7 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
                 $IDc = $IDc_key['IDc']; // on va chercher la valeur contenue par la clé 'IDc'
                 $request_nom = "SELECT Nom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les noms des patients
                 $request_prenom = "SELECT Prenom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les prénoms des patients
-                $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE IDc = '$IDc'"; // requête pour récupérer le nom de l'intervention selon l'ID du responsable                
+                $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE IDc = '$IDc'"; // requête pour récupérer le nom de l'intervention selon l'ID du responsable
                 $Nom_intervention = do_request($connexion, $request_intervention);
                 $Nom = do_request($connexion, $request_nom);
                 $Prenom = do_request($connexion, $request_prenom);
@@ -212,15 +212,30 @@ function print_creneaux($array) // pas d'utilité
 
 function generate_id($id, $nom, $prenom)
 {
-    $first_letter = $prenom[0] ;
-    $login = $first_letter.$nom ;
+    $connexion = connect();
+    $first_letter_prenom = $prenom[0] ;
+    $first_letter_nom = $nom[0] ;
+    $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9) ;
+    $login = $first_letter_prenom.$first_letter_nom.$random_number ;
 
     switch ($id) {
         case 'IDm':
             $login_def = "M_".$login ;
+            $req_exist_loginM = "SELECT IDm FROM Medecin WHERE IDm = '$login_def' " ;
+            $exist_loginM = do_request($connexion, $req_exist_loginM) ;
+            if (!empty($exist_loginM)) {
+                print("oklm") ;
+                generate_id($id, $nom, $prenom) ;
+            }
             break;
         case 'IDr':
             $login_def = "R_".$login ;
+            $req_exist_loginR = "SELECT IDr FROM Responsable WHERE IDr = '$login_def' " ;
+            $exist_loginM = do_request($connexion, $req_exist_loginM) ;
+            if (!empty($exist_loginM)) {
+                print("oklm") ;
+                generate_id($id, $nom, $prenom) ;
+            }
             break;
     }
     return $login_def ;
@@ -540,7 +555,7 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
 
         $i = 0 ;
 
-        while ($i < $size) 
+        while ($i < $size)
         {
             if($i != $size - 1)
             {
@@ -549,7 +564,7 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
                     $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($creneaux_du_jour[$i]['Heure_fin'])));
                     $insert_request = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite) VALUES ('', '$date_considérée', '".$creneaux_du_jour[$i]['Heure_fin']."', '$creneau_heure_fin', '$date_du_jour', ".$creneau_flottant['IDp'].", '$type_intervention', ".$creneau_flottant['Niveau_priorite'].")";
                     mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
-                    return; 
+                    return;
                 }
             }
             else
@@ -568,13 +583,13 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
             {
                 $test['IDp'] = $creneau_flottant['IDp'] ;
                 $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
-    
+
                 $creneau_flottant['IDp'] = $creneaux_du_jour[$i]['IDp'] ;
                 $creneau_flottant['Niveau_priorite'] = $creneaux_du_jour[$i]['Niveau_priorite'] ;
-    
+
                 $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
                 $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] ;
-    
+
                 $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite']." WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
                 mysqli_query($connexion,$update_request) or die('<br>Erreur SQL !<br>'.$update_request.'<br>'.mysqli_error($connexion));
             }
