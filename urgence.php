@@ -57,7 +57,7 @@ session_start() ;
 
     <?php
 
-    if(isset('bouton_urgence'))
+    if(isset($_POST['bouton_urgence']))
     {
         $connexion = connect() ;
         $nom_patient = $_POST['nom_pat'] ;
@@ -65,30 +65,60 @@ session_start() ;
         $tel_patient = $_POST['tel'] ;
         $service_acc = $_POST['service_acc'] ;
         $nom_patho = $_POST['nom_patho'] ;
+        $type_intervention = $_SESSION['intervention'] ;
 
-        $req_niveau_prio = "SELECT Niveau_urgence FROM Pathologie WHERE Nom_pathologie = '$nom_patho" ;
+        $req_niveau_prio = "SELECT Niveau_urgence FROM Pathologie WHERE Nom_pathologie = '$nom_patho'" ;
         $niveau_prio = do_request($connexion, $req_niveau_prio) ;
+        $niveau_priorite = $niveau_prio[0]['Niveau_urgence'] ;
+
 
         if(check_carac($nom_patient) == TRUE AND check_carac($prenom_patient) == TRUE)
         {
-            if (preg_match("#^0[1-8]([-. ]?[0-9]{2}){4}$#", $tel_pat))
+            if (preg_match("#^0[1-8]([-. ]?[0-9]{2}){4}$#", $tel_patient))
             {
-                $req_exist_pat = "SELECT * FROM Patient WHERE Nom = '$nom_pat' AND Prenom = '$prenom_pat' AND Numero_tel = '$tel_pat' AND Nom_service = '$service_acc'" ;
+                $req_exist_pat = "SELECT * FROM Patient WHERE Nom = '$nom_patient' AND Prenom = '$prenom_patient' AND Numero_tel = '$tel_patient' AND Nom_service = '$service_acc'" ;
                 $exist_pat = do_request($connexion, $req_exist_pat) ; 
 
-                if (empty($exist_pat))
+                if (empty($exist_pat[0])) # le patient n'existe pas dans la BD
                 {
-                    $req_add_patient = "INSERT INTO Patient (IDp, Nom, Prenom, Numero_tel, Nom_service, Niveau_priorite) VALUES ('','$nom_patient','$prenom_patient', '$tel_patient', '$service_acc', '$niveau_prio')" ;
+                    $req_add_patient = "INSERT INTO Patient (IDp, Nom, Prenom, Numero_tel, Nom_service, Niveau_priorite) VALUES ('','$nom_patient','$prenom_patient', '$tel_patient', '$service_acc', '$niveau_priorite')" ;
                     $add_patient = mysqli_query($connexion,$req_add_patient);
-                    $IDp = mysqli_insert_id() ; 
+
+                    # on récupère son IDp qui est un autoincrément
+                    $req_idpatient = "SELECT IDp FROM Patient WHERE Nom = '$nom_patient' AND Prenom = '$prenom_patient' AND Numero_tel = '$tel_patient' AND Nom_service = '$service_acc'" ;
+                    $idpatient = do_request($connexion, $req_idpatient) ;
+                    $IDp = $idpatient[0]['IDp'] ;
                     print($IDp) ;
 
+                    # on ajoute l'IDp et la patho dans la table souffre
+                    $req_add_souffre = "INSERT INTO souffre (Nom_pathologie, IDp) VALUES ('$nom_patho', '$IDp)" ;
+                    $add_souffre = mysqli_query($connexion, $req_add_souffre) ;
+
+                    # on appelle la fonction de sousbooking pour gérer l'urgence
                     sousbooking($connexion, $type_intervention, $IDp) ;
                         
                 }
-                else 
+                else # le patient existe
                 {
+                    # on récupère l'IDp du patient
+                    $req_idpatient = "SELECT IDp FROM Patient WHERE Nom = '$nom_patient' AND Prenom = '$prenom_patient' AND Numero_tel = '$tel_patient' AND Nom_service = '$service_acc'" ;
+                    $idpatient = do_request($connexion, $req_idpatient) ;
+                    $IDp = $idpatient[0]['IDp'] ;
+                    
+                    # on vérifie s'il a la pathologie renseignée dans le formulaire déjà présente dans la table souffre
+                    $req_patho_patient = "SELECT Nom_pathologie, IDp FROM souffre WHERE Nom_pathologie = '$nom_patho'" ;
+                    $patho_patient = do_request($connexion, $req_patho_patient);
+
+                    if (empty($patho_patient)) # si la pathologie de ce patient n'est pas dans souffre
+                    {
+                        # on ajoute l'association pathologie/IDp
+                        $req_add_souffre = "INSERT INTO souffre (Nom_pathologie, IDp) VALUES ('$nom_patho', '$IDp)" ;
+                        $add_souffre = mysqli_query($connexion, $req_add_souffre) ;
+                    }
+                    
                     print("Le patient existe déjà") ;
+
+                    # on appelle la fonction de sousbooking pour gérer l'urgence
                     sousbooking($connexion, $type_intervention, $IDp) ;
                 }
             }
