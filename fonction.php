@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = '';  // mot de passe
+      $mdp = 'phpmyadmin';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -79,7 +79,7 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
                 $IDc = $IDc_key['IDc']; // on va chercher la valeur contenue par la clé 'IDc'
                 $request_nom = "SELECT Nom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les noms des patients
                 $request_prenom = "SELECT Prenom FROM patient WHERE IDp = (SELECT IDp FROM creneaux WHERE IDc = '$IDc')"; // requête pour récupérer les prénoms des patients
-                $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE IDc = '$IDc'"; // requête pour récupérer le nom de l'intervention selon l'ID du responsable                
+                $request_intervention = "SELECT Nom_intervention FROM creneaux WHERE IDc = '$IDc'"; // requête pour récupérer le nom de l'intervention selon l'ID du responsable
                 $Nom_intervention = do_request($connexion, $request_intervention);
                 $Nom = do_request($connexion, $request_nom);
                 $Prenom = do_request($connexion, $request_prenom);
@@ -372,11 +372,11 @@ function sousbooking($connexion, $type_intervention, $IDp)
         $duree = do_request($connexion, $request_durée);
         $request_creneaux = "SELECT IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Niveau_priorite FROM creneaux WHERE Nom_intervention = '$type_intervention' AND Date_creneau = '$date_considérée'";
         $creneaux = do_request($connexion, $request_creneaux);
-    
+
         $duree_intervention = $duree[0]['Duree'];
-    
+
         $taille = sizeof($creneaux);
-    
+
         for ($i = 0 ; $i < $taille ; $i++)
         {
             if (strtotime($creneaux[$i]['Date_creneau']." ".$creneaux[$i]['Heure_debut']) <= strtotime($date_considérée." ".$heure_now))
@@ -385,16 +385,16 @@ function sousbooking($connexion, $type_intervention, $IDp)
                 $creneaux_du_jour = array_values($creneaux) ;
             }
         }
-    
+
         if(!isset($creneaux_du_jour))
         {
             $creneaux_du_jour = $creneaux;
         }
-    
-        $i = 0 ;
-        $size = sizeof($creneaux_du_jour) ;    
 
-        while ($i < $size) 
+        $i = 0 ;
+        $size = sizeof($creneaux_du_jour) ;
+
+        while ($i < $size)
         {
             print($creneaux_du_jour[$i-1]['Heure_fin']);
             print($creneaux_du_jour[$i]['Heure_debut']);
@@ -406,18 +406,18 @@ function sousbooking($connexion, $type_intervention, $IDp)
             {
                 $test['IDp'] = $creneau_flottant['IDp'] ;
                 $test['Niveau_priorite'] = $creneau_flottant['Niveau_priorite'] ;
-    
+
                 $creneau_flottant['IDp'] = $creneaux_du_jour[$i]['IDp'] ;
                 $creneau_flottant['Niveau_priorite'] = $creneaux_du_jour[$i]['Niveau_priorite'] ;
-    
+
                 $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
                 $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] ;
-    
+
                 $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite']." WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
                 mysqli_query($connexion,$update_request) or die('<br>Erreur SQL !<br>'.$update_request.'<br>'.mysqli_error($connexion));
             }
             ++$i ;
-        } 
+        }
     }
     else
     {
@@ -435,7 +435,7 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
 
     if(!isset($heure_now))
     {
-        $heure_now = date("H:i:s");        
+        $heure_now = date("H:i:s");
     }
 
     $request_durée = "SELECT Duree FROM type_d_intervention WHERE Nom_intervention = '$type_intervention'";
@@ -473,7 +473,7 @@ function surbooking($connexion, $type_intervention, $IDp, $nb_jours = 0, $crenea
 
     print("<br><br>");
 
-    while ($i < $size) 
+    while ($i < $size)
     {
         if($creneaux_du_jour[$i-1]['Heure_fin'] != $creneaux_du_jour[$i]['Heure_debut'])
         {

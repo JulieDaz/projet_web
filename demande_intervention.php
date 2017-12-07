@@ -66,17 +66,25 @@ if ($_POST == TRUE) {
     list($date,$horaire) = explode(" ", $creneauRecherche);  //on récupère la date et l'heure du créneau
     $creneauxProposes= array() ;   //on initialise un tableau vide
 
+    foreach ($creneauxIndisponibles as $value) {    // On parcourt le tableau contenant l'ensemble des créneaux indisponibles
+      $Date_creneau[] = $value['Date_creneau'] ;
+    }
 
-    while (count($creneauxProposes) < 100) {   // Tant qu'on n'a pas 5 créneaux à proposer
+    for($i = 0; $i < count($creneauxIndisponibles); $i++)
+    {
+        $creneauxIndispo[$i] = array($Date_creneau[$i]);
+        echo $creneauxIndispo[0] ;
+    }
 
-      foreach ($creneauxIndisponibles as $value) {    // On parcourt le tableau contenant l'ensemble des créneaux indisponibles
-        // echo $value['Heure_debut'].'</br>' ;
+
+    /*while (count($creneauxProposes) < 100) {   // Tant qu'on n'a pas 5 créneaux à proposer
+
+
 
         if ($date == $value['Date_creneau'] && $horaire == $value['Heure_debut']) {   // On vérifie si le créneau est déjà pris ou pas
           $creneauRecherche = $value['Date_creneau'].' '.$value['Heure_fin'] ;     // Si c'est le cas, on passe directement au créneau suivant
         }
 
-      }
 
       //si le créneau est libre, alors on le stocke dans une liste de créneaux proposés
       $creneauxProposes[] = $creneauRecherche;
@@ -104,9 +112,10 @@ if ($_POST == TRUE) {
     foreach ($creneauxProposes as$value) {
       echo $value ;
       echo '</br>' ;
-    }
-
+    }*/
   }
+
+
 
 
 
