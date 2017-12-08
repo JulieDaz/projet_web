@@ -22,14 +22,14 @@ INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("P
 INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("IRM","60", "R_MI0398");
 INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Chirurgie","180", "R_MC1290");
 INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Extraction dentaire","30", "R_JD5903");
-INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Demande de contraception","60", "R_EO164");
+INSERT INTO `type_d_intervention`(`Nom_intervention`, `Duree`, `IDr`) VALUES ("Demande de contraception","60", "R_EO1647");
 
 INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_JR3942","Radioguy","Jean-Michel","Radiologie","j-m.radioguy@gmail.com");
 INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_HB1029","Bloodman","Henri","Prise de sang","henri.bloodman@gmail.com");
 INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_MI0398","Irman","Marcus","IRM","irman_marcus@gmail.com");
 INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_MC1290","Chirurguy","Miles","Chirurgie","miles.chirurguy@outlook.fr");
 INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_JD5903","Dentis","Jeanne","Extraction dentaire","jeanne_dentis@gmail.com");
-INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_EO164","Olvira","Etienne","Demande de contraception","etienne_ol@gmail.com");
+INSERT INTO `responsable_d_intervention`(`IDr`, `Nom`, `Prenom`, `Nom_intervention`,`Mail`) VALUES ("R_EO1647","Olvira","Etienne","Demande de contraception","etienne_ol@gmail.com");
 
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Rhume","1");
 INSERT INTO `pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Grippe","2");
@@ -95,7 +95,12 @@ INSERT INTO `creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date
 (28, '2017-12-07', '17:00:00', '18:00:00', '2017-11-18', 2, 'Radiologie', 2, "0"),
 (29, '2017-12-07', '18:00:00', '19:00:00', '2017-11-18', 3, 'Radiologie', 2, "0"),
 (30, '2017-12-07', '19:00:00', '20:00:00', '2017-11-18', 5, 'Radiologie', 2, "0"),
-(31, '2017-12-08', '08:00:00', '09:00:00', '2017-11-18', 4, 'Radiologie', 5, "0");
+(31, '2017-12-07', '08:00:00', '09:00:00', '2017-11-18', 4, 'Radiologie', 5, "0"),
+(32, '2017-12-08', '08:00:00', '11:00:00', '2017-11-18', 2, 'Chirurgie', 5, "0"),
+(33, '2017-12-08', '11:00:00', '14:00:00', '2017-11-18', 3, 'Chirurgie', 4, "0"),
+(34, '2017-12-08', '14:00:00', '17:00:00', '2017-11-18', 5, 'Chirurgie', 3, "0"),
+(35, '2017-12-08', '17:00:00', '20:00:00', '2017-11-18', 4, 'Chirurgie', 2, "0");
+
 
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","0");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","1");
@@ -117,8 +122,6 @@ INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Extraction dentaire","7
 INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Prise de sang","9");
 INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Prise de sang","12");
 
-
-
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDm`) VALUES ("0", "94803jean", "Medecin","M_JM1548");
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDm`) VALUES ("1", "06478andre", "Medecin","M_AL4975");
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDm`) VALUES ("2", "39489roger", "Medecin","M_RD2906");
@@ -133,13 +136,6 @@ INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDr`) VALUES ("10","23098ma
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDr`) VALUES ("11","18642miles", "Responsable","R_MC1290");
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDr`) VALUES ("12","13587jeanne", "Responsable","R_JD5903");
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDr`) VALUES ("13","78634etienne", "Responsable","R_EO164");
-
-UPDATE `type_d_intervention` SET `IDr`="R_JMRadioguy" WHERE `Nom_intervention`="Imagerie médicale";
-UPDATE `type_d_intervention` SET `IDr`="R_HBloodman" WHERE `Nom_intervention`="¨Prise de sang";
-UPDATE `type_d_intervention` SET `IDr`="R_MIrman" WHERE `Nom_intervention`="IRM";
-UPDATE `type_d_intervention` SET `IDr`="R_MChirurguy" WHERE `Nom_intervention`="Chirurgie";
-UPDATE `type_d_intervention` SET `IDr`="R_JDentis" WHERE `Nom_intervention`="Extraction dentaire";
-UPDATE `type_d_intervention` SET `IDr`="R_EOlvira" WHERE `Nom_intervention`="Demande de contraception";
 
 UPDATE `patient` SET `Nom_service`="Radiologie" WHERE `IDp`="3";
 UPDATE `patient` SET `Nom_service`="Radiologie" WHERE `IDp`="4";
