@@ -71,6 +71,9 @@ else {
 		$_SESSION['ID'] = $id ;
 		$_SESSION['mdp'] = $mdp;
 		$_SESSION['type'] = "Responsable" ;
+		$req_intervention = "SELECT Nom_intervention FROM Responsable_d_intervention WHERE IDr = '$id'" ;
+		$intervention = do_request($connexion, $req_intervention) ;
+		$_SESSION['intervention'] = $intervention[0]['Nom_intervention'] ;
 		break;
 	}
 
@@ -172,7 +175,6 @@ if(isset($super_tableau_creneaux)) // on vérifie que des créneaux existent
 		}
 	}
 }
-$_SESSION['intervention'] = $nom_intervention[0] ;
 ?>
 
 <!--Ecriture du planning, commun à tous les utilisateurs..................................................................................................-->
@@ -297,6 +299,7 @@ elseif ($usertype == "Medecin") {
 }
 
 elseif ($usertype == "Responsable") {
+	#REQUETE POUR RECUPERER LE TYPE D'INTERVENTION
 	?>
 	<br>
 	<p>Effectuer une demande d'urgence : </p>
