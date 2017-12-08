@@ -56,8 +56,6 @@ if ($_POST == TRUE) {
     $pathologie = $_POST['pathologie'] ;
     $typeIntervention = $_POST['type_intervention'] ;
 
-    $creneauxIndisponibles = getCreneauxIndisponibles($typeIntervention);   //on récupère le résultat de la requete contenant les heures de début et de fin des créneaux indisponibles
-    $dureeIntervention = getDureeIntervention($typeIntervention);   //on récupère la durée de l'intervention demandée
     // date()         -> renvoie un string
     // date_create()  -> renvoie une date
     // date_format()  -> renvoie un string
@@ -66,11 +64,91 @@ if ($_POST == TRUE) {
     list($date,$horaire) = explode(" ", $creneauRecherche);  //on récupère la date et l'heure du créneau
     $creneauxProposes= array() ;   //on initialise un tableau vide
 
-    foreach ($creneauxIndisponibles as $value) {    // On parcourt le tableau contenant l'ensemble des créneaux indisponibles
-      $date_creneau[] = $value['Date_creneau'] ;
-      $heure_debut_creneau[] = $value['Heure_debut'] ;
-      $heure_fin_creneau[] = $value['Heure_fin'] ;
+    $dureeIntervention = getDureeIntervention($typeIntervention);   //on récupère la durée de l'intervention demandée
+    $creneauxIndisponibles = getCreneauxIndisponibles($typeIntervention,$date) ;    // On récupère les créneaux disponibles
+
+    if (empty($creneauxIndisponibles)) {
+        while (count($creneauxProposes <= 5)) {
+            $creneauxProposes[] = $creneauRecherche ;
+            $creneauRecherche = date_modify(date_create($creneauRecherche), "+$dureeIntervention minutes");
+            $creneauRecherche = date_format($creneauRecherche,'Y-m-d H:i:s') ;
+            list($date,$horaire) = explode(" ", $creneauRecherche);
+        }
     }
+
+    else {
+        foreach ($creneauxIndisponibles as $value) {
+            if ($horaire != $value['Heure_debut']) {
+                $creneauxProposes[] = $creneauRecherche ;
+            }
+
+            $creneauRecherche = date_modify(date_create($creneauRecherche), "+$dureeIntervention minutes");
+            $creneauRecherche = date_format($creneauRecherche,'Y-m-d H:i:s') ;
+            list($date,$horaire) = explode(" ", $creneauRecherche);
+
+        }
+    }
+
+    foreach ($creneauxProposes as$value) {
+        echo '</br>' ;
+        echo $value ;
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//     foreach ($creneauxIndisponibles as $value) {    // On parcourt le tableau contenant l'ensemble des créneaux indisponibles
+//       $date_creneau[] = $value['Date_creneau'] ;
+//       $heure_debut_creneau[] = $value['Heure_debut'] ;
+//       $heure_fin_creneau[] = $value['Heure_fin'] ;
+//     }
+//
+//     $i=0 ;
+//
+//     while (count($creneauxProposes) < 100) {   // Tant qu'on n'a pas 5 créneaux à proposer
+//
+//       while ($date != $date_creneau[$i] && $horaire != $heure_debut_creneau[$i]) {    // tant que le créneau est dispo
+//         //je continue à avancer et j'enregistre à chaque fois
+//         $creneauxProposes[] = $creneauRecherche;
+//         $creneauRecherche = date_modify(date_create($creneauRecherche), "+$dureeIntervention minutes");
+//         $creneauRecherche = date_format($creneauRecherche,'Y-m-d H:i:s') ;
+//         list($date,$horaire) = explode(" ", $creneauRecherche);
+//         $i++ ;
+//       }
+//
+//       // on sort du while quand le créneau est pris, j'avance alors sans enregistrer
+//       $creneauRecherche = $date_creneau[$i].' '.$heure_fin_creneau[] ;     // Si c'est le cas, on passe directement au créneau suivant
+//       list($date,$horaire) = explode(" ", $creneauRecherche);
+//
+//   }
+//
+//   foreach ($creneauxProposes as$value) {
+//     echo '</br>' ;
+//     echo $value ;
+//   }
+//
+// }
+
+//------------------------------------------------------------------------------
+
+    // foreach ($creneauxIndisponibles as $value) {    // On parcourt le tableau contenant l'ensemble des créneaux indisponibles
+    //   $date_creneau[] = $value['Date_creneau'] ;
+    //   $heure_debut_creneau[] = $value['Heure_debut'] ;
+    //   $heure_fin_creneau[] = $value['Heure_fin'] ;
+    // }
 
     // for($i = 0; $i < count($creneauxIndisponibles); $i++)
     // {
@@ -78,52 +156,43 @@ if ($_POST == TRUE) {
     // }
 
 
-    while (count($creneauxProposes) < 100) {   // Tant qu'on n'a pas 5 créneaux à proposer
+    // while (count($creneauxProposes) < 100) {   // Tant qu'on n'a pas 5 créneaux à proposer
+    //
+    //   //for ($i=0; $i < count($creneauxIndisponibles) ; $i++) {
+    //   foreach ($creneauxIndisponibles as $value) {
+    //
+    //     if ($date == $value['Date_creneau'] && $horaire == $value['Heure_fin']) {   // On vérifie si le créneau est déjà pris ou pas
+    //       $creneauRecherche = $value['Date_creneau'].' '.$value['Heure_fin'] ;     // Si c'est le cas, on passe directement au créneau suivant
+    //       list($date,$horaire) = explode(" ", $creneauRecherche);
+    //     }
+    //
+    //   }
+    //
+    //
+    //   //si le créneau est libre, alors on le stocke dans une liste de créneaux proposés
+    //   $creneauxProposes[] = $creneauRecherche;
+    //
+    //   if (date_format(date_create($creneauRecherche),'H:i') == '18:00') {
+    //     $creneauRecherche = date_modify(date_create($creneauRecherche), "+1 day");
+    //     $creneauRecherche = date_format($creneauRecherche,'Y-m-d 08:00:00') ;
+    //     list($date,$horaire) = explode(" ", $creneauRecherche);
+    //
+    //     if (date_format(date_create($creneauRecherche),'D') == 'Sat') {
+    //       $creneauRecherche = date_modify(date_create($creneauRecherche), "+2 day");
+    //       $creneauRecherche = date_format($creneauRecherche,'Y-m-d 08:00:00') ;
+    //       list($date,$horaire) = explode(" ", $creneauRecherche);
+    //     }
+    //   }
+    //
+    //     else {
+    //       $creneauRecherche = date_modify(date_create($creneauRecherche), "+$dureeIntervention minutes");
+    //       $creneauRecherche = date_format($creneauRecherche,'Y-m-d H:i:s') ;
+    //       list($date,$horaire) = explode(" ", $creneauRecherche);
+    //     }
+    //
+    //   }
 
-      for ($i=0; $i < count($creneauxIndisponibles) ; $i++) { 
-
-        if ($date == $date_creneau[$i] && $horaire == $heure_debut_creneau[$i]) {   // On vérifie si le créneau est déjà pris ou pas
-          $creneauRecherche = $value['Date_creneau'].' '.$value['Heure_fin'] ;     // Si c'est le cas, on passe directement au créneau suivant
-        }
-
-      }
-
-
-      //si le créneau est libre, alors on le stocke dans une liste de créneaux proposés
-      $creneauxProposes[] = $creneauRecherche;
-
-      if (date_format(date_create($creneauRecherche),'H:i') == '18:00') {
-        $creneauRecherche = date_modify(date_create($creneauRecherche), "+1 day");
-        $creneauRecherche = date_format($creneauRecherche,'Y-m-d 08:00:00') ;
-        list($date,$horaire) = explode(" ", $creneauRecherche);
-
-        if (date_format(date_create($creneauRecherche),'D') == 'Sat') {
-          $creneauRecherche = date_modify(date_create($creneauRecherche), "+2 day");
-          $creneauRecherche = date_format($creneauRecherche,'Y-m-d 08:00:00') ;
-          list($date,$horaire) = explode(" ", $creneauRecherche);
-        }
-      }
-
-        else {
-          $creneauRecherche = date_modify(date_create($creneauRecherche), "+$dureeIntervention minutes");
-          $creneauRecherche = date_format($creneauRecherche,'Y-m-d H:i:s') ;
-          list($date,$horaire) = explode(" ", $creneauRecherche);
-        }
-
-      }
-
-    foreach ($creneauxProposes as$value) {
-      echo $value ;
-      echo '</br>' ;
-    }
-
-  }
-
-
-
-
-
-
+//------------------------------------------------------------------------------
 
     //$creneauRecherche = date("Y-m-d H:i:s",$creneauRecherche) ;   //on enregistre la date du lendemain sous le même format que dans la base de données
 
