@@ -316,7 +316,8 @@ function getCreneauxIndisponibles($typeIntervention,$date){
     $connexion = connect();
     $request = "SELECT `Heure_debut`,`Heure_fin`
                 FROM `creneaux`
-                WHERE `Nom_intervention` LIKE '$typeIntervention'AND `Date_creneau` = '$date'";
+                WHERE `Nom_intervention` LIKE 'Radiologie' AND `Date_creneau` = '2017-12-10'
+                ORDER BY `creneaux`.`Heure_debut` ASC ";
     $reponse = do_request($connexion, $request);
     return $reponse;
 }

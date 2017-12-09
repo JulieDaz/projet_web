@@ -56,6 +56,9 @@ if ($_POST == TRUE) {
     $pathologie = $_POST['pathologie'] ;
     $typeIntervention = $_POST['type_intervention'] ;
 
+    $i = 0 ;
+    $j = 0;
+
     // date()         -> renvoie un string
     // date_create()  -> renvoie une date
     // date_format()  -> renvoie un string
@@ -67,8 +70,12 @@ if ($_POST == TRUE) {
     $dureeIntervention = getDureeIntervention($typeIntervention);   //on récupère la durée de l'intervention demandée
     $creneauxIndisponibles = getCreneauxIndisponibles($typeIntervention,$date) ;    // On récupère les créneaux disponibles
 
+    foreach ($creneauxIndisponibles as $value) {
+        $heureDebutCreneaux[] = $value['Heure_debut'] ;
+    }
+
     if (empty($creneauxIndisponibles)) {
-        while (count($creneauxProposes <= 5)) {
+        while (count($creneauxProposes) < 5) {
             $creneauxProposes[] = $creneauRecherche ;
             $creneauRecherche = date_modify(date_create($creneauRecherche), "+$dureeIntervention minutes");
             $creneauRecherche = date_format($creneauRecherche,'Y-m-d H:i:s') ;
@@ -77,23 +84,34 @@ if ($_POST == TRUE) {
     }
 
     else {
-        foreach ($creneauxIndisponibles as $value) {
-            if ($horaire != $value['Heure_debut']) {
-                $creneauxProposes[] = $creneauRecherche ;
-            }
+      $j = 0 ;
+    while (count($creneauxProposes) < 5) {
+          echo count($creneauxProposes).'</br>' ;
+          for($i = 0 ; $i < count($heureDebutCreneaux) ; $i++) {
+              if ($horaire != $heureDebutCreneaux[$j]) {
+                  $creneauxProposes[] = $creneauRecherche ;
 
-            $creneauRecherche = date_modify(date_create($creneauRecherche), "+$dureeIntervention minutes");
-            $creneauRecherche = date_format($creneauRecherche,'Y-m-d H:i:s') ;
-            list($date,$horaire) = explode(" ", $creneauRecherche);
+              }else {
+                if($j < count($heureDebutCreneaux) -1 )
+                  $j++;
+              }
 
-        }
+              $creneauRecherche = date_modify(date_create($creneauRecherche), "+$dureeIntervention minutes");
+              $creneauRecherche = date_format($creneauRecherche,'Y-m-d H:i:s') ;
+              list($date,$horaire) = explode(" ", $creneauRecherche);
+
+              if($horaire == '18:00:00')
+                break;
+          }
+
+      }
     }
 
     foreach ($creneauxProposes as$value) {
         echo '</br>' ;
         echo $value ;
     }
-    
+
 }
 
 
