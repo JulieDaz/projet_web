@@ -136,9 +136,10 @@ if ($_POST == TRUE) {
   ?><p>Veuillez sélectionner une date de rdv</p> <br ><?php
   foreach ($creneauxProposes as $value) {
   ?>
-  <form method= "post" action= "">
-  <input type= "radio" value= "<?php $value ?>" name="date" >
-  <label> <?php echo date_format(date_create($value),'l d F Y H:i') ?> </label > <br >
-<?php
-}
-?>
+  <form method= "post" action= "traitementRDV.php">
+    <input type= "radio" value="<?php echo $value ?>" name="date" >
+    <label> <?php echo date_format(date_create($value),'l d F Y H:i') ?> </label > <br >
+    <?php
+  }?>
+    <input type="submit"/>
+  </form>
