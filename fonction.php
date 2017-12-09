@@ -286,15 +286,6 @@ function get_dates_semaines($semaine) // argument = nb de semaines passées ou f
     return $dates_semaine;
 }
 
-// function getCreneauxIndisponibles($typeIntervention){
-//   $connexion = connect();
-//   $request = "SELECT `Date_creneau`,`Heure_debut`,`Heure_fin`
-//             FROM `creneaux`
-//             WHERE `Nom_intervention` LIKE '$typeIntervention'";
-//   $reponse = do_request($connexion, $request);
-//   return $reponse;    //On récupère les creneaux indisponibles
-// }
-
 
 function getDureeIntervention($typeIntervention){
   $connexion = connect();
@@ -314,10 +305,10 @@ function getDureeIntervention($typeIntervention){
 
 function getCreneauxIndisponibles($typeIntervention,$date){
     $connexion = connect();
-    $request = "SELECT `Heure_debut`,`Heure_fin`
+    $request = "SELECT `Date_creneau`,`Heure_debut`,`Heure_fin`
                 FROM `creneaux`
-                WHERE `Nom_intervention` LIKE 'Radiologie' AND `Date_creneau` = '2017-12-10'
-                ORDER BY `creneaux`.`Heure_debut` ASC ";
+                WHERE `Nom_intervention` LIKE '$typeIntervention' AND `Date_creneau` >= '$date'
+                ORDER BY `Date_creneau` ASC, `Heure_debut` ASC  ";
     $reponse = do_request($connexion, $request);
     return $reponse;
 }
