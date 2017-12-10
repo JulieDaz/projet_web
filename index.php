@@ -3,7 +3,8 @@
 	<head>
 		<title>Medical Planner</title>
 		<link rel="stylesheet" type="text/css" href="style.css">
-
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
 
@@ -22,13 +23,13 @@
 	</form>
 
 	<?php
-	if (session_start() == TRUE)
+	if (session_start() == TRUE) # si une session est déjà en cours
 	{
-		if (isset($_SESSION['erreur']))
+		if (isset($_SESSION['erreur'])) # si la variable $_SESSION['erreur'] exist --> l'utilisateur s'est trompé de login ou mdp
 		{
-			print("Erreur : identifiant ou mot de passe incorrect") ;
+			print("Erreur : identifiant ou mot de passe incorrect") ; # affiche un message d'erreur
 		}
-		session_destroy();
+		session_destroy(); # détruit les $_SESSION existant
 	}
 	?>
 
