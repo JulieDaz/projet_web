@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = 'phpmyadmin';  // mot de passe
+      $mdp = '';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -349,6 +349,7 @@ function sousbooking($connexion, $type_intervention, $IDp)
     if(empty($creneau_sous_booking[0]) and strtotime($heure_now) < strtotime("-".$duree_intervention." minute", strtotime("20:00:00"))) // si le créneau de sousbooking est libre et que l'heure est inférieure à 20h - la durée d'une intervention
     {
         print("Procédure Sousbooking");
+        Print("<br><br>");
         $creneau_flottant['IDp'] = $IDp;
         $creneau_flottant['Niveau_priorite'] = 10;
         $creneau_flottant['Deplacement'] = 0;
@@ -468,11 +469,13 @@ function sousbooking($connexion, $type_intervention, $IDp)
     elseif(!empty($creneau_sous_booking[0]) and $heure_now > strtotime("-".$duree_intervention." minute", strtotime("20:00:00"))) // si le créneau de sous-booking est pris et que l'heure de demande est après 20:00
     {
         print("Procédure Surbooking +1");
+        Print("<br><br>");
         surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $nb_jours = 1);
     }
     else // si le créneau de sous booking est pris
     {
         print("Procédure Surbooking");
+        Print("<br><br>");
         surbooking($connexion, $type_intervention, $IDp, $duree_intervention);
     }
 }
@@ -610,7 +613,7 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
 
                 $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
                 $creneaux_du_jour[$i]['Deplacement'] = $test['Deplacement'] + 1;
-                $ajout_priorite = intval($creneaux_du_jour[$i]['Deplacement']);
+                $ajout_priorite = intval($creneaux_du_jour[$i]['Deplacement']/5);
                 $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] + $ajout_priorite;
 
                 $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite'].", Deplacement = '".$creneau_flottant['Deplacement']."' WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
