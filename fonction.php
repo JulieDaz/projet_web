@@ -3,10 +3,10 @@
 /* Connexion à la base de donnée */
 function connect()
   {
-      $user = 'root'; // utilisatrice
-      $mdp = 'phpmyadmin';  // mot de passe
+      $user = 'root'; // utilisateur
+      $mdp = '';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
-      $bd = 'projet_web';  // base de données à laquelle se connecter
+      $bd = 'projet_web';  // nom de la base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
 
       mysqli_set_charset($connexion, "utf8");
@@ -19,7 +19,6 @@ function connect()
   }
 
 /* Déconnexion a la base de données */
-
 function deconnect($connexion)
 {
 	mysqli_close($connexion);
@@ -211,42 +210,43 @@ function print_creneaux($array) // pas d'utilité
     }
 }
 
-function generate_id($id, $nom, $prenom)
+### Fonction permettant de générer automatiquement les identifiants ###
+function generate_id($id, $nom, $prenom) 
 {
     $connexion = connect();
-    $first_letter_prenom = $prenom[0] ;
-    $first_letter_nom = $nom[0] ;
-    $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9) ;
-    $login = $first_letter_prenom.$first_letter_nom.$random_number ;
+    $first_letter_prenom = $prenom[0] ; # on stocke la première lettre du prénom
+    $first_letter_nom = $nom[0] ; # puis celle du nom
+    $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9) ; # on génère une suite de 4 chiffres aléatoires compris entre 0 et 9
+    $login = $first_letter_prenom.$first_letter_nom.$random_number ; # on concatène la première lettre du prénom + du nom + notre suite de chiffres
 
-    switch ($id) {
-        case 'IDm':
-            $login_def = "M_".$login ;
-            $req_exist_loginM = "SELECT IDm FROM Medecin WHERE IDm = '$login_def' " ;
+    switch ($id) { # selon le cas on va ajouter une chose supplémentaire
+        case 'IDm': # si c'et un Médecin
+            $login_def = "M_".$login ; # on va rajouter 'M_'
+            $req_exist_loginM = "SELECT IDm FROM Medecin WHERE IDm = '$login_def' " ; # requête permettant de vérifier l'existence du login générer
             $exist_loginM = do_request($connexion, $req_exist_loginM) ;
-            if (!empty($exist_loginM)) {
-                print("oklm") ;
-                generate_id($id, $nom, $prenom) ;
+            if (!empty($exist_loginM)) { # si la requête renvoie quelque chose -> login présent dans la BD
+                generate_id($id, $nom, $prenom) ; # on rappelle la fonction pour générer à nouveau un login
             }
             break;
-        case 'IDr':
-            $login_def = "R_".$login ;
-            $req_exist_loginR = "SELECT IDr FROM Responsable WHERE IDr = '$login_def' " ;
+
+        case 'IDr': # si c'et un responsable 
+            $login_def = "R_".$login ; # on rajoute 'R_'
+            $req_exist_loginR = "SELECT IDr FROM Responsable WHERE IDr = '$login_def' " ; # reque^te permettant de vérifier l'existence du login générer
             $exist_loginM = do_request($connexion, $req_exist_loginM) ;
-            if (!empty($exist_loginM)) {
-                print("oklm") ;
-                generate_id($id, $nom, $prenom) ;
+            if (!empty($exist_loginM)) { # si la requête renvoie quelque chose -> login présent dans la BD
+                generate_id($id, $nom, $prenom) ; # on rappelle la fonction pour générer à nouveau un login
             }
             break;
     }
     return $login_def ;
 }
 
+### Fonction pour générer un mot de passe ###
 function generate_mdp($prenom)
 {
-    $prenom=mb_strtolower($prenom) ;
-    $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9) ;
-    $mdp = $random_number.$prenom ;
+    $prenom=mb_strtolower($prenom) ; # on récupère le prénom de l'utilisateur que l'on convertit en minuscule
+    $random_number = rand(0,9).rand(0,9).rand(0,9).rand(0,9).rand(0,9) ; # on génère 5 chiffres aléatoires
+    $mdp = $random_number.$prenom ; # on concatène le prénom + les chiffres aléatoires
 
     return $mdp ;
 }
@@ -322,27 +322,28 @@ function getCreneauxIndisponibles($typeIntervention,$date){
     return $reponse;
 }
 
-
-function check_carac($word)
+### Fonction pour vérifier les caractères entrés par l'utilisateur ###
+function check_carac($word) 
 {
-    $word_changed = ucfirst(mb_strtolower($word, 'UTF-8')) ;
+    $word_changed = ucfirst(mb_strtolower($word, 'UTF-8')) ; # quelque soit ce qu'a rentré l'utilisateur on met une majuscule pour le premier caractères, et le reste en minuscule
 
-    if (preg_match("#^[A-Z][a-zàâäéèêëïùüû]+[' -]?[a-zàâäéèêëïùüû]+$#", $word_changed))
+    if (preg_match("#^[A-Z][a-zàâäéèêëïùüû]+[' -]?[a-zàâäéèêëïùüû]+$#", $word_changed)) # on vérifie les champs correspondent à cette regex (pas de chiffre, accent + tiret + apostrophe autorisés)
     {
         return $word_changed ;
     }
 }
 
+### Fonction pour vérifier l'adresse mail rentrée par l'utilisateur ###
 function check_mail($mail)
 {
-    $mail_changed = strtolower($mail) ;
-    if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $mail_changed))
+    $mail_changed = strtolower($mail) ; # on passe tout en minuscule puisque les adresses mails ne tiennent pas compte de la casse
+    if (preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $mail_changed)) # regex pour vérifier ce qu'à rentrer l'utilisateur
     {
         return $mail_changed ;
     }
 }
 
-
+### Fonction permettant de gérer le sousbooking ###
 function sousbooking($connexion, $type_intervention, $IDp)
 {
     print("<br>");
@@ -486,7 +487,7 @@ function sousbooking($connexion, $type_intervention, $IDp)
     }
 }
 
-
+### Fonction permettant de gérer le surbooking ###
 function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $nb_jours = 0, $creneau_flottant = NULL, $heure_now = NULL)
 {
     print("<br>");
