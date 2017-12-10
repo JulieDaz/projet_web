@@ -211,7 +211,7 @@ function print_creneaux($array) // pas d'utilité
 }
 
 ### Fonction permettant de générer automatiquement les identifiants ###
-function generate_id($id, $nom, $prenom) 
+function generate_id($id, $nom, $prenom)
 {
     $connexion = connect();
     $first_letter_prenom = $prenom[0] ; # on stocke la première lettre du prénom
@@ -229,7 +229,7 @@ function generate_id($id, $nom, $prenom)
             }
             break;
 
-        case 'IDr': # si c'et un responsable 
+        case 'IDr': # si c'et un responsable
             $login_def = "R_".$login ; # on rajoute 'R_'
             $req_exist_loginR = "SELECT IDr FROM Responsable WHERE IDr = '$login_def' " ; # reque^te permettant de vérifier l'existence du login générer
             $exist_loginM = do_request($connexion, $req_exist_loginM) ;
@@ -314,7 +314,7 @@ function getCreneauxIndisponibles($typeIntervention,$date){
 }
 
 ### Fonction pour vérifier les caractères entrés par l'utilisateur ###
-function check_carac($word) 
+function check_carac($word)
 {
     $word_changed = ucfirst(mb_strtolower($word, 'UTF-8')) ; # quelque soit ce qu'a rentré l'utilisateur on met une majuscule pour le premier caractères, et le reste en minuscule
 
@@ -627,4 +627,29 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
     }
 }
 
+
+// Requête permettant de voir si le patient existe déjà dans la base de données
+function verif_patient($nomPatient,$prenomPatient) {
+    $connexion = connect() ;
+    $request = "SELECT *
+                FROM `patient`
+                WHERE `Nom` LIKE '$nomPatient' AND `Prenom` LIKE '$prenomPatient'" ;
+    $reponse = do_request($connexion,$request) ;
+    return $reponse ;
+}
+
+
+function select_IDpatient($nomPatient,$prenomPatient) {
+    $connexion = connect() ;
+    $request = "SELECT `IDp`
+                FROM `patient`
+                WHERE `Nom` LIKE '$nomPatient' AND `Prenom` LIKE '$prenomPatient'" ;
+    $reponse = do_request($connexion,$request) ;
+
+    foreach ($reponse as $value) {
+      $IDp[] = $value['IDp'];
+    }
+
+    return $IDp[0] ;
+}
 ?>
