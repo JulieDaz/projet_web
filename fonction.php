@@ -286,15 +286,6 @@ function get_dates_semaines($semaine) // argument = nb de semaines passées ou f
     return $dates_semaine;
 }
 
-// function getCreneauxIndisponibles($typeIntervention){
-//   $connexion = connect();
-//   $request = "SELECT `Date_creneau`,`Heure_debut`,`Heure_fin`
-//             FROM `creneaux`
-//             WHERE `Nom_intervention` LIKE '$typeIntervention'";
-//   $reponse = do_request($connexion, $request);
-//   return $reponse;    //On récupère les creneaux indisponibles
-// }
-
 
 function getDureeIntervention($typeIntervention){
   $connexion = connect();
@@ -314,10 +305,10 @@ function getDureeIntervention($typeIntervention){
 
 function getCreneauxIndisponibles($typeIntervention,$date){
     $connexion = connect();
-    $request = "SELECT `Heure_debut`,`Heure_fin`
+    $request = "SELECT `Date_creneau`,`Heure_debut`,`Heure_fin`
                 FROM `creneaux`
-                WHERE `Nom_intervention` LIKE 'Radiologie' AND `Date_creneau` = '2017-12-10'
-                ORDER BY `creneaux`.`Heure_debut` ASC ";
+                WHERE `Nom_intervention` LIKE '$typeIntervention' AND `Date_creneau` >= '$date'
+                ORDER BY `Date_creneau` ASC, `Heure_debut` ASC  ";
     $reponse = do_request($connexion, $request);
     return $reponse;
 }
@@ -359,6 +350,7 @@ function sousbooking($connexion, $type_intervention, $IDp)
     if(empty($creneau_sous_booking[0]) and strtotime($heure_now) < strtotime("-".$duree_intervention." minute", strtotime("20:00:00"))) // si le créneau de sousbooking est libre et que l'heure est inférieure à 20h - la durée d'une intervention
     {
         print("Procédure Sousbooking");
+        Print("<br><br>");
         $creneau_flottant['IDp'] = $IDp;
         $creneau_flottant['Niveau_priorite'] = 10;
         $creneau_flottant['Deplacement'] = 0;
@@ -440,7 +432,7 @@ function sousbooking($connexion, $type_intervention, $IDp)
                     if(strtotime($creneaux_du_jour[$i]['Heure_fin']) <= strtotime("-".$duree_intervention." minute", strtotime("20:00:00"))) // si l'heure de fin du dernier créneau de la journée < 20:00 - duree intervention
                     {
                         $creneau_heure_debut = date("H:i:s", strtotime($creneaux_du_jour[$i]['Heure_fin']));
-                        $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($dernier_creneau)));
+                        $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($creneau_heure_debut)));
                         print("Le dernier créneau inséré aura lieu le ".$date." entre ".$creneau_heure_debut." et ".$creneau_heure_fin);
                         $insert_request = "INSERT INTO creneaux(IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite, Deplacement) VALUES ('', '$date', '$creneau_heure_debut', '$creneau_heure_fin', '$date', '".$creneau_flottant['IDp']."', '$type_intervention', '".$creneau_flottant['Niveau_priorite']."', ".$creneau_flottant['Deplacement'].")";
                         mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
@@ -478,11 +470,13 @@ function sousbooking($connexion, $type_intervention, $IDp)
     elseif(!empty($creneau_sous_booking[0]) and $heure_now > strtotime("-".$duree_intervention." minute", strtotime("20:00:00"))) // si le créneau de sous-booking est pris et que l'heure de demande est après 20:00
     {
         print("Procédure Surbooking +1");
+        Print("<br><br>");
         surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $nb_jours = 1);
     }
     else // si le créneau de sous booking est pris
     {
         print("Procédure Surbooking");
+        Print("<br><br>");
         surbooking($connexion, $type_intervention, $IDp, $duree_intervention);
     }
 }
@@ -571,7 +565,7 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
                     if(strtotime($creneaux_du_jour[$i]['Heure_fin']) <= strtotime("-".$duree_intervention_x2." minute", strtotime("20:00:00")))
                     {
                         $creneau_heure_debut = date("H:i:s", strtotime($creneaux_du_jour[$i]['Heure_fin']));
-                        $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($dernier_creneau)));
+                        $creneau_heure_fin = date("H:i:s", strtotime("+".$duree_intervention." minute", strtotime($creneau_heure_debut)));
                         print("Le dernier créneau inséré aura lieu le ".$date_considérée." entre ".$creneau_heure_debut." et ".$creneau_heure_fin);
                         $insert_request = "INSERT INTO creneaux(IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite, Deplacement) VALUES ('', '$date_considérée', '$creneau_heure_debut', '$creneau_heure_fin', '$date_du_jour', '".$creneau_flottant['IDp']."', '$type_intervention', '".$creneau_flottant['Niveau_priorite']."', ".$creneau_flottant['Deplacement'].")";
                         mysqli_query($connexion,$insert_request) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
@@ -620,7 +614,7 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
 
                 $creneaux_du_jour[$i]['IDp'] = $test['IDp'] ;
                 $creneaux_du_jour[$i]['Deplacement'] = $test['Deplacement'] + 1;
-                $ajout_priorite = intval($creneaux_du_jour[$i]['Deplacement']);
+                $ajout_priorite = intval($creneaux_du_jour[$i]['Deplacement']/5);
                 $creneaux_du_jour[$i]['Niveau_priorite'] = $test['Niveau_priorite'] + $ajout_priorite;
 
                 $update_request = "UPDATE creneaux SET IDp = ".$creneaux_du_jour[$i]['IDp']." , Niveau_priorite = ".$creneaux_du_jour[$i]['Niveau_priorite'].", Deplacement = '".$creneau_flottant['Deplacement']."' WHERE IDc = ".$creneaux_du_jour[$i]['IDc'];
