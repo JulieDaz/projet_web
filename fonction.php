@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisatrice
-      $mdp = '';  // mot de passe
+      $mdp = 'phpmyadmin';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -626,4 +626,29 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
     }
 }
 
+
+// Requête permettant de voir si le patient existe déjà dans la base de données
+function verif_patient($nomPatient,$prenomPatient) {
+    $connexion = connect() ;
+    $request = "SELECT *
+                FROM `patient`
+                WHERE `Nom` LIKE '$nomPatient' AND `Prenom` LIKE '$prenomPatient'" ;
+    $reponse = do_request($connexion,$request) ;
+    return $reponse ;
+}
+
+
+function select_IDpatient($nomPatient,$prenomPatient) {
+    $connexion = connect() ;
+    $request = "SELECT `IDp`
+                FROM `patient`
+                WHERE `Nom` LIKE '$nomPatient' AND `Prenom` LIKE '$prenomPatient'" ;
+    $reponse = do_request($connexion,$request) ;
+
+    foreach ($reponse as $value) {
+      $IDp[] = $value['IDp'];
+    }
+
+    return $IDp[0] ;
+}
 ?>

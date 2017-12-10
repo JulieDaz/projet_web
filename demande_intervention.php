@@ -43,8 +43,6 @@
 
   </body>
 
-
-
 </html>
 
 
@@ -56,10 +54,11 @@ if ($_POST == TRUE) {
   $pathologie = $_POST['pathologie'] ;
   $typeIntervention = $_POST['type_intervention'] ;
 
-  //     // date()         -> renvoie un string
-  //     // date_create()  -> renvoie une date
-  //     // date_format()  -> renvoie un string
-  //     // mktime()       -> renvoie un int (timestamp)
+  if (empty(verif_patient($nomPatient,$prenomPatient))) {
+    echo "</br>Le patient $nomPatient $prenomPatient n'existe pas dans la base de données</br>" ;
+  }
+
+  else {
   $creneauRecherche  = date('Y-m-d H:i:s',mktime(8, 0, 0, date("m")  , date("d")+1, date("Y")));   //date du lendemain à 8h00, date à laquelle nous allons commencer la recherche de créneau disponible
   list($date,$horaire) = explode(" ", $creneauRecherche);  //on récupère la date et l'heure du créneau
   $creneauxProposes= array() ;   //on initialise un tableau vide
@@ -75,10 +74,6 @@ if ($_POST == TRUE) {
   }
 
   for($i = 0 ; $i < count($creneauxIndisponibles) ; $i++) {
-    // echo "heure : $horaire </br>" ;
-    // echo "horaire créneau : $heure_debut_creneau[$j]</br>" ;
-    // echo "date : $date</br>" ;
-    // echo "date du créneau : $date_creneau[$j]</br>" ;
 
     if ($date != $date_creneau[$j] OR $horaire != $heure_debut_creneau[$j]) {   // On vérifie si le créneau est déjà pris ou pas
       $creneauxProposes[] = $creneauRecherche;    // Si le créneau est disponible alors on l'enregistre
@@ -89,7 +84,7 @@ if ($_POST == TRUE) {
       $j++;
     }
 
-    if (date_format(date_create($creneauRecherche),'H:i') == '18:00') {   // Quand on est à 18h on passe au jour suivant
+    if (date_format(date_create($creneauRecherche),'H:i') == '18:00' OR date_format(date_create($creneauRecherche),'H:i') == '20:00') {   // Quand on est à 18h on passe au jour suivant
       $creneauRecherche = date_modify(date_create($creneauRecherche), "+1 day");
       $creneauRecherche = date_format($creneauRecherche,'Y-m-d 08:00:00') ;
       list($date,$horaire) = explode(" ", $creneauRecherche);
@@ -113,7 +108,7 @@ if ($_POST == TRUE) {
 
 
   while (count($creneauxProposes) < 10) {
-    if (date_format(date_create($creneauRecherche),'H:i') == '18:00') {   // Quand on est à 18h on passe au jour suivant
+    if (date_format(date_create($creneauRecherche),'H:i') == '18:00' OR date_format(date_create($creneauRecherche),'H:i') == '20:00') {   // Quand on est à 18h on passe au jour suivant
       $creneauRecherche = date_modify(date_create($creneauRecherche), "+1 day");
       $creneauRecherche = date_format($creneauRecherche,'Y-m-d 08:00:00') ;
       list($date,$horaire) = explode(" ", $creneauRecherche);
@@ -131,15 +126,25 @@ if ($_POST == TRUE) {
       list($date,$horaire) = explode(" ", $creneauRecherche);
     }
   }
-}
+
 
   ?><p>Veuillez sélectionner une date de rdv</p> <br ><?php
   foreach ($creneauxProposes as $value) {
   ?>
   <form method= "post" action= "traitementRDV.php">
-    <input type= "radio" value="<?php echo $value ?>" name="date" >
+    <input type= "radio" name="date" value="<?php echo $value ?>" >
     <label> <?php echo date_format(date_create($value),'l d F Y H:i') ?> </label > <br >
+    <input type ="hidden" name = "nomPatient" value = <?php echo $nomPatient ?> >
+    <input type ="hidden" name = "prenomPatient" value = <?php echo $prenomPatient ?> >
+    <input type ="hidden" name = "pathologie" value = <?php echo $pathologie ?> >
+    <input type ="hidden" name = "typeIntervention" value = <?php echo $typeIntervention ?> >
+    <input type ="hidden" name = "dureeIntervention" value = <?php echo $dureeIntervention ?> >
     <?php
   }?>
     <input type="submit"/>
   </form>
+
+<?php
+}
+}
+?>
