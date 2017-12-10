@@ -42,21 +42,26 @@ session_start() ;
     <?php
     if(isset($_POST['bouton_patho_add']))
     {
-        $connexion = connect() ;
-        $nom_pathologie = $_POST['nom_patho'] ;
+        $connexion = connect() ; # connexion à la base de données
+        # on récupère les données du formulaires
+        $nom_pathologie = $_POST['nom_patho'] ; 
         $niveau_urgence = $_POST['urgence'] ;
 
-        if (check_carac($nom_pathologie) == TRUE)
+        if (check_carac($nom_pathologie) == TRUE) # si le nom de la pathologie ne comporte pas de caractères spéciaux
         {
-            $req_exist_patho = "SELECT * FROM Pathologie WHERE Nom_pathologie = '$nom_pathologie'" ;
+            $pathologie = check_carac($nom_pathologie) ; # on remplace le nom de la pathologie rentrée par l'utilisateur par la sortie de la fonction
+
+            # on vérifie si la pathologie existe déjà dans la BD 
+            $req_exist_patho = "SELECT * FROM Pathologie WHERE Nom_pathologie = '$pathologie'" ;
             $exist_patho = do_request($connexion, $req_exist_patho) ;
 
-            if (empty($exist_patho))
+            if (empty($exist_patho)) # si la pathologie n'existe pas 
             {
-                $req_add_patho = "INSERT INTO Pathologie (Nom_pathologie, Niveau_urgence) VALUES ('$nom_pathologie', '$niveau_urgence')" ;
+                # requêter d'ajout de la pathologie dans la BD 
+                $req_add_patho = "INSERT INTO Pathologie (Nom_pathologie, Niveau_urgence) VALUES ('$pathologie', '$niveau_urgence')" ;
                 $add_patho = mysqli_query($connexion, $req_add_patho) ;
 
-                if($add_patho == TRUE)
+                if($add_patho == TRUE) # si la requête s'est effectuée correctement 
                 {
                     print("La pathologie a été correctement ajouté.") ;
                 }
@@ -71,10 +76,6 @@ session_start() ;
         else {
             print("Erreur : vous avez entré des caractères non tolérés.") ;
         }
-
-
-        
-
     }
     ?>
 </div>
@@ -97,23 +98,28 @@ session_start() ;
     <?php
     if(isset($_POST['bouton_accueil_add']))
     {
-        $connexion = connect() ;
+        $connexion = connect() ; # connexion à la BD 
+        # on récupère les données du formulaire 
         $service_acc = $_POST['service_acc'] ;
         $bill = $_POST['bill'] ;
 
-        if (check_carac($service_acc) == TRUE)
+        if (check_carac($service_acc) == TRUE) # si les caractères respectent les conditions de la fonctions
         {
-            if (preg_match("#^[1-9][0-9]#", $bill))
+            $service_accueil = check_carac($service_acc) ; # on remplace le nom du service d'accueil  rentré par l'utilisateur par la sortie de la fonction
+            
+            if (preg_match("#^[1-9][0-9]#", $bill)) # on vérifie que le montant a payé soit un entier
             {
-                $req_exist_service = "SELECT * FROM Service_d_accueil WHERE Nom_service = '$service_acc'" ;
+                # requête pour vérifier si le service d'accueil existe déjà dans la BD 
+                $req_exist_service = "SELECT * FROM Service_d_accueil WHERE Nom_service = '$service_accueil'" ;
                 $exist_service = do_request($connexion, $req_exist_service) ;
 
-                if(empty($exist_service))
+                if(empty($exist_service)) # si le service d'accueil n'existe pas 
                 {
-                    $req_add_acc = "INSERT INTO Service_d_accueil (Nom_service, Facture) VALUES ('$service_acc', '$bill')" ;
+                    # requête d'ajout du service d'accueil dans la BD 
+                    $req_add_acc = "INSERT INTO Service_d_accueil (Nom_service, Facture) VALUES ('$service_accueil', '$bill')" ;
                     $add_acc = mysqli_query($connexion, $req_add_acc) ;
 
-                    if($add_acc==TRUE)
+                    if($add_acc==TRUE) # si la requête s'est exécutée 
                     {
                         print("Le service d'accueil a été correctement ajouté");
                     }
@@ -124,7 +130,6 @@ session_start() ;
                 }
                 else {
                     print("Erreur : ce service d'accueil existe déjà dans la base de données. Veuillez insérer un autre nom.");
-
                 }
             }
             else {
