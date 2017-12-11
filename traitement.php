@@ -14,8 +14,10 @@ session_start();
 	</head>
 	<body>
 
-	<a class="bouton_deco" href="index.php">Déconnexion</a>
 	<br>
+
+<div class = "deco">
+<img src = "images/penguin.png" height = "50" width = "50">
 
 <?php
 
@@ -55,32 +57,43 @@ if ($pwd != $mdp OR $get_type == FALSE) {
 else {
 	switch ($usertype) {
 	case 'Medecin':
-		print("vous êtes un médecin !");
 		$_SESSION['ID'] = $id ;
 		$_SESSION['mdp'] = $mdp;
 		$_SESSION['type'] = "Medecin" ;
+		$_SESSION['table_id'] = "IDm" ;
 		break;
 
 	case 'Admin':
-		print("vous êtes un admin !");
 		$_SESSION['ID'] = $id ;
 		$_SESSION['mdp'] = $mdp;
 		$_SESSION['type'] = "Administrateur" ;
+		$_SESSION['table_id'] = "IDa" ;
 		break;
 
 	case "Responsable":
-		print("Vous êtes un responsable !");
 		$_SESSION['ID'] = $id ;
 		$_SESSION['mdp'] = $mdp;
-		$_SESSION['type'] = "Responsable" ;
+		$_SESSION['type'] = "Responsable_d_intervention" ;
 		$req_intervention = "SELECT Nom_intervention FROM Responsable_d_intervention WHERE IDr = '$id'" ;
+		$_SESSION['table_id'] = "IDr" ;
 		$intervention = do_request($connexion, $req_intervention) ;
 		$_SESSION['intervention'] = $intervention[0]['Nom_intervention'] ;
 		break;
 	}
 
 }
+
+$req_display_name = "SELECT Nom, Prenom FROM ".$_SESSION['type']." WHERE ".$_SESSION['table_id']." = '$id'";
+$display_name = do_request($connexion, $req_display_name) ;
+print($display_name[0]['Prenom']." ".$display_name[0]['Nom']) ;
+
 ?>
+<br><br>
+
+
+</div>
+<a class="bouton_deco" href="index.php">Déconnexion</a>
+
 
 
 <!--si l'utilisateur est un médecin ou un admin.....................................................................................................................-->

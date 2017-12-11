@@ -42,6 +42,14 @@ td.time
     text-align: center ;
 }
 
+.deco {
+display: inline-block ;
+position: absolute;
+right : 135px ;
+top : 10px ;
+text-align: center ;
+}
+
 .bouton_deco {
 color: white;
 background-color: #000080;
@@ -71,8 +79,6 @@ border: 2px outset #c0c0c0;
 background-color: #6495ED;
 border: 2px inset #c0c0c0;
 }
-
-
 
 .connexion {
     font-size: 20px ;
