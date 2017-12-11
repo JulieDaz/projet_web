@@ -14,7 +14,7 @@ session_start();
 	</head>
 	<body>
 
-	<a class="bouton_relief" href="index.php">Déconnexion</a>
+	<a class="bouton_deco" href="index.php">Déconnexion</a>
 	<br>
 
 <?php
@@ -185,7 +185,7 @@ if(isset($super_tableau_creneaux)) // on vérifie que des créneaux existent
 		<br>
 		<form method = "POST" action = "traitement.php">
 			<input type="submit" value="<<" name="semaine_précédente">
-			<input type="submit" value="Aujourd'hui" name="reset_time">
+			<input type="submit" value="Semaine en cours" name="reset_time">
 			<input type="submit" value=">>" name="semaine_suivante">
 		</form>
 		<br>
@@ -309,4 +309,6 @@ elseif ($usertype == "Responsable") {
 
 <?php
 }
+print("<br><br>") ;
+include("pieddepage.php") ;
 ?>

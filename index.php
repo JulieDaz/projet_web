@@ -15,11 +15,11 @@
 	<div class="connexion">
 
 	<form method="post" action="traitement.php">
-	  <label>ID</label> : <input type="text" required="on" name="ID">
-	  <br><br>
-	  <label>Mot de passe</label> : <input type="password" required="on" name="mdp">
-	  <br><br>
-	  <input class="bouton_relief" type="submit" value="Se connecter">
+		<label>ID</label> : <input type="text" required="on" name="ID">
+		<br><br>
+		<label>Mot de passe</label> : <input type="password" required="on" name="mdp">
+		<br><br>
+		<input class="bouton_relief" type="submit" value="Se connecter">
 	</form>
 
 	<?php
