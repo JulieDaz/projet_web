@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisateur
-      $mdp = '';  // mot de passe
+      $mdp = 'phpmyadmin';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // nom de la base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -66,16 +66,17 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
         }
         else
         {
-            foreach($IDp_intervention as $IDp) // pour chaque ID patient récupéré
+            foreach($IDp_from_medecin as $IDp_array) // pour chaque ID patient récupéré
             {
+                $IDp = $IDp_array['IDp']; // on va chercher la valeur contenue par la clé 'IDp'
                 $request_HDebut = "SELECT Heure_debut FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de début du créneau
                 $request_HFin = "SELECT Heure_fin FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de fin du créneau
                 $request_date_creneau = "SELECT Date_creneau FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer la date du créneau
                 $request_IDc = "SELECT IDc FROM creneaux WHERE  Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer les ID créneaux pour chaque patient
                 $IDc_array = do_request($connexion, $request_IDc);
                 $Date_creneau = do_request($connexion, $request_date_creneau);
-                $Heure_debut = do_request($connexion, $request_HDebut); 
-                $Heure_fin = do_request($connexion, $request_HFin); 
+                $Heure_debut = do_request($connexion, $request_HDebut);
+                $Heure_fin = do_request($connexion, $request_HFin);
             }
             foreach($IDc_array as $IDc_key) // pour chaque créneau récupéré
             {
@@ -316,6 +317,16 @@ function getCreneauxIndisponibles($typeIntervention,$date){
     $reponse = do_request($connexion, $request);
     return $reponse;
 }
+
+
+function get_niveau_priorite($nom_patho){
+  $connexion = connect() ;
+  $req_niveau_prio = "SELECT Niveau_urgence FROM Pathologie WHERE Nom_pathologie = '$nom_patho'" ;
+  $niveau_prio = do_request($connexion, $req_niveau_prio) ;
+  $niveau_priorite = $niveau_prio[0]['Niveau_urgence'] ;
+  return $niveau_priorite ;
+}
+
 
 ### Fonction pour vérifier les caractères entrés par l'utilisateur ###
 function check_carac($word)
