@@ -53,7 +53,6 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
             if(!empty($IDc_patients[0]))
             {
                 $patient_ayant_intervention++;
-                $IDp_intervention[] = $IDp;
             }
         }
         if(empty($IDp_from_medecin[0]) or $patient_ayant_intervention == 0)
@@ -62,8 +61,9 @@ function get_creneaux($job, $ID, $connexion, $intervention_admin_med = NULL)
         }
         else
         {
-            foreach($IDp_intervention as $IDp) // pour chaque ID patient récupéré
+            foreach($IDp_from_medecin as $IDp_array) // pour chaque ID patient récupéré
             {
+                $IDp = $IDp_array['IDp']; // on va chercher la valeur contenue par la clé 'IDp'
                 $request_HDebut = "SELECT Heure_debut FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de début du créneau
                 $request_HFin = "SELECT Heure_fin FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de fin du créneau
                 $request_date_creneau = "SELECT Date_creneau FROM creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'";
@@ -312,6 +312,16 @@ function getCreneauxIndisponibles($typeIntervention,$date){
     $reponse = do_request($connexion, $request);
     return $reponse;
 }
+
+
+function get_niveau_priorite($nom_patho){
+  $connexion = connect() ;
+  $req_niveau_prio = "SELECT Niveau_urgence FROM Pathologie WHERE Nom_pathologie = '$nom_patho'" ;
+  $niveau_prio = do_request($connexion, $req_niveau_prio) ;
+  $niveau_priorite = $niveau_prio[0]['Niveau_urgence'] ;
+  return $niveau_priorite ;
+}
+
 
 ### Fonction pour vérifier les caractères entrés par l'utilisateur ###
 function check_carac($word)

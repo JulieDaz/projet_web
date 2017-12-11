@@ -60,13 +60,16 @@ if ($_POST == TRUE) {   // On vérifie que le formulaire a été envoyé
   }
 
   else {
-  $creneauRecherche  = date('Y-m-d H:i:s',mktime(8, 0, 0, date("m")  , date("d")+1, date("Y")));   //date du lendemain à 8h00, date à laquelle nous allons commencer la recherche de créneau disponible
-  list($date,$horaire) = explode(" ", $creneauRecherche);  //on récupère la date et l'heure du créneau
   $creneauxProposes= array() ;   //on initialise un tableau vide
   $j=0;
 
   $dureeIntervention = getDureeIntervention($typeIntervention);   //on récupère la durée de l'intervention demandée
   $creneauxIndisponibles = getCreneauxIndisponibles($typeIntervention,$date) ;    // On récupère les créneaux disponibles
+  $niveau_priorite = get_niveau_priorite($pathologie) ;   // On récupère le niveau de priorité de la pathologie
+  
+// Changer ici pour les niveaux de priorité
+  $creneauRecherche  = date('Y-m-d H:i:s',mktime(8, 0, 0, date("m")  , date("d")+1, date("Y")));   //date du lendemain à 8h00, date à laquelle nous allons commencer la recherche de créneau disponible
+  list($date,$horaire) = explode(" ", $creneauRecherche);  //on récupère la date et l'heure du créneau
 
   foreach ($creneauxIndisponibles as $value) {    // On parcourt le tableau contenant l'ensemble des créneaux indisponibles et on stocke séparément l'heure et la date
     $date_creneau[] = $value['Date_creneau'] ;
