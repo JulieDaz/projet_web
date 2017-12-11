@@ -42,6 +42,22 @@ td.time
     text-align: center ;
 }
 
+.bouton_deco {
+color: white;
+background-color: #000080;
+text-decoration: none;
+text-align: center;
+padding: 5px;
+border: 2px outset #c0c0c0;
+position : absolute ;
+right : 30px;
+}
+
+.bouton_deco:hover {
+background-color: #6495ED;
+border: 2px inset #c0c0c0;
+}
+
 .bouton_relief {
 color: white;
 background-color: #000080;
@@ -68,4 +84,8 @@ border: 2px inset #c0c0c0;
     padding-bottom: 10px ;
     text-align: center
     
+}
+
+footer{
+    text-align: center ;
 }
