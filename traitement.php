@@ -99,6 +99,11 @@ print($display_name[0]['Prenom']." ".$display_name[0]['Nom']) ;
 <!--si l'utilisateur est un médecin ou un admin.....................................................................................................................-->
 <!-- Quel type d'intervention veut-on visualiser -->
 
+<?php
+if($usertype == "Admin" or $usertype == "Medecin")
+{
+?>
+
 <form action="traitement.php" method="post">
 	<label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
 		<?php
@@ -119,6 +124,9 @@ print($display_name[0]['Prenom']." ".$display_name[0]['Nom']) ;
  		<input type="submit" value="Valider quel type d'intervention à visualiser" name="intervention">
  	</select>
  </form>
+<?php
+}
+?>
 
 <!--Ecriture du planning, commun à tous les utilisateurs..................................................................................................-->
 		<?php
