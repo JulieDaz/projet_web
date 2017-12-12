@@ -40,7 +40,7 @@ function do_request($connexion,$request)
 /* Récupérer les créneaux à afficher selon le type d'utilisateur */
 function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admin_med = NULL)
 {
-    $date_lundi = date("Y-m-d", strtotime($dates_semaine[1]));
+    $date_lundi = date("d-m-Y", strtotime(str_replace('/', '-', $dates_semaine[1])));
     if ($job == "Medecin") // s'il s'agit d'un médecin
     {
         $request_IDp = "SELECT IDp FROM a_comme WHERE IDm='$ID'"; // requête pour récupérer les ID patients du médecin considéré
@@ -53,7 +53,7 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
             $infos_creneau = do_request($connexion, $request_infos);
             foreach($infos_creneau as $creneau)
             {
-                $date = date("d/m/Y", strtotime($creneau['Date_creneau']));
+                $date = date("d-m-Y", strtotime($creneau['Date_creneau']));
                 if(strtotime($date) >= strtotime($date_lundi) and !empty($creneau))
                 {
                     $patient_ayant_intervention++; // on incrémente la variable de vérification
@@ -104,7 +104,7 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
         $infos_creneau = do_request($connexion, $request_intervention);
         foreach($infos_creneau as $creneau)
         {
-            $date = date("d/m/Y", strtotime($creneau['Date_creneau']));
+            $date = date("d-m-Y", strtotime($creneau['Date_creneau']));
             if(strtotime($date) >= strtotime($date_lundi))
             {
                 $IDc_array[] = $creneau['IDc'];
@@ -169,7 +169,7 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
             $infos_creneau = do_request($connexion, $request_infos);
             foreach($infos_creneau as $creneau)
             {
-                $date = date("d/m/Y", strtotime($creneau['Date_creneau']));                
+                $date = date("d-m-Y", strtotime($creneau['Date_creneau']));
                 if(strtotime($date) >= strtotime($date_lundi))
                 {
                     $IDc_array[] = $creneau['IDc'];
