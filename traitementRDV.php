@@ -1,7 +1,10 @@
+<title> Demande d'intervention - 1/2 </title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="style.css"/>
+
 <?php
 
 include('fonction.php');
-
 
 $nomPatient = $_POST['nomPatient'];
 $prenomPatient = $_POST['prenomPatient'] ;
@@ -21,19 +24,27 @@ $heureFin = date_format($finCreneau,'H:i:s') ;
 $IDp = select_IDpatient($nomPatient,$prenomPatient) ;
 
 $connexion = connect();
-$insertRequest = "INSERT INTO `creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`)
-VALUES (NULL, '$date', '$heure', '$heureFin', '$aujourdhui',
-  (SELECT IDp
-    FROM patient
-    WHERE IDp = '$IDp'),
 
-    (SELECT Nom_intervention
-      FROM type_d_intervention
-      WHERE Nom_intervention LIKE '$typeIntervention') , NULL)";
+// On vérifie que le patient n'a pas déjà rdv ce jour là
+$verif_rdv_patient = do_request($connexion,"SELECT `Nom_intervention` FROM `creneaux` WHERE `Date_creneau` LIKE '$date' AND `Heure_debut` LIKE '$heure' AND `IDp` LIKE '$IDp'") ;
+if (!empty($verif_rdv_patient)) {
+  echo "Attention, ce patient a déjà un rdv pour ce créneau</br></br>" ;?>
+  <a class="access_form" href="demande_intervention.php">Retourner au formulaire de demande d'intervention </a>
+  <?php
+}else{
+  $insertRequest = "INSERT INTO `creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`)
+  VALUES (NULL, '$date', '$heure', '$heureFin', '$aujourdhui',
+    (SELECT IDp
+      FROM patient
+      WHERE IDp = '$IDp'),
 
-      mysqli_query($connexion, $insertRequest) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
-?>
+      (SELECT Nom_intervention
+        FROM type_d_intervention
+        WHERE Nom_intervention LIKE '$typeIntervention') , NULL)";
+
+        mysqli_query($connexion, $insertRequest) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
 
 
-<p> Le rendez-vous a bien été enregistré </p>
-<a class="bouton_relief" href="traitement.php">Retourner au planning</a>
+    header('Location: traitement.php');
+    }
+      ?>

@@ -4,7 +4,7 @@
 function connect()
   {
       $user = 'root'; // utilisateur
-      $mdp = '';  // mot de passe
+      $mdp = 'phpmyadmin';  // mot de passe
       $machine = '127.0.0.1'; //serveur sur lequel tourne le SGBD
       $bd = 'projet_web';  // nom de la base de données à laquelle se connecter
       $connexion = mysqli_connect($machine, $user, $mdp, $bd);
@@ -57,7 +57,7 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
                 if(strtotime($date) >= strtotime($date_lundi) and !empty($creneau))
                 {
                     $patient_ayant_intervention++; // on incrémente la variable de vérification
-                    $IDp_intervention[] = $IDp; // on récupère l'IDp du patient ayant une intervention    
+                    $IDp_intervention[] = $IDp; // on récupère l'IDp du patient ayant une intervention
                 }
             }
         }
@@ -116,7 +116,7 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
         }
         elseif(!isset($IDc_array))
         {
-            print("Il n'y a pas de créneaux à récupérer de ce type.");            
+            print("Il n'y a pas de créneaux à récupérer de ce type.");
         }
         else
         {
@@ -194,7 +194,7 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
                     $HDebut_array[] = $Heure_debut[0];
                     $HFin_array[] = $Heure_fin[0];
                     $Date_array[] = $Date_creneau[0];
-                    $IDp_array[] = $IDp[0];    
+                    $IDp_array[] = $IDp[0];
                 }
                 foreach($IDp_array as $IDp_key)
                 {

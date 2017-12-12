@@ -120,12 +120,6 @@ INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Cancer","10");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Cancer","11");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Diabète","12");
 
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Radiologie","3");
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Radiologie","4");
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Extraction dentaire","7");
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Prise de sang","9");
-INSERT INTO `recoit`(`Nom_intervention`, `IDp`) VALUES ("Prise de sang","12");
-
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDm`) VALUES ("0", "94803jean", "Medecin","M_JM1548");
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDm`) VALUES ("1", "06478andre", "Medecin","M_AL4975");
 INSERT INTO `utilisateur`(`IDu`, `Mdp`, `User_type`,`IDm`) VALUES ("2", "39489roger", "Medecin","M_RD2906");

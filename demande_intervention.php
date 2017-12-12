@@ -1,4 +1,6 @@
 <?php
+  session_start() ;
+  print_r( $_SESSION) ;
   include('fonction.php');
   $connexion = connect() ;
   session_start() ;
@@ -56,10 +58,10 @@
 <?php
 if ($_POST == TRUE) {   // On vérifie que le formulaire a été envoyé
   // On stocke les variables
-  $nomPatient = $_POST['Nom_patient'];
-  $prenomPatient = $_POST['Prenom_patient'] ;
-  $pathologie = $_POST['pathologie'] ;
-  $typeIntervention = $_POST['type_intervention'] ;
+  $nomPatient = $_SESSION['nom_patient'] = $_POST['Nom_patient'];
+  $prenomPatient = $_SESSION['prenom_patient'] = $_POST['Prenom_patient'] ;
+  $pathologie = $_SESSION['pathologie'] = $_POST['pathologie'] ;
+  $typeIntervention = $_SESSION['intervention_demandee'] = $_POST['type_intervention'] ;
 
   if (empty(verif_patient($nomPatient,$prenomPatient))) {   // On vérifie que le patient existe bien dans la base de données
     echo "</br>Le patient $nomPatient $prenomPatient n'existe pas dans la base de données</br>" ;
@@ -69,7 +71,7 @@ if ($_POST == TRUE) {   // On vérifie que le formulaire a été envoyé
     $creneauxProposes= array() ;   //on initialise un tableau vide
     $j=0;
 
-    $niveau_priorite = get_niveau_priorite($pathologie) ;   // On récupère le niveau de priorité de la pathologie
+    $niveau_priorite = /*$_SESSION['niveau_priorite'] =*/ get_niveau_priorite($pathologie) ;   // On récupère le niveau de priorité de la pathologie
 
     if ($niveau_priorite == 1) {    // Minimum 1 semaine de délai pour un niveau 1
       $creneauRecherche  = date('Y-m-d H:i:s',mktime(8, 0, 0, date("m")  , date("d")+7, date("Y")));   //date 7 jours plus tard à 8h00, date à laquelle nous allons commencer la recherche de créneau disponible
@@ -92,7 +94,7 @@ if ($_POST == TRUE) {   // On vérifie que le formulaire a été envoyé
       list($date,$horaire) = explode(" ", $creneauRecherche);
     }
 
-    $dureeIntervention = getDureeIntervention($typeIntervention);   //on récupère la durée de l'intervention demandée
+    $dureeIntervention = $_SESSION['duree_intervention'] = getDureeIntervention($typeIntervention);   //on récupère la durée de l'intervention demandée
     $creneauxIndisponibles = getCreneauxIndisponibles($typeIntervention,$date) ;    // On récupère les créneaux disponibles
 
     foreach ($creneauxIndisponibles as $value) {    // On parcourt le tableau contenant l'ensemble des créneaux indisponibles et on stocke séparément l'heure et la date
@@ -173,21 +175,59 @@ if ($_POST == TRUE) {   // On vérifie que le formulaire a été envoyé
     ?><p>Veuillez sélectionner une date de rdv</p> <br ><?php
     foreach ($creneauxProposes as $value) {   // On récupère les dates disponibles préalablement stockées dans le tableau "creneauxProposes"
       ?>
-      <form method= "post" action= "traitementRDV.php">
+      <form method= "post" action= "">
         <input type= "radio" name="date" value="<?php echo $value ?>" >
         <label> <?php echo date_format(date_create($value),'l d F Y H:i') ?> </label > <br >
-          <!-- On envoie en caché dans le formulaire les variables qui vont nous servier à implémenter la base de données -->
-          <input type ="hidden" name = "nomPatient" value = <?php echo $nomPatient ?> >
-          <input type ="hidden" name = "prenomPatient" value = <?php echo $prenomPatient ?> >
-          <input type ="hidden" name = "pathologie" value = <?php echo $pathologie ?> >
-          <input type ="hidden" name = "typeIntervention" value = <?php echo $typeIntervention ?> >
-          <input type ="hidden" name = "dureeIntervention" value = <?php echo $dureeIntervention ?> >
           <?php
         }?>
-        <input type="submit"/>
+        <input type="submit" name = "soumission_demande_intervention"/>
       </form>
 
       <?php
+
+    }
+
+if(isset($_POST['soumission_demande_intervention'])){
+    $aujourdhui = date('Y-m-d') ;
+
+    $creneau = $_POST['date'] ;
+    list($date,$heure) = explode(" ", $creneau);
+
+    $nomPatient = $_SESSION['nom_patient'] ;
+    $prenomPatient = $_SESSION['prenom_patient'] ;
+    $pathologie = $_SESSION['pathologie'] ;
+    $typeIntervention = $_SESSION['intervention_demandee'] ;
+    $dureeIntervention = $_SESSION['duree_intervention'] ;
+
+    $finCreneau = date_modify(date_create($creneau), "+$dureeIntervention minutes") ;
+    $heureFin = date_format($finCreneau,'H:i:s') ;
+
+    $IDp = select_IDpatient($nomPatient,$prenomPatient) ;
+
+    $connexion = connect();
+
+    // On vérifie que le patient n'a pas déjà rdv ce jour là
+    $verif_rdv_patient = do_request($connexion,"SELECT `Nom_intervention` FROM `creneaux` WHERE `Date_creneau` LIKE '$date' AND `Heure_debut` LIKE '$heure' AND `IDp` LIKE '$IDp'") ;
+    if (!empty($verif_rdv_patient)) {
+      echo "Attention, ce patient a déjà un rdv pour ce créneau</br></br>" ;?>
+      <a class="access_form" href="demande_intervention.php">Retourner au formulaire de demande d'intervention </a>
+      <?php
+    }else{
+      $insertRequest = "INSERT INTO `creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`)
+      VALUES (NULL, '$date', '$heure', '$heureFin', '$aujourdhui',
+        (SELECT IDp
+          FROM patient
+          WHERE IDp = '$IDp'),
+
+          (SELECT Nom_intervention
+            FROM type_d_intervention
+            WHERE Nom_intervention LIKE '$typeIntervention') , NULL)";
+
+            mysqli_query($connexion, $insertRequest) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
+
+
+        header('Location: traitement.php');
+      }
     }
   }
   ?>
