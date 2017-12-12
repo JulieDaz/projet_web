@@ -1,6 +1,10 @@
 <?php 
 include("fonction.php"); 
 session_start() ;
+if(!isset($_SESSION['admin']))
+{
+    header("Location:index.php") ;
+}
 ?>
 
 
@@ -154,8 +158,6 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
         {
             print("Erreur : le nom du service d'accueille comprend des caractères non tolérés.") ;
         }
-
-        
     }
     ?>
 </div>
