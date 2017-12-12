@@ -1,5 +1,6 @@
 <?php
   session_start() ;
+  print_r($_SESSION) ;
   include('fonction.php');
   $connexion = connect() ;
   if(!isset($_SESSION['medecin']))
@@ -198,6 +199,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     $typeIntervention = $_SESSION['intervention_demandee'] ;
     $dureeIntervention = $_SESSION['duree_intervention'] ;
     $niveau_priorite = $_SESSION['niveau_priorite'] ;
+    $IDm = $_SESSION['ID'] ;
 
     $finCreneau = date_modify(date_create($creneau), "+$dureeIntervention minutes") ;   // On paramètre la fin du rdv en fonction de la durée de l'intervention
     $heureFin = date_format($finCreneau,'H:i:s') ;
@@ -213,7 +215,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
       <a class="access_form" href="demande_intervention.php">Retourner au formulaire de demande d'intervention </a>
       <?php
     }else{    //On insère le nouveau rdv dans la base de données si le patient n'a pas déjà un rdv à ce jour là
-      $insertRequest = "INSERT INTO `creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`)
+      $insertCreneauRequest = "INSERT INTO `creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`)
       VALUES (NULL, '$date', '$heure', '$heureFin', '$aujourdhui',
         (SELECT IDp
           FROM patient
@@ -223,7 +225,10 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
             FROM type_d_intervention
             WHERE Nom_intervention LIKE '$typeIntervention') , '$niveau_priorite')";
 
-            mysqli_query($connexion, $insertRequest) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
+        mysqli_query($connexion, $insertCreneauRequest) or die('<br>Erreur SQL !<br>'.$insertCreneauRequest.'<br>'.mysqli_error($connexion));
+
+        $insertPatientRequest = "INSERT INTO `a_comme`(`IDm`, `IDp`) VALUES ('$IDm','$IDp') " ;
+        mysqli_query($connexion, $insertPatientRequest) or die('<br>Erreur SQL !<br>'.$insertPatientRequest.'<br>'.mysqli_error($connexion));
 
             ?>
             <p> Votre rendez-vous a bien été enregistré </p>
