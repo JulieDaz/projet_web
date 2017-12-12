@@ -35,4 +35,11 @@
 
 	</div>
 	</body>
+<br><br><br><br><br><br><br><br><br><br><br>
 </html>
+
+
+<?php
+print("<br><br>") ;
+include("pieddepage.php") ;
+?>
