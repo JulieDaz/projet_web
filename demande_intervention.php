@@ -1,6 +1,5 @@
 <?php
   session_start() ;
-  print_r( $_SESSION) ;
   include('fonction.php');
   $connexion = connect() ;
   if(!isset($_SESSION['medecin']))
@@ -42,7 +41,7 @@
             echo "<option value='$value[Nom_intervention]'> $value[Nom_intervention] </option>";                          //On crée le menu déroulant au fil de la lecture du foreach
           }
         ?>
-      <input type="submit" value="Soumettre">
+      <input type="submit" value="Soumettre" name = "demande_intervention">
     </form>
 
     <a class="access_form" href="traitement.php">Annuler</a>
@@ -55,7 +54,7 @@
 
 
 <?php
-if ($_POST == TRUE) {   // On vérifie que le formulaire a été envoyé
+if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a été envoyé
   // On stocke les variables
   $nomPatient = $_SESSION['nom_patient'] = $_POST['Nom_patient'];
   $prenomPatient = $_SESSION['prenom_patient'] = $_POST['Prenom_patient'] ;
@@ -70,7 +69,7 @@ if ($_POST == TRUE) {   // On vérifie que le formulaire a été envoyé
     $creneauxProposes= array() ;   //on initialise un tableau vide
     $j=0;
 
-    $niveau_priorite = /*$_SESSION['niveau_priorite'] =*/ get_niveau_priorite($pathologie) ;   // On récupère le niveau de priorité de la pathologie
+    $niveau_priorite = $_SESSION['niveau_priorite'] = get_niveau_priorite($pathologie) ;   // On récupère le niveau de priorité de la pathologie
 
     if ($niveau_priorite == 1) {    // Minimum 1 semaine de délai pour un niveau 1
       $creneauRecherche  = date('Y-m-d H:i:s',mktime(8, 0, 0, date("m")  , date("d")+7, date("Y")));   //date 7 jours plus tard à 8h00, date à laquelle nous allons commencer la recherche de créneau disponible
@@ -183,10 +182,10 @@ if ($_POST == TRUE) {   // On vérifie que le formulaire a été envoyé
       </form>
 
       <?php
-
     }
+  }
 
-if(isset($_POST['soumission_demande_intervention'])){
+  if(isset($_POST['soumission_demande_intervention'])){
     $aujourdhui = date('Y-m-d') ;
 
     $creneau = $_POST['date'] ;
@@ -197,6 +196,7 @@ if(isset($_POST['soumission_demande_intervention'])){
     $pathologie = $_SESSION['pathologie'] ;
     $typeIntervention = $_SESSION['intervention_demandee'] ;
     $dureeIntervention = $_SESSION['duree_intervention'] ;
+    $niveau_priorite = $_SESSION['niveau_priorite'] ;
 
     $finCreneau = date_modify(date_create($creneau), "+$dureeIntervention minutes") ;
     $heureFin = date_format($finCreneau,'H:i:s') ;
@@ -208,7 +208,7 @@ if(isset($_POST['soumission_demande_intervention'])){
     // On vérifie que le patient n'a pas déjà rdv ce jour là
     $verif_rdv_patient = do_request($connexion,"SELECT `Nom_intervention` FROM `creneaux` WHERE `Date_creneau` LIKE '$date' AND `Heure_debut` LIKE '$heure' AND `IDp` LIKE '$IDp'") ;
     if (!empty($verif_rdv_patient)) {
-      echo "Attention, ce patient a déjà un rdv pour ce créneau</br></br>" ;?>
+      echo 'Attention, ce patient a déjà un rdv pour l\'intervention '.$verif_rdv_patient[0]['Nom_intervention'].' à cette heure !</br></br>"' ;?>
       <a class="access_form" href="demande_intervention.php">Retourner au formulaire de demande d'intervention </a>
       <?php
     }else{
@@ -220,13 +220,16 @@ if(isset($_POST['soumission_demande_intervention'])){
 
           (SELECT Nom_intervention
             FROM type_d_intervention
-            WHERE Nom_intervention LIKE '$typeIntervention') , NULL)";
+            WHERE Nom_intervention LIKE '$typeIntervention') , '$niveau_priorite')";
 
             mysqli_query($connexion, $insertRequest) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
 
+        ?>
+        <p> Votre rendez-vous a bien été enregistré </p>
+        <a class="access_form" href="traitement.php">Retourner au planning </a>
 
-        header('Location: traitement.php');
-      }
-    }
-  }
-  ?>
+<?php
+          }
+        }
+
+        ?>
