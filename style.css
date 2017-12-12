@@ -37,28 +37,51 @@ td.time
 }
 
 /*Mise en forme*/
+body {
+    background-color: #b7bec4 ;
+}
+
 
 #title{
     text-align: center ;
 }
 
+/* Les div  */
+
 .deco {
-display: inline-block ;
+
 position: absolute;
-right : 135px ;
+right : 140px ;
 top : 10px ;
 text-align: center ;
 }
 
+.formulaire {
+    font-size: 20px ;
+    /* border: 2px solid #858585; */
+    /* background-color: #c3def7 ; */
+    width : 700px ;
+    margin :auto;
+    margin-top: 5% ;
+    padding-top: 10px ;
+    padding-bottom: 10px ;
+    text-align: left ;
+}
+
+
+/* Les boutons  */
+
 .bouton_deco {
 color: white;
-background-color: #000080;
+background-color: #800000;
 text-decoration: none;
 text-align: center;
 padding: 5px;
 border: 2px outset #c0c0c0;
 position : absolute ;
 right : 30px;
+top : 35px ;
+border-radius:5px;
 }
 
 .bouton_deco:hover {
@@ -66,23 +89,74 @@ background-color: #6495ED;
 border: 2px inset #c0c0c0;
 }
 
-.bouton_relief {
+
+.return_planning {
+color: white;
+background-color: #800000;
+text-decoration: none;
+text-align: center;
+padding: 5px;
+border: 2px outset #c0c0c0;
+position : absolute ;
+left : 30px;
+top : 35px ;
+border-radius:5px;
+}
+
+.return_planning:hover {
+background-color: #6495ED;
+border: 2px inset #c0c0c0;
+}
+
+.access_form {
+color: white;
+background-color: #800000;
+text-decoration: none;
+text-align: center;
+padding: 5px;
+border: 2px outset #c0c0c0;
+border-radius:5px;
+}
+
+.access_form:hover {
+background-color: #6495ED;
+border: 2px inset #c0c0c0;
+}
+
+input[type=submit] {
 color: white;
 background-color: #000080;
 text-decoration: none;
 text-align: center;
 padding: 5px;
 border: 2px outset #c0c0c0;
+border-radius:5px;
 }
 
-.bouton_relief:hover {
+input[type=submit]:hover {
 background-color: #6495ED;
 border: 2px inset #c0c0c0;
 }
 
+input[type=text], select, option {
+ background-color:#FFF3F3;
+ }
+
+input[type=text], select {
+ padding:5px;
+ border:1px solid rgb(143, 145, 233);
+ border-radius:5px;
+ width:auto;
+ box-shadow:1px 1px 2px #C0C0C0 inset;
+ }
+
+select {
+ margin-top:10px;
+ }
+
 .connexion {
     font-size: 20px ;
-    border: 2px solid #0134c0;
+    border: 2px solid #021b5c;
     margin-left: 35%;
     margin-right: 35%;
     margin-top: 5% ;
@@ -92,6 +166,8 @@ border: 2px inset #c0c0c0;
     
 }
 
-footer{
-    text-align: center ;
+footer {
+		bottom: 0px;
+		text-align: center;
+		width: 100%;
 }

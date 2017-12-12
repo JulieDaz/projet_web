@@ -12,11 +12,12 @@
   <link rel="stylesheet" href="style.css"/>
 
   <body>
+    <h2> Formulaire de demande d'intervention : </h2>
     <form method="post" action="">
       <label>Nom du patient</label> : <input type="text" required="on" name="Nom_patient">    <!--Champ pour indiquer le nom du patient-->
-      <br>
+      <br><br>
       <label>Prénom du patient</label> : <input type="text" required="on" name="Prenom_patient">    <!--Champ pour indiquer le prénom du patient-->
-      <br>
+      <br><br>
       <label>Sélectionnez la pathologie</label> : <select name="pathologie">    <!--Menu déroulant des différentes pathologies-->
         <?php
           $request = "SELECT Nom_pathologie FROM pathologie";      //On effectue une requête qui sélectionne les pathologies
@@ -26,7 +27,7 @@
           }
         ?>
       </select>
-      <br>
+      <br><br>
       <label>Type d'intervention souhaitée</label> : <select name="type_intervention">    <!--Menu déroulant des différents types d'intervention-->
         <?php
           $request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
@@ -38,7 +39,7 @@
       <input type="submit" value="Soumettre">
     </form>
 
-    <a class="bouton_relief" href="traitement.php">Annuler</a>
+    <a class="access_form" href="traitement.php">Annuler</a>
 
 
   </body>

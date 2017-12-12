@@ -14,9 +14,21 @@ session_start() ;
 <body>
 
 <!-- Retourner au planning -->
-<a class="bouton_relief" href="traitement.php">Retourner au planning</a>
-<br>
-<br>
+<br><br><br><br>
+
+<div class="deco">
+<img src = "images/penguin.png" height = "50" width = "50">
+
+<?php
+print($_SESSION['prenom']." ".$_SESSION['nom']) ;
+?>
+<br><br>
+
+</div> 
+
+<a class="bouton_deco" href="index.php">Déconnexion</a>
+
+
 
 <!--.....................SECTION Medecin.....................-->
 
@@ -410,6 +422,8 @@ session_start() ;
 
 
 </div>
+
+<a class="return_planning" href="traitement.php">Retourner au planning</a>
 
 </body>
 

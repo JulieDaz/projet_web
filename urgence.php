@@ -11,22 +11,32 @@ session_start() ;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css">
+
 </head>
 <body>
     
-</body>
-</html>
+<a class="return_planning" href="traitement.php">Retourner au planning</a>
+
+<div class = "formulaire">
 
 <h2> Formulaire de demande d'urgence : </h2>
 <p>Veuillez renseigner les informations suivantes concernant le patient : </p>
 <br>
     <form method="post" action="">
+        <fieldset>
+        <legend>Informations personnelles</legend>
         <label>Nom</label> : <input type="text" required="on" name="nom_pat"> <!-- Champ requis pour le nom -->
         <br><br>
         <label>Prénom</label> : <input type="text" required="on" name="prenom_pat"> <!-- Champ requis pour le prénom -->
         <br><br>
         <label>Numéro de téléphone</label> : <input type="text" required="on" name="tel"> <!-- Champ requis pour le numéro de téléphone -->
         <br><br>
+        </fieldset>
+        <br>
+        <fieldset>
+        
+        <legend>Informations médicales</legend>
         <label>Service d'accueil</label> : <select name ="service_acc"> <!-- menu déroulant pour choisir le service d'accueil -->
 
         <?php
@@ -52,7 +62,8 @@ session_start() ;
         }
         ?>
         </select>
-        <br><br>
+        </fieldset>
+        <br>
         <input type="submit" value="Demande d'urgence" name="bouton_urgence">
 	</form>
 
@@ -139,3 +150,6 @@ session_start() ;
 
 
     ?>
+</div>  
+</body>
+</html>

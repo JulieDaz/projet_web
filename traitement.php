@@ -1,6 +1,8 @@
-<?php include("fonction.php");
-
+<?php 
+include("fonction.php");
 session_start();
+// include("entete.php") ;
+
 
 ?>
 
@@ -14,7 +16,8 @@ session_start();
 	</head>
 	<body>
 
-	<br>
+	<br><br>
+
 
 <div class = "deco">
 <img src = "images/penguin.png" height = "50" width = "50">
@@ -36,24 +39,19 @@ else
 
 print("<br>") ;
 
-if ($id == "" OR $mdp == "")
-{
-	print("Attention vous n'avez pas rempli tous les champs. Veuillez recommencer.");
-}
-else 
-{
-	$type= "SELECT User_type, IDu, Mdp FROM Utilisateur WHERE IDm= '$id' OR IDa = '$id' OR IDr = '$id'" ;
-	$get_type = mysqli_query($connexion,$type) or die('<br>Erreur SQL !<br>'.$type.'<br>'.mysqli_error($connexion));
-	$info_user = mysqli_fetch_array($get_type);
-	$usertype = $info_user[0];
-	$IDu = $info_user[1];
-	$pwd = $info_user[2] ;
-}
+
+$type= "SELECT User_type, IDu, Mdp FROM Utilisateur WHERE IDm= '$id' OR IDa = '$id' OR IDr = '$id'" ;
+$get_type = mysqli_query($connexion,$type) or die('<br>Erreur SQL !<br>'.$type.'<br>'.mysqli_error($connexion));
+$info_user = mysqli_fetch_array($get_type);
+$usertype = $info_user[0];
+$IDu = $info_user[1];
+$pwd = $info_user[2] ;
 
 if ($pwd != $mdp OR $get_type == FALSE) {
 	$_SESSION['erreur'] = "Login ou mdp invalide" ;
 	header("Location:index.php") ;
 }
+
 else {
 	switch ($usertype) {
 	case 'Medecin':
@@ -85,11 +83,13 @@ else {
 
 $req_display_name = "SELECT Nom, Prenom FROM ".$_SESSION['type']." WHERE ".$_SESSION['table_id']." = '$id'";
 $display_name = do_request($connexion, $req_display_name) ;
-print($display_name[0]['Prenom']." ".$display_name[0]['Nom']) ;
+$_SESSION['prenom'] = $display_name[0]['Prenom'] ;
+$_SESSION['nom'] = $display_name[0]['Nom'] ;
+
+print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 ?>
 <br><br>
-
 
 </div>
 <a class="bouton_deco" href="index.php">Déconnexion</a>
@@ -296,10 +296,10 @@ if ($usertype == "Admin") {
  	?>
  	<h3>Formulaires :</h3>
 	<p>Ajouter/retirer un médecin, un responsable d'intervention ou un patient :</p>
-	<a class="bouton_relief" href="ajouter.php">Accéder au formulaire</a>
+	<a class="access_form" href="ajouter.php">Accéder au formulaire</a>
 
 	<p>Ajouter/retirer une pathologie ou un service d'accueil :</p>
-	<a class="bouton_relief" href="ajouter2.php">Accéder au formulaire</a>
+	<a class="access_form" href="ajouter2.php">Accéder au formulaire</a>
 
 <?php
 }
@@ -308,7 +308,7 @@ if ($usertype == "Admin") {
 elseif ($usertype == "Medecin") {
 	?>
 	<br>
-	<a class="bouton_relief" href="demande_intervention.php">Demande d'intervention </a>
+	<a class="access_form" href="demande_intervention.php">Demande d'intervention </a>
 
 <?php
 }
@@ -318,7 +318,7 @@ elseif ($usertype == "Responsable") {
 	?>
 	<br>
 	<p>Effectuer une demande d'urgence : </p>
-	<a class="bouton_relief" href="urgence.php">Demande d'urgence</a>
+	<a class="access_form" href="urgence.php">Demande d'urgence</a>
 
 <?php
 }
