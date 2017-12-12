@@ -186,7 +186,8 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     }
   }
 
-  if(isset($_POST['soumission_demande_intervention'])){
+  if(isset($_POST['soumission_demande_intervention'])){   // Une fois que l'on a cliqué sur le bouton pour valider la demande de rdv
+    // On initialise toutes nos variables
     $aujourdhui = date('Y-m-d') ;
 
     $creneau = $_POST['date'] ;
@@ -199,7 +200,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     $dureeIntervention = $_SESSION['duree_intervention'] ;
     $niveau_priorite = $_SESSION['niveau_priorite'] ;
 
-    $finCreneau = date_modify(date_create($creneau), "+$dureeIntervention minutes") ;
+    $finCreneau = date_modify(date_create($creneau), "+$dureeIntervention minutes") ;   // On paramètre la fin du rdv en fonction de la durée de l'intervention
     $heureFin = date_format($finCreneau,'H:i:s') ;
 
     $IDp = select_IDpatient($nomPatient,$prenomPatient) ;
@@ -212,7 +213,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
       echo 'Attention, ce patient a déjà un rdv pour l\'intervention '.$verif_rdv_patient[0]['Nom_intervention'].' à cette heure !</br></br>"' ;?>
       <a class="access_form" href="demande_intervention.php">Retourner au formulaire de demande d'intervention </a>
       <?php
-    }else{
+    }else{    //On insère le nouveau rdv dans la base de données si le patient n'a pas déjà un rdv à ce jour là
       $insertRequest = "INSERT INTO `creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`)
       VALUES (NULL, '$date', '$heure', '$heureFin', '$aujourdhui',
         (SELECT IDp
@@ -225,11 +226,11 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
 
             mysqli_query($connexion, $insertRequest) or die('<br>Erreur SQL !<br>'.$insert_request.'<br>'.mysqli_error($connexion));
 
-        ?>
-        <p> Votre rendez-vous a bien été enregistré </p>
-        <a class="access_form" href="traitement.php">Retourner au planning </a>
+            ?>
+            <p> Votre rendez-vous a bien été enregistré </p>
+            <a class="access_form" href="traitement.php">Retourner au planning </a>
 
-<?php
+            <?php
           }
         }
 
