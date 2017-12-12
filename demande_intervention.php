@@ -179,10 +179,11 @@ if ($_POST == TRUE) {   // On vérifie que le formulaire a été envoyé
           <input type ="hidden" name = "dureeIntervention" value = <?php echo $dureeIntervention ?> >
           <?php
         }?>
-        <input type="submit"/>
+        <input type="submit" name = "soumission_demande_intervention"/>
       </form>
 
       <?php
+
     }
   }
   ?>
