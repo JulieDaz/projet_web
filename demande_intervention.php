@@ -1,6 +1,5 @@
 <?php
   session_start() ;
-  print_r($_SESSION) ;
   include('fonction.php');
   $connexion = connect() ;
   if(!isset($_SESSION['medecin']))
@@ -211,8 +210,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     // On vérifie que le patient n'a pas déjà rdv ce jour là
     $verif_rdv_patient = do_request($connexion,"SELECT `Nom_intervention` FROM `creneaux` WHERE `Date_creneau` LIKE '$date' AND `Heure_debut` LIKE '$heure' AND `IDp` LIKE '$IDp'") ;
     if (!empty($verif_rdv_patient)) {
-      echo 'Attention, ce patient a déjà un rdv pour l\'intervention '.$verif_rdv_patient[0]['Nom_intervention'].' à cette heure !</br></br>"' ;?>
-      <a class="access_form" href="demande_intervention.php">Retourner au formulaire de demande d'intervention </a>
+      echo '</br>Attention, ce patient a déjà un rdv pour l\'intervention '.$verif_rdv_patient[0]['Nom_intervention'].' à cette heure !</br></br>"' ;?>
       <?php
     }else{    //On insère le nouveau rdv dans la base de données si le patient n'a pas déjà un rdv à ce jour là
       $insertCreneauRequest = "INSERT INTO `creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`)
@@ -225,11 +223,13 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
             FROM type_d_intervention
             WHERE Nom_intervention LIKE '$typeIntervention') , '$niveau_priorite')";
 
-        mysqli_query($connexion, $insertCreneauRequest) or die('<br>Erreur SQL !<br>'.$insertCreneauRequest.'<br>'.mysqli_error($connexion));
+            mysqli_query($connexion, $insertCreneauRequest) or die('<br>Erreur SQL !<br>'.$insertCreneauRequest.'<br>'.mysqli_error($connexion));
 
-        $insertPatientRequest = "INSERT INTO `a_comme`(`IDm`, `IDp`) VALUES ('$IDm','$IDp') " ;
-        mysqli_query($connexion, $insertPatientRequest) or die('<br>Erreur SQL !<br>'.$insertPatientRequest.'<br>'.mysqli_error($connexion));
-
+            $verif_relation_medecin_patient = do_request($connexion,"SELECT * FROM `a_comme` WHERE `IDm` LIKE '$IDm' AND `IDp` LIKE '$IDp'") ;
+            if (empty($verif_relation_medecin_patient)) {
+              $insertPatientRequest = "INSERT INTO `a_comme`(`IDm`, `IDp`) VALUES ('$IDm','$IDp') " ;
+              mysqli_query($connexion, $insertPatientRequest) or die('<br>Erreur SQL !<br>'.$insertPatientRequest.'<br>'.mysqli_error($connexion));
+            }
             ?>
             <p> Votre rendez-vous a bien été enregistré </p>
             <a class="access_form" href="traitement.php">Retourner au planning </a>
