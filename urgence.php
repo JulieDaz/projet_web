@@ -1,6 +1,10 @@
 <?php
 include("fonction.php");
 session_start() ;
+if(!isset($_SESSION['responsable']))
+{
+    header("Location:index.php") ;
+}
 ?>
 
 <!DOCTYPE html>
@@ -144,8 +148,6 @@ session_start() ;
         }
 
     }
-
-
 
     ?>
 </div>  

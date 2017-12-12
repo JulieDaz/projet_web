@@ -239,9 +239,9 @@ function generate_id($id, $nom, $prenom)
 
         case 'IDr': # si c'et un responsable
             $login_def = "R_".$login ; # on rajoute 'R_'
-            $req_exist_loginR = "SELECT IDr FROM Responsable WHERE IDr = '$login_def' " ; # reque^te permettant de vérifier l'existence du login générer
-            $exist_loginM = do_request($connexion, $req_exist_loginM) ;
-            if (!empty($exist_loginM)) { # si la requête renvoie quelque chose -> login présent dans la BD
+            $req_exist_loginR = "SELECT IDr FROM Responsable_d_intervention WHERE IDr = '$login_def' " ; # reque^te permettant de vérifier l'existence du login générer
+            $exist_loginR = do_request($connexion, $req_exist_loginR) ;
+            if (!empty($exist_loginR)) { # si la requête renvoie quelque chose -> login présent dans la BD
                 generate_id($id, $nom, $prenom) ; # on rappelle la fonction pour générer à nouveau un login
             }
             break;

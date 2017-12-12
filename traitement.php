@@ -57,23 +57,26 @@ else {
 	case 'Medecin':
 		$_SESSION['ID'] = $id ;
 		$_SESSION['mdp'] = $mdp;
-		$_SESSION['type'] = "Medecin" ;
-		$_SESSION['table_id'] = "IDm" ;
+		$_SESSION['medecin'] = "Medecin" ;
+		$type = $_SESSION['medecin'] ;
+		$table_id = "IDm" ;
 		break;
 
 	case 'Admin':
 		$_SESSION['ID'] = $id ;
 		$_SESSION['mdp'] = $mdp;
-		$_SESSION['type'] = "Administrateur" ;
-		$_SESSION['table_id'] = "IDa" ;
+		$_SESSION['admin'] = "Administrateur" ;
+		$type = $_SESSION['admin'] ;
+		$table_id = "IDa" ;
 		break;
 
 	case "Responsable":
 		$_SESSION['ID'] = $id ;
 		$_SESSION['mdp'] = $mdp;
-		$_SESSION['type'] = "Responsable_d_intervention" ;
+		$_SESSION['responsable'] = "Responsable_d_intervention" ;
+		$type = $_SESSION['responsable'] ;
 		$req_intervention = "SELECT Nom_intervention FROM Responsable_d_intervention WHERE IDr = '$id'" ;
-		$_SESSION['table_id'] = "IDr" ;
+		$table_id = "IDr" ;
 		$intervention = do_request($connexion, $req_intervention) ;
 		$_SESSION['intervention'] = $intervention[0]['Nom_intervention'] ;
 		break;
@@ -81,13 +84,12 @@ else {
 
 }
 
-$req_display_name = "SELECT Nom, Prenom FROM ".$_SESSION['type']." WHERE ".$_SESSION['table_id']." = '$id'";
+$req_display_name = "SELECT Nom, Prenom FROM ".$type." WHERE ".$table_id." = '$id'";
 $display_name = do_request($connexion, $req_display_name) ;
 $_SESSION['prenom'] = $display_name[0]['Prenom'] ;
 $_SESSION['nom'] = $display_name[0]['Nom'] ;
 
 print($_SESSION['prenom']." ".$_SESSION['nom']) ;
-
 ?>
 <br><br>
 

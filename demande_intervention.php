@@ -1,6 +1,11 @@
 <?php
   include('fonction.php');
   $connexion = connect() ;
+  session_start() ;
+  if(!isset($_SESSION['medecin']))
+{
+    header("Location:index.php") ;
+}
  ?>
 
 

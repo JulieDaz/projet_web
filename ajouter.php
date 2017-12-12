@@ -1,6 +1,10 @@
 <?php
 include("fonction.php");
 session_start() ;
+if(!isset($_SESSION['admin']))
+{
+    header("Location:index.php") ;
+}
 ?>
 
 
@@ -142,7 +146,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
         
         foreach ($select_med as $med) {
             echo "<option value=$med[IDm]>$med[Nom] $med[Prenom] : $med[Nom_service]</option>" ;
-         }
+        }
         ?>
         <select>
         <input type="submit" value="Supprimer un médecin" name="bouton_med_supp">
@@ -280,7 +284,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
             print("Erreur : l'un des champs comprend des caractères non tolérés.") ; 
         }
     }
-    ?>
+?>
 
 </div>
 
@@ -301,7 +305,8 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
         
         foreach ($select_resp as $resp) {
             echo "<option value=$resp[IDr]>$resp[Nom] $resp[Prenom] : $resp[Nom_intervention]</option>" ;
-         }
+        }
+
         ?>
         <select>
         <input type="submit" value="Supprimer un responsable" name="bouton_resp_supp">
