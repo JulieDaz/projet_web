@@ -69,7 +69,7 @@ session_start() ;
 
     <?php
 
-    if(isset($_POST['bouton_urgence'])) # Si l'utilisateur a validé l'envoi du formulaire 
+    if(isset($_POST['bouton_urgence'])) # Si l'utilisateur a validé l'envoi du formulaire
     {
         $connexion = connect() ; # connexion à la BD
         # récupération de tous les champs rentrés/sélectionnés par l'utilisateur
@@ -80,19 +80,17 @@ session_start() ;
         $nom_patho = $_POST['nom_patho'] ;
         $type_intervention = $_SESSION['intervention'] ;
 
-        # requête pour récupérer le niveau 
-        $req_niveau_prio = "SELECT Niveau_urgence FROM Pathologie WHERE Nom_pathologie = '$nom_patho'" ;
-        $niveau_prio = do_request($connexion, $req_niveau_prio) ;
-        $niveau_priorite = $niveau_prio[0]['Niveau_urgence'] ;
+        # requête pour récupérer le niveau
+        $niveau_priorite = get_niveau_priorite($nom_patho) ;
 
 
-        if(check_carac($nom_patient) == TRUE AND check_carac($prenom_patient) == TRUE) # si les champs remplis par l'utilisateur sont conformes 
+        if(check_carac($nom_patient) == TRUE AND check_carac($prenom_patient) == TRUE) # si les champs remplis par l'utilisateur sont conformes
         {
             if (preg_match("#^0[1-8]([-. ]?[0-9]{2}){4}$#", $tel_patient)) # vérification du numéro de téléphone rentrés par l'utilisateur avec une regex
             {
                 # requête pour vérifier si le patient en demande d'urgence existe déjà dans la base de données
                 $req_exist_pat = "SELECT * FROM Patient WHERE Nom = '$nom_patient' AND Prenom = '$prenom_patient' AND Numero_tel = '$tel_patient' AND Nom_service = '$service_acc'" ;
-                $exist_pat = do_request($connexion, $req_exist_pat) ; 
+                $exist_pat = do_request($connexion, $req_exist_pat) ;
 
                 if (empty($exist_pat[0])) # le patient n'existe pas dans la BD
                 {
@@ -111,7 +109,7 @@ session_start() ;
 
                     # on appelle la fonction de sousbooking pour gérer l'urgence
                     sousbooking($connexion, $type_intervention, $IDp) ;
-                        
+
                 }
                 else # le patient existe déjà dans la BD
                 {
@@ -119,7 +117,7 @@ session_start() ;
                     $req_idpatient = "SELECT IDp FROM Patient WHERE Nom = '$nom_patient' AND Prenom = '$prenom_patient' AND Numero_tel = '$tel_patient' AND Nom_service = '$service_acc'" ;
                     $idpatient = do_request($connexion, $req_idpatient) ;
                     $IDp = $idpatient[0]['IDp'] ;
-                    
+
                     # on vérifie si la pathologie renseignée dans le formulaire déjà présente dans la table souffre pour ce patient
                     $req_patho_patient = "SELECT Nom_pathologie, IDp FROM souffre WHERE Nom_pathologie = '$nom_patho'" ;
                     $patho_patient = do_request($connexion, $req_patho_patient);
@@ -130,7 +128,7 @@ session_start() ;
                         $req_add_souffre = "INSERT INTO souffre (Nom_pathologie, IDp) VALUES ('$nom_patho', '$IDp)" ;
                         $add_souffre = mysqli_query($connexion, $req_add_souffre) ;
                     }
-                    
+
                     print("Le patient existe déjà") ;
 
                     # on appelle la fonction de sousbooking pour gérer l'urgence
