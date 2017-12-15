@@ -217,6 +217,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
           <?php
         }?>
     </fieldset>
+        <br>
         <input type="submit" name = "soumission_demande_intervention"/>
       </form>
 
