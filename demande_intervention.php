@@ -276,7 +276,6 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
             <p> Votre rendez-vous a bien été enregistré </p>
             <?php
           }
-        }
 
         ?>
 </div>
