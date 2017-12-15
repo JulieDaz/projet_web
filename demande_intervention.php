@@ -17,6 +17,18 @@
   <link rel="stylesheet" href="style.css"/>
 
   <body>
+  <div class="deco">
+  <img src = "images/penguin.png" height = "50" width = "50">
+
+  <?php
+  print($_SESSION['prenom']." ".$_SESSION['nom']) ;
+  ?>
+  <br><br>
+
+  </div> 
+
+<a class="bouton_deco" href="index.php">Déconnexion</a>
+
   <a class="return_planning" href="traitement.php">Retourner au planning</a>
 
     <div class = "formulaire">
@@ -276,6 +288,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
             <p> Votre rendez-vous a bien été enregistré </p>
             <?php
           }
+        }
 
         ?>
 </div>
