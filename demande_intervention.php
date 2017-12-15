@@ -29,12 +29,12 @@
       <br><br>
       <label>Prénom du patient</label> : <input type="text" required="on" name="Prenom_patient">    <!--Champ pour indiquer le prénom du patient-->
       <br><br>
-      </fieldset>
+      <label>Numéro de téléphone</label> : <input type="text" required="on" name="Num_telephone">    <!--Champ pour indiquer le numéro de téléphone du patient-->
       <br>
+</fieldset>
+     <br>
       <fieldset>
       <legend>Informations médicales</legend>
-      <label>Numéro de téléphone</label> : <input type="text" required="on" name="Num_telephone">    <!--Champ pour indiquer le numéro de téléphone du patient-->
-      <br><br>
       <label>Sélectionnez la pathologie</label> : <select name="pathologie">    <!--Menu déroulant des différentes pathologies-->
         <?php
           $request = "SELECT Nom_pathologie FROM pathologie";      //On effectue une requête qui sélectionne les pathologies
