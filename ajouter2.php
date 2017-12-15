@@ -1,5 +1,5 @@
 <?php 
-include("fonction.php"); 
+include("includes/fonction.php"); 
 session_start() ;
 if(!isset($_SESSION['admin']))
 {
@@ -35,7 +35,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 <!-- Ajouter une pathologie -->
 
-<div class="ajout_retrait">
+<div class="section">
 <div class = "formulaire">
 <fieldset>
 <legend><h3> Formulaire d'ajout d'une pathologie</h3></legend>
@@ -94,13 +94,14 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
     ?>
 </fieldset>
 </div>
+</div>
 
 
 <!--.................SECTION SERVICE D'ACCUEIL................-->
 
 <!-- Ajouter un service d'accueil -->
 
-<div class="ajout_retrait">
+<div class="section">
 <div class = "formulaire">
 <fieldset>
 <legend><h3> Formulaire d'ajout d'un service d'accueil : </h3></legend>
@@ -109,7 +110,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
         <br><br>
         <label>Facturation</label> : <input type="text" required="on" name="bill">
         <br><br>        
-        <input type="submit" value="Ajouter une pathologie" name="bouton_accueil_add">
+        <input type="submit" value="Ajouter un service d'intervention" name="bouton_accueil_add">
 	</form>
 
     <?php
@@ -196,9 +197,9 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
             if($supp_accueil == TRUE)
             {
-                print("you're a genius") ;
+                print("Le service d'accueil a été supprimé avec succès.") ;
             }
-            else { print("naab") ;
+            else { print("Erreur : un problème est survenu lors de la suppression.") ;
             }
         }
     ?>  

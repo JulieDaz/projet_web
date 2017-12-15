@@ -1,5 +1,5 @@
 <?php 
-include("fonction.php");
+include("includes/fonction.php");
 session_start();
 // include("entete.php") ;
 
@@ -320,5 +320,5 @@ elseif ($usertype == "Responsable") {
 <?php
 }
 print("<br><br>") ;
-include("pieddepage.php") ;
+include("includes/pieddepage.php") ;
 ?>

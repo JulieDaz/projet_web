@@ -1,5 +1,5 @@
 <?php
-include("fonction.php");
+include("includes/fonction.php");
 session_start() ;
 if(!isset($_SESSION['admin']))
 {
@@ -36,7 +36,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 <!-- Ajouter un Medecin -->
 
-<div class="ajout_retrait">
+<div class="section">
 <div class="formulaire">
     <fieldset>
     <legend><h3>Formulaire d'ajout d'un médecin</h3></legend>
@@ -181,7 +181,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 <!-- Ajouter un responsable -->
 
-<div class="ajout_retrait">
+<div class="section">
 <div class="formulaire">
 <br>
 <fieldset>
@@ -347,7 +347,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 <!--.........................SECTION PATIENT.......................-->
 
-<div class="ajout_retrait">
+<div class="section">
 <div class="formulaire">
 <br>
 <fieldset>

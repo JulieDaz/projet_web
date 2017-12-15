@@ -1,5 +1,5 @@
 <?php
-include("fonction.php");
+include("includes/fonction.php");
 session_start() ;
 if(!isset($_SESSION['responsable']))
 {
@@ -33,6 +33,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
     
 <a class="return_planning" href="traitement.php">Retourner au planning</a>
 <br><br><br><br>
+<div class="section">
 <div class = "formulaire">
 
 <h2> Formulaire de demande d'urgence : </h2>
@@ -162,5 +163,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
     ?>
 </div>  
+</div>  
+<br>
 </body>
 </html>

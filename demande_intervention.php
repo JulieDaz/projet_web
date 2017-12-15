@@ -1,13 +1,12 @@
 <?php
   session_start() ;
-  include('fonction.php');
+  include('includes/fonction.php');
   $connexion = connect() ;
   if(!isset($_SESSION['medecin']))
 {
     header("Location:index.php") ;
 }
  ?>
-
 
 <html>
 
@@ -23,16 +22,14 @@
   <?php
   print($_SESSION['prenom']." ".$_SESSION['nom']) ;
   ?>
-  <br><br>
-
   </div>
+<br><br><br>
 
 <a class="bouton_deco" href="index.php">Déconnexion</a>
 
   <a class="return_planning" href="traitement.php">Retourner au planning</a>
-
+    <div class="section">
     <div class = "formulaire">
-
     <h2> Formulaire de demande d'intervention : </h2>
     <form method="post" action="">
       <fieldset>
@@ -291,5 +288,6 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
      }
 
         ?>
+</div>
 </div>
 </html>
