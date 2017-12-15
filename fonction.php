@@ -313,7 +313,7 @@ function getDureeIntervention($typeIntervention){
 
 function getCreneauxIndisponibles($typeIntervention,$date){
     $connexion = connect();
-    $request = "SELECT Date_creneau,Heure_debut,Heure_fin
+    $request = "SELECT Date_creneau,Heure_debut
                 FROM creneaux
                 WHERE Nom_intervention LIKE '$typeIntervention' AND Date_creneau >= '$date'
                 ORDER BY Date_creneau ASC, Heure_debut ASC  ";
