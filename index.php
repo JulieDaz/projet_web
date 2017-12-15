@@ -43,5 +43,5 @@
 
 <?php
 print("<br><br>") ;
-include("pieddepage.php") ;
+include("includes/pieddepage.php") ;
 ?>

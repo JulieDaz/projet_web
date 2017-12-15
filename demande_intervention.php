@@ -1,6 +1,6 @@
 <?php
   session_start() ;
-  include('fonction.php');
+  include('includes/fonction.php');
   $connexion = connect() ;
   if(!isset($_SESSION['medecin']))
 {

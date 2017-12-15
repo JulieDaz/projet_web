@@ -1,5 +1,5 @@
 <?php
-include('fonction.php');
+include('includes/fonction.php');
   if(!isset($_SESSION['medecin']))
 {
     header("Location:index.php") ;
@@ -10,7 +10,7 @@ include('fonction.php');
 <meta charset="utf-8">
 <link rel="stylesheet" href="style.css"/>
 
-
+<?php
 $nomPatient = $_POST['nomPatient'];
 $prenomPatient = $_POST['prenomPatient'] ;
 $pathologie = $_POST['pathologie'] ;
