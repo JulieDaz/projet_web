@@ -210,7 +210,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     <p>Veuillez sélectionner une date de rdv</p> <br ><?php
     foreach ($creneauxProposes as $value) {   // On récupère les dates disponibles préalablement stockées dans le tableau "creneauxProposes"
       ?>
-      
+
       <form method= "post" action= "">
         <input type= "radio" name="rdv" value="<?php echo $value ?>" >
         <label> <?php echo date_format(date_create($value),'l d F Y H:i') ?> </label > <br >
@@ -276,6 +276,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
             <p> Votre rendez-vous a bien été enregistré </p>
             <?php
           }
+     }
 
         ?>
 </div>
