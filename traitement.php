@@ -109,7 +109,7 @@ if($usertype == "Admin" or $usertype == "Medecin")
 <form action="traitement.php" method="post">
 	<label>Sélectionnez le type d'intervention</label> : <select name="type_d_intervention">
 		<?php
-			$request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
+			$request = "SELECT Nom_intervention FROM Type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
 			$typeIntervention = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
 			foreach($typeIntervention as $value)                               //On parcourt ce tableau pour récupérer les types d'intervention 1 à 1
 			{

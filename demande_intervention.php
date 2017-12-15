@@ -37,7 +37,7 @@
       <legend>Informations médicales</legend>
       <label>Sélectionnez la pathologie</label> : <select name="pathologie">    <!--Menu déroulant des différentes pathologies-->
         <?php
-          $request = "SELECT Nom_pathologie FROM pathologie";      //On effectue une requête qui sélectionne les pathologies
+          $request = "SELECT Nom_pathologie FROM Pathologie";      //On effectue une requête qui sélectionne les pathologies
           $pathologie = do_request($connexion,$request);                //On récupère le résultat de la requête dans un tableau
           foreach($pathologie as $value) {                              //On parcourt ce tableau pour récupérer les pathologies 1 à 1
             echo "<option value='$value[Nom_pathologie]'> $value[Nom_pathologie] </option>";                          //On crée le menu déroulant au fil de la lecture du foreach
@@ -47,7 +47,7 @@
       <br><br>
       <label>Type d'intervention souhaitée</label> : <select name="type_intervention">    <!--Menu déroulant des différents types d'intervention-->
         <?php
-          $request = "SELECT Nom_intervention FROM type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
+          $request = "SELECT Nom_intervention FROM Type_d_intervention";      //On effectue une requête qui sélectionne les noms des interventions
           $typeIntervention = do_request($connexion,$request);               //On récupère le résultat de la requête dans un tableau
           foreach($typeIntervention as $value) {                              //On parcourt ce tableau pour récupérer les types d'intervention 1 à 1
             echo "<option value='$value[Nom_intervention]'> $value[Nom_intervention] </option>";                          //On crée le menu déroulant au fil de la lecture du foreach
@@ -255,14 +255,14 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     }elseif ($verif_rdv_patient2 == FALSE) {    // On vérifie si le créneau sélectionné chevauche un autre rdv pris précédemment par le patient
       echo '</br>Attention, le créneau sélectionné empiète sur un autre rdv pris par ce patient !</br></br>"' ;
     }else{    //On insère le nouveau rdv dans la base de données si le patient n'a pas déjà un rdv à ce jour là
-      $insertCreneauRequest = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite)
+      $insertCreneauRequest = "INSERT INTO Creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite)
       VALUES (NULL, '$date', '$heure', '$heureFin', '$aujourdhui',
         (SELECT IDp
-          FROM patient
+          FROM Patient
           WHERE IDp = '$IDp'),
 
           (SELECT Nom_intervention
-            FROM type_d_intervention
+            FROM Type_d_intervention
             WHERE Nom_intervention LIKE '$typeIntervention') , '$niveau_priorite')";
 
             mysqli_query($connexion, $insertCreneauRequest) or die('<br>Erreur SQL !<br>'.$insertCreneauRequest.'<br>'.mysqli_error($connexion));
