@@ -35,7 +35,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 <!-- Ajouter une pathologie -->
 
-<div class="ajout_retrait">
+<div class="section">
 <div class = "formulaire">
 <fieldset>
 <legend><h3> Formulaire d'ajout d'une pathologie</h3></legend>
@@ -101,7 +101,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 <!-- Ajouter un service d'accueil -->
 
-<div class="ajout_retrait">
+<div class="section">
 <div class = "formulaire">
 <fieldset>
 <legend><h3> Formulaire d'ajout d'un service d'accueil : </h3></legend>
