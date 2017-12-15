@@ -4,7 +4,7 @@
 
 <?php
 
-include('fonction.php');
+include('includes/fonction.php');
 
 $nomPatient = $_POST['nomPatient'];
 $prenomPatient = $_POST['prenomPatient'] ;
