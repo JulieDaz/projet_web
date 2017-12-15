@@ -297,9 +297,9 @@ function get_dates_semaines($semaine) // argument = nb de semaines passées ou f
 
 function getDureeIntervention($typeIntervention){
   $connexion = connect();
-  $request = "SELECT `Duree`
-              FROM `type_d_intervention`
-              WHERE `Nom_intervention` LIKE '$typeIntervention'";
+  $request = "SELECT Duree
+              FROM type_d_intervention
+              WHERE Nom_intervention LIKE '$typeIntervention'";
   $reponse = do_request($connexion, $request) ;
 
   foreach($reponse as $value)
@@ -313,10 +313,10 @@ function getDureeIntervention($typeIntervention){
 
 function getCreneauxIndisponibles($typeIntervention,$date){
     $connexion = connect();
-    $request = "SELECT `Date_creneau`,`Heure_debut`,`Heure_fin`
-                FROM `creneaux`
-                WHERE `Nom_intervention` LIKE '$typeIntervention' AND `Date_creneau` >= '$date'
-                ORDER BY `Date_creneau` ASC, `Heure_debut` ASC  ";
+    $request = "SELECT Date_creneau,Heure_debut,Heure_fin
+                FROM creneaux
+                WHERE Nom_intervention LIKE '$typeIntervention' AND Date_creneau >= '$date'
+                ORDER BY Date_creneau ASC, Heure_debut ASC  ";
     $reponse = do_request($connexion, $request);
     return $reponse;
 }
@@ -328,6 +328,25 @@ function get_niveau_priorite($nom_patho){
   $niveau_prio = do_request($connexion, $req_niveau_prio) ;
   $niveau_priorite = $niveau_prio[0]['Niveau_urgence'] ;
   return $niveau_priorite ;
+}
+
+
+function verif_rdv_patient($date, $heure, $IDp){
+  $connexion = connect() ;
+  $requete = do_request($connexion,"SELECT Nom_intervention FROM creneaux WHERE Date_creneau LIKE '$date' AND Heure_debut LIKE '$heure' AND IDp LIKE '$IDp'") ;
+  return $requete ;
+}
+
+
+function verif_rdv_patient2($date, $heure, $IDp){
+  $connexion = connect() ;
+  $requete = do_request($connexion,"SELECT Nom_intervention, Heure_debut, Heure_fin FROM creneaux WHERE Date_creneau LIKE '$date' AND IDp LIKE '$IDp'") ;
+  foreach ($requete as $value) {
+    if (strtotime($value['Heure_debut']) < strtotime($heure) && strtotime($heure) < strtotime($value['Heure_fin'])) {
+      return FALSE ;
+    }
+  }
+  return TRUE ;
 }
 
 
@@ -647,11 +666,11 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
 
 
 // Requête permettant de voir si le patient existe déjà dans la base de données
-function verif_patient($nomPatient,$prenomPatient) {
+function verif_patient($nomPatient, $prenomPatient, $numero) {
     $connexion = connect() ;
     $request = "SELECT *
-                FROM `patient`
-                WHERE `Nom` LIKE '$nomPatient' AND `Prenom` LIKE '$prenomPatient'" ;
+                FROM patient
+                WHERE Nom LIKE '$nomPatient' AND Prenom LIKE '$prenomPatient' AND Numero_tel LIKE '$numero'" ;
     $reponse = do_request($connexion,$request) ;
     return $reponse ;
 }
@@ -659,9 +678,9 @@ function verif_patient($nomPatient,$prenomPatient) {
 
 function select_IDpatient($nomPatient,$prenomPatient) {
     $connexion = connect() ;
-    $request = "SELECT `IDp`
-                FROM `patient`
-                WHERE `Nom` LIKE '$nomPatient' AND `Prenom` LIKE '$prenomPatient'" ;
+    $request = "SELECT IDp
+                FROM patient
+                WHERE Nom LIKE '$nomPatient' AND Prenom LIKE '$prenomPatient'" ;
     $reponse = do_request($connexion,$request) ;
 
     foreach ($reponse as $value) {
