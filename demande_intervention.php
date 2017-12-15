@@ -32,7 +32,7 @@
   <a class="return_planning" href="traitement.php">Retourner au planning</a>
 
     <div class = "formulaire">
-
+    <br><br>
     <h2> Formulaire de demande d'intervention : </h2>
     <form method="post" action="">
       <fieldset>
