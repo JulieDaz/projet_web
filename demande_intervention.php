@@ -82,7 +82,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
       $creneauRecherche  = date('Y-m-d H:i:s',mktime(8, 0, 0, date("m")  , date("d")+5, date("Y")));
       list($date,$horaire) = explode(" ", $creneauRecherche);
     }
-    elseif ($niveau_priorite == 3) {    // 4 jours de délai pour un niveau 3
+    elseif ($niveau_priorite == 3) {    // 3 jours de délai pour un niveau 3
       $creneauRecherche  = date('Y-m-d H:i:s',mktime(8, 0, 0, date("m")  , date("d")+3, date("Y")));
       list($date,$horaire) = explode(" ", $creneauRecherche);
     }
@@ -177,7 +177,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     foreach ($creneauxProposes as $value) {   // On récupère les dates disponibles préalablement stockées dans le tableau "creneauxProposes"
       ?>
       <form method= "post" action= "">
-        <input type= "radio" name="date" value="<?php echo $value ?>" >
+        <input type= "radio" name="rdv" value="<?php echo $value ?>" >
         <label> <?php echo date_format(date_create($value),'l d F Y H:i') ?> </label > <br >
           <?php
         }?>
@@ -192,7 +192,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     // On initialise toutes nos variables
     $aujourdhui = date('Y-m-d') ;
 
-    $creneau = $_POST['date'] ;
+    $creneau = $_POST['rdv'] ;
     list($date,$heure) = explode(" ", $creneau);
 
     $nomPatient = $_SESSION['nom_patient'] ;
@@ -211,12 +211,14 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     $connexion = connect();
 
     // On vérifie que le patient n'a pas déjà rdv ce jour là
-    $verif_rdv_patient = do_request($connexion,"SELECT `Nom_intervention` FROM `creneaux` WHERE `Date_creneau` LIKE '$date' AND `Heure_debut` LIKE '$heure' AND `IDp` LIKE '$IDp'") ;
+    $verif_rdv_patient = verif_rdv_patient($date, $heure, $IDp) ;
+    $verif_rdv_patient2 = verif_rdv_patient2($date, $heure, $IDp) ;
     if (!empty($verif_rdv_patient)) {
-      echo '</br>Attention, ce patient a déjà un rdv pour l\'intervention '.$verif_rdv_patient[0]['Nom_intervention'].' à cette heure !</br></br>"' ;?>
-      <?php
+      echo '</br>Attention, ce patient a déjà un rdv pour l\'intervention '.$verif_rdv_patient[0]['Nom_intervention'].' à cette heure !</br></br>"' ;
+    }elseif ($verif_rdv_patient2 == FALSE) {
+      echo '</br>Attention, le créneau sélectionné empiète sur un autre rdv pris par ce patient !</br></br>"' ;
     }else{    //On insère le nouveau rdv dans la base de données si le patient n'a pas déjà un rdv à ce jour là
-      $insertCreneauRequest = "INSERT INTO `creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date_priseRDV`, `IDp`, `Nom_intervention`, `Niveau_priorite`)
+      $insertCreneauRequest = "INSERT INTO creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite)
       VALUES (NULL, '$date', '$heure', '$heureFin', '$aujourdhui',
         (SELECT IDp
           FROM patient
@@ -228,9 +230,9 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
 
             mysqli_query($connexion, $insertCreneauRequest) or die('<br>Erreur SQL !<br>'.$insertCreneauRequest.'<br>'.mysqli_error($connexion));
 
-            $verif_relation_medecin_patient = do_request($connexion,"SELECT * FROM `a_comme` WHERE `IDm` LIKE '$IDm' AND `IDp` LIKE '$IDp'") ;
+            $verif_relation_medecin_patient = do_request($connexion,"SELECT * FROM a_comme WHERE IDm LIKE '$IDm' AND IDp LIKE '$IDp'") ;
             if (empty($verif_relation_medecin_patient)) {
-              $insertPatientRequest = "INSERT INTO `a_comme`(`IDm`, `IDp`) VALUES ('$IDm','$IDp') " ;
+              $insertPatientRequest = "INSERT INTO a_comme(IDm, IDp) VALUES ('$IDm','$IDp') " ;
               mysqli_query($connexion, $insertPatientRequest) or die('<br>Erreur SQL !<br>'.$insertPatientRequest.'<br>'.mysqli_error($connexion));
             }
             ?>
