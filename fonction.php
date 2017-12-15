@@ -647,11 +647,11 @@ function surbooking($connexion, $type_intervention, $IDp, $duree_intervention, $
 
 
 // Requête permettant de voir si le patient existe déjà dans la base de données
-function verif_patient($nomPatient,$prenomPatient) {
+function verif_patient($nomPatient, $prenomPatient, $numero) {
     $connexion = connect() ;
     $request = "SELECT *
                 FROM `patient`
-                WHERE `Nom` LIKE '$nomPatient' AND `Prenom` LIKE '$prenomPatient'" ;
+                WHERE `Nom` LIKE '$nomPatient' AND `Prenom` LIKE '$prenomPatient' AND `Numero_tel` LIKE '$numero'" ;
     $reponse = do_request($connexion,$request) ;
     return $reponse ;
 }

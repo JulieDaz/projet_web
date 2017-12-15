@@ -23,6 +23,8 @@
       <br><br>
       <label>Prénom du patient</label> : <input type="text" required="on" name="Prenom_patient">    <!--Champ pour indiquer le prénom du patient-->
       <br><br>
+      <label>Numéro de téléphone</label> : <input type="text" required="on" name="Num_telephone">    <!--Champ pour indiquer le numéro de téléphone du patient-->
+      <br><br>
       <label>Sélectionnez la pathologie</label> : <select name="pathologie">    <!--Menu déroulant des différentes pathologies-->
         <?php
           $request = "SELECT Nom_pathologie FROM pathologie";      //On effectue une requête qui sélectionne les pathologies
@@ -58,10 +60,11 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
   // On stocke les variables
   $nomPatient = $_SESSION['nom_patient'] = $_POST['Nom_patient'];
   $prenomPatient = $_SESSION['prenom_patient'] = $_POST['Prenom_patient'] ;
+  $numero = $_SESSION['num_telephone'] = $_POST['Num_telephone'];
   $pathologie = $_SESSION['pathologie'] = $_POST['pathologie'] ;
   $typeIntervention = $_SESSION['intervention_demandee'] = $_POST['type_intervention'] ;
 
-  if (empty(verif_patient($nomPatient,$prenomPatient))) {   // On vérifie que le patient existe bien dans la base de données
+  if (empty(verif_patient($nomPatient,$prenomPatient,$numero))) {   // On vérifie que le patient existe bien dans la base de données
     echo "</br>Le patient $nomPatient $prenomPatient n'existe pas dans la base de données</br>" ;
   }
 
@@ -232,8 +235,6 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
             }
             ?>
             <p> Votre rendez-vous a bien été enregistré </p>
-            <a class="access_form" href="traitement.php">Retourner au planning </a>
-
             <?php
           }
         }
