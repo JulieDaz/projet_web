@@ -30,7 +30,7 @@ th /* Les cellules d'en-tête */
 
 
 /* Les cellules normales */
-td 
+td
 {
    border: 1px solid ;
    font-family:  Arial, "Arial Black", Times, "Times New Roman", serif;
@@ -56,7 +56,7 @@ td.time
     width:5%;
     background-color: #3f108aab ;
 }
- 
+
 th:not(:empty) {
 	border-radius: 0.5em;
 	border-style: outset;
@@ -212,7 +212,7 @@ select {
     padding-top: 15px ;
     padding-bottom: 15px ;
     text-align: center
-    
+
 }
 
 footer {
@@ -225,6 +225,4 @@ footer {
 .img_index {
     display: block;
     margin: auto;
-    /* vertical-align: center; */
- 
 }
