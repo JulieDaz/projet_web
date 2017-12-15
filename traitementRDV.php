@@ -1,10 +1,21 @@
+<?php
+include('fonction.php');
+  if(!isset($_SESSION['medecin']))
+{
+    header("Location:index.php") ;
+}
+ ?>
+
 <title> Demande d'intervention - 1/2 </title>
 <meta charset="utf-8">
 <link rel="stylesheet" href="style.css"/>
 
+<<<<<<< HEAD
 <?php
 
 include('includes/fonction.php');
+=======
+>>>>>>> 80d513a7f6ab9ee67d478e9283204272b6e4fc94
 
 $nomPatient = $_POST['nomPatient'];
 $prenomPatient = $_POST['prenomPatient'] ;
