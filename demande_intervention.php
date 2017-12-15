@@ -25,7 +25,7 @@
   ?>
   <br><br>
 
-  </div> 
+  </div>
 
 <a class="bouton_deco" href="index.php">Déconnexion</a>
 
@@ -225,7 +225,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
 
       <form method= "post" action= "">
         <input type= "radio" name="rdv" value="<?php echo $value ?>" >
-        <label> <?php echo date_format(date_create($value),'l d F Y H:i') ?> </label > <br >
+        <label> <?php echo date_format(date_create($value),'d/m/y à H:i') ?> </label > <br >
           <?php
         }?>
     </fieldset>
