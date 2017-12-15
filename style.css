@@ -11,30 +11,64 @@ caption /* Titre du tableau */
 table /* Le tableau en lui-même */
 {
    margin: auto; /* Centre le tableau */
-   border: 2px outset rgb(0, 70, 128); /* Bordure du tableau avec effet 3D (outset) */
    border-collapse: collapse; /* Colle les bordures entre elles */
    width:100%;
 }
+
+
 th /* Les cellules d'en-tête */
 {
-   background-color: #095f9494;
+   background-color: #3f108aab;
    color: white;
    font-size: 1.1em;
    font-family: Arial, "Arial Black", Times, "Times New Roman", serif;
-   border:1px solid rgb(0, 70, 128);
+   /* border:1px solid rgb(0, 70, 128); */
+   height: 2.4em;
 }
 
-td /* Les cellules normales */
+
+
+
+/* Les cellules normales */
+td 
 {
-   border: 1px solid rgb(0, 70, 128);
-   font-family: "Comic Sans MS", "Trebuchet MS", Times, "Times New Roman", serif;
+   border: 1px solid ;
+   font-family:  Arial, "Arial Black", Times, "Times New Roman", serif;
+   font-size : 17px ;
    text-align: center; /* Tous les textes des cellules seront centrés*/
    padding: 5px; /* Petite marge intérieure aux cellules pour éviter que le texte touche les bordures */
 }
+
+
+td:not(:empty) {
+	/* avec une classe css ou avec un tr:nth-child(2) de tbody */
+	border-radius: 0.5em;
+	background-color: #02537e94;
+	/* border-color: rgb(110, 178, 199); */
+	border-style: outset;
+	border-width: 2px;
+	box-shadow: 1px 1px black;
+	color: white;
+}
+
 td.time
 {
     width:5%;
+    background-color: #3f108aab ;
 }
+ 
+th:not(:empty) {
+	border-radius: 0.5em;
+	border-style: outset;
+	border-width: 2px;
+	box-shadow: 1px 1px black;  /* version r�cente des navigateurs, pas besoin des pr�fixes */
+}
+
+
+td:empty{
+    border : thin dashed ;
+}
+
 
 /*Mise en forme*/
 body {
@@ -44,7 +78,9 @@ body {
 
 #title{
     text-align: center ;
+    text-shadow : 1px 1px 2px gray ;
 }
+
 
 /* Les div  */
 
@@ -62,12 +98,22 @@ text-align: center ;
     /* background-color: #c3def7 ; */
     width : 700px ;
     margin :auto;
-    margin-top: 5% ;
+    margin-top: 5px ;
     padding-top: 10px ;
     padding-bottom: 10px ;
     text-align: left ;
 }
 
+.ajout_retrait {
+    background-color: #dfdfdf ;
+    border-radius: 15px ;
+    width : 800px ;
+    margin :auto;
+    margin-top: 15px ;
+    padding-top: 5px ;
+    padding-bottom: 5px ;
+    text-align: left ;
+}
 
 /* Les boutons  */
 
@@ -85,7 +131,8 @@ border-radius:5px;
 }
 
 .bouton_deco:hover {
-background-color: #6495ED;
+background-color: #800000b2;
+/* background-color: #6495ED; */
 border: 2px inset #c0c0c0;
 }
 
@@ -138,11 +185,11 @@ background-color: #6495ED;
 border: 2px inset #c0c0c0;
 }
 
-input[type=text], select, option {
+input[type=text], input[type=password],select, option {
  background-color:#FFF3F3;
  }
 
-input[type=text], select {
+input[type=text],input[type=password], select {
  padding:5px;
  border:1px solid rgb(143, 145, 233);
  border-radius:5px;
@@ -160,8 +207,8 @@ select {
     margin-left: 35%;
     margin-right: 35%;
     margin-top: 5% ;
-    padding-top: 10px ;
-    padding-bottom: 10px ;
+    padding-top: 15px ;
+    padding-bottom: 15px ;
     text-align: center
     
 }
@@ -170,4 +217,11 @@ footer {
 		bottom: 0px;
 		text-align: center;
 		width: 100%;
+}
+
+.img_index {
+    display: block;
+    margin: auto;
+    vertical-align: center;
+ 
 }

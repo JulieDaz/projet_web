@@ -30,19 +30,15 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 <a class="bouton_deco" href="index.php">Déconnexion</a>
 
-
-<!-- Retourner au planning -->
-<a class="bouton_relief" href="traitement.php">Retourner au planning</a>
-
-<br>
-<br>
-
+<br><br><br><br>
 <!--.................SECTION PATHOLOGIE................-->
 
 <!-- Ajouter une pathologie -->
 
-<div class = "patho">
-<h2> Formulaire d'ajout d'une pathologie : </h2>
+<div class="ajout_retrait">
+<div class = "formulaire">
+<fieldset>
+<legend><h3> Formulaire d'ajout d'une pathologie</h3></legend>
     <form method="post" action=""> 
         <label>Nom de la pathologie</label> : <input type="text" required="on" name="nom_patho">
         <br><br>
@@ -96,6 +92,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
         }
     }
     ?>
+</fieldset>
 </div>
 
 
@@ -103,8 +100,10 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 <!-- Ajouter un service d'accueil -->
 
-<div class = "service_acc">
-<h2> Formulaire d'ajout d'un service d'accueil : </h2>
+<div class="ajout_retrait">
+<div class = "formulaire">
+<fieldset>
+<legend><h3> Formulaire d'ajout d'un service d'accueil : </h3></legend>
     <form method="post" action=""> 
         <label>Nom du service d'accueil</label> : <input type="text" required="on" name="service_acc">
         <br><br>
@@ -160,12 +159,14 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
         }
     }
     ?>
+</fieldset>
 </div>
 
 <!-- Supprimer un service d'accueil -->
 
-<div>
-<h2>Formulaire de retrait d'un service d'accueil : </h2>
+<div class = "formulaire">
+<fieldset>
+<legend><h3>Formulaire de retrait d'un service d'accueil</h3></legend>
 
     <form method = "post" action = "">
         <label>Sélectionner le service d'accueil que vous souhaitez retirer de la base de données :</label>
@@ -201,7 +202,8 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
             }
         }
     ?>  
-
+</fieldset>
+</div>
 </div>
 
 <a class="return_planning" href="traitement.php">Retourner au planning</a>

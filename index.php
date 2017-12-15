@@ -10,7 +10,7 @@
 
  
 
-	<h1 id = "title">Welcome to Medical Planner</h1>
+	<h1 id = "title">Bienvenue sur <i>Medical Planner</i></h1>
 
 	<div class="connexion">
 
@@ -35,7 +35,9 @@
 
 	</div>
 	</body>
-<br><br><br><br><br><br><br><br><br><br><br>
+
+	<img src = "images/hospital.png" height = "200" width = "200" class="img_index">
+
 </html>
 
 

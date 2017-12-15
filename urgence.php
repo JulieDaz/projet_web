@@ -19,9 +19,20 @@ if(!isset($_SESSION['responsable']))
 
 </head>
 <body>
+
+<div class="deco">
+<img src = "images/penguin.png" height = "50" width = "50">
+
+<?php
+print($_SESSION['prenom']." ".$_SESSION['nom']) ;
+?>
+<br><br>
+
+</div> 
+<a class="bouton_deco" href="index.php">Déconnexion</a>
     
 <a class="return_planning" href="traitement.php">Retourner au planning</a>
-
+<br><br><br><br>
 <div class = "formulaire">
 
 <h2> Formulaire de demande d'urgence : </h2>

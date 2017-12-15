@@ -274,7 +274,7 @@ if($usertype == "Admin" or $usertype == "Medecin")
 						}
 						echo "<td class=\"time\">".$heures.":".$minutes."</td>"; // affichage de l'heure dans la colonne de gauche
 					}
-					echo "<td>";
+					echo "<td class=\"creneaux\">";
 					if(isset($rdv[$date_jour[$i]][$heures.":".$minutes])) // à la case correspondante on affiche le créneau s'il existe
 					{
 						echo $rdv[$date_jour[$i]][$heures.":".$minutes];

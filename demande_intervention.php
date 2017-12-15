@@ -17,12 +17,22 @@
   <link rel="stylesheet" href="style.css"/>
 
   <body>
+  <a class="return_planning" href="traitement.php">Retourner au planning</a>
+
+    <div class = "formulaire">
+
     <h2> Formulaire de demande d'intervention : </h2>
     <form method="post" action="">
+      <fieldset>
+      <legend>Informations personnelles</legend>
       <label>Nom du patient</label> : <input type="text" required="on" name="Nom_patient">    <!--Champ pour indiquer le nom du patient-->
       <br><br>
       <label>Prénom du patient</label> : <input type="text" required="on" name="Prenom_patient">    <!--Champ pour indiquer le prénom du patient-->
       <br><br>
+      </fieldset>
+      <br>
+      <fieldset>
+      <legend>Informations médicales</legend>
       <label>Sélectionnez la pathologie</label> : <select name="pathologie">    <!--Menu déroulant des différentes pathologies-->
         <?php
           $request = "SELECT Nom_pathologie FROM pathologie";      //On effectue une requête qui sélectionne les pathologies
@@ -41,10 +51,12 @@
             echo "<option value='$value[Nom_intervention]'> $value[Nom_intervention] </option>";                          //On crée le menu déroulant au fil de la lecture du foreach
           }
         ?>
+        </select>
+        </fieldset>
+      <br>
       <input type="submit" value="Soumettre" name = "demande_intervention">
     </form>
 
-    <a class="access_form" href="traitement.php">Annuler</a>
 
 
   </body>
@@ -170,14 +182,19 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     }
 
 
-    ?><p>Veuillez sélectionner une date de rdv</p> <br ><?php
+    ?>
+    <fieldset>
+    <legend>Choix du rendez-vous</legend>
+    <p>Veuillez sélectionner une date de rdv</p> <br ><?php
     foreach ($creneauxProposes as $value) {   // On récupère les dates disponibles préalablement stockées dans le tableau "creneauxProposes"
       ?>
+      
       <form method= "post" action= "">
         <input type= "radio" name="date" value="<?php echo $value ?>" >
         <label> <?php echo date_format(date_create($value),'l d F Y H:i') ?> </label > <br >
           <?php
         }?>
+    </fieldset>
         <input type="submit" name = "soumission_demande_intervention"/>
       </form>
 
@@ -239,3 +256,5 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
         }
 
         ?>
+</div>
+</html>

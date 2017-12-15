@@ -32,15 +32,14 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
 
 <a class="bouton_deco" href="index.php">Déconnexion</a>
 
-
-
 <!--.....................SECTION Medecin.....................-->
 
 <!-- Ajouter un Medecin -->
 
-<div id="medecin">
-
-<h2> Formulaire d'ajout d'un médecin : </h2>
+<div class="ajout_retrait">
+<div class="formulaire">
+    <fieldset>
+    <legend><h3>Formulaire d'ajout d'un médecin</h3></legend>
     <form method="post" action="">
         <label>Nom</label> : <input type="text" required="on" name="nom_med">
         <br><br>
@@ -126,12 +125,14 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
             }
         }
         ?>
+</fieldset>        
 </div>
 
 <!-- Supprimer un médecin-->
 
-<div>
-<h2>Formulaire de retrait d'un médecin : </h2>
+<div class="formulaire">
+<fieldset>
+<legend><h3>Formulaire de retrait d'un médecin</h3></legend>
 
     <form method = "post" action = "">
         <label>Sélectionner le médecin que vous souhaitez retirer de la base de données :</label>
@@ -172,17 +173,20 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
             
         }
     ?>  
-
+</fieldset>
+</div>
 </div>
 
 <!--........................SECTION RESPONSABLE.........................-->
 
 <!-- Ajouter un responsable -->
 
-<div id="responsable">
+<div class="ajout_retrait">
+<div class="formulaire">
 <br>
-<h2> Formulaire d'ajout d'un responsable d'intervention et du service d'intervention correspondant : </h2>
-
+<fieldset>
+<legend><h3> Formulaire d'ajout d'un responsable d'intervention</h3></legend>
+    <p>Ajouter un responsable et son service d'intervention</p>
     <form method="post" action="">
         <label>Nom</label> : <input type="text" required="on" name="nom_resp">
         <br><br>
@@ -285,13 +289,14 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
         }
     }
 ?>
-
+</fieldset>
 </div>
 
 <!-- Supprimer un responsable -->
 
-<div>
-<h2>Formulaire de retrait d'un responsable : </h2>
+<div class="formulaire">
+<fieldset>
+<legend><h3>Formulaire de retrait d'un responsable</h3></legend>
 
     <form method = "post" action = "">
         <label>Sélectionner le responsable d'intervention que vous souhaitez retirer de la base de données :</label>
@@ -335,15 +340,18 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
             }
         }
     ?>  
-
+</fieldset>
+</div>
 </div>
 
 
 <!--.........................SECTION PATIENT.......................-->
 
-<div id="patient">
+<div class="ajout_retrait">
+<div class="formulaire">
 <br>
-<h2> Formulaire d'ajout d'un patient : </h2>
+<fieldset>
+<legend><h3> Formulaire d'ajout d'un patient</h3></legend>
 
     <form method="post" action="">
         <label>Nom</label> : <input type="text" required="on" name="nom_patient">
@@ -426,6 +434,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
         ?>
 
 
+</div>
 </div>
 
 <a class="return_planning" href="traitement.php">Retourner au planning</a>
