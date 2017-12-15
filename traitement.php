@@ -169,7 +169,7 @@ if($usertype == "Admin" or $usertype == "Medecin")
 				{
 					$_SESSION['type_d_intervention'] = $_POST["type_d_intervention"]; // on réaffecte $_SESSION à la valeur du menu déroulant
 				}
-				print("Vous visualisez les créneaux de ".$_SESSION['type_d_intervention']); // on indique le type d'intervention des créneaux que l'on visualise
+				print("Vous visualisez les créneaux de <b>".$_SESSION['type_d_intervention']."</b>"); // on indique le type d'intervention des créneaux que l'on visualise
 				print("<br><br>");
 			}
 
