@@ -85,17 +85,14 @@ body {
 /* Les div  */
 
 .deco {
-
 position: absolute;
-right : 140px ;
+right : 150px ;
 top : 10px ;
 text-align: center ;
 }
 
 .formulaire {
     font-size: 20px ;
-    /* border: 2px solid #858585; */
-    /* background-color: #c3def7 ; */
     width : 700px ;
     margin :auto;
     margin-top: 5px ;
@@ -128,6 +125,7 @@ position : absolute ;
 right : 30px;
 top : 35px ;
 border-radius:5px;
+font-size: 18px ;
 }
 
 .bouton_deco:hover {
@@ -148,6 +146,7 @@ position : absolute ;
 left : 30px;
 top : 35px ;
 border-radius:5px;
+font-size: 18px ;
 }
 
 .return_planning:hover {
@@ -163,6 +162,7 @@ text-align: center;
 padding: 5px;
 border: 2px outset #c0c0c0;
 border-radius:5px;
+font-size: 18px ;
 }
 
 .access_form:hover {
@@ -178,6 +178,7 @@ text-align: center;
 padding: 5px;
 border: 2px outset #c0c0c0;
 border-radius:5px;
+font-size: 16px ;
 }
 
 input[type=submit]:hover {
@@ -195,6 +196,7 @@ input[type=text],input[type=password], select {
  border-radius:5px;
  width:auto;
  box-shadow:1px 1px 2px #C0C0C0 inset;
+ font-size: 16px ;
  }
 
 select {
@@ -216,12 +218,13 @@ select {
 footer {
 		bottom: 0px;
 		text-align: center;
-		width: 100%;
+        width: 100%;
+
 }
 
 .img_index {
     display: block;
     margin: auto;
-    vertical-align: center;
+    /* vertical-align: center; */
  
 }
