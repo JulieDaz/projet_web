@@ -73,10 +73,14 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
                 $request_HFin = "SELECT Heure_fin FROM Creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de fin du créneau
                 $request_date_creneau = "SELECT Date_creneau FROM Creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer la date du créneau
                 $request_IDc = "SELECT IDc FROM Creneaux WHERE  Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer les ID créneaux pour chaque patient
-                $IDc_array = do_request($connexion, $request_IDc);
+                $IDc = do_request($connexion, $request_IDc);
                 $Date_creneau = do_request($connexion, $request_date_creneau);
                 $Heure_debut = do_request($connexion, $request_HDebut);
                 $Heure_fin = do_request($connexion, $request_HFin);
+                $IDc_array[] = $IDc[0];
+                $HDebut_array[] = $Heure_debut[0];
+                $HFin_array[] = $Heure_fin[0];
+                $Date_array[] = $Date_creneau[0];
             }
             foreach($IDc_array as $IDc_key) // pour chaque créneau récupéré
             {
@@ -91,9 +95,9 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
                 $Prenom_array[] = $Prenom[0]; // stockage du prenom dans un tableau
                 $Nom_intervention_array[] = $Nom_intervention[0]; // stockage du nom d'intervention dans un tableau
             }
-            for($i = 0; $i < sizeof($Heure_debut); $i++) // pour chaque créneau qui existe (représenté par le nb d'heures de début que l'on a récupéré)
+            for($i = 0; $i < sizeof($HDebut_array); $i++) // pour chaque créneau qui existe (représenté par le nb d'heures de début que l'on a récupéré)
             {
-                $res[$i] = array($Heure_debut[$i], $Heure_fin[$i], $Date_creneau[$i], $Nom_array[$i], $Prenom_array[$i], $Nom_intervention_array[$i]); // une ligne contiendra l'heure de début, de fin, la date, le nom, le prénom et le nom de l'intervention
+                $res[$i] = array($HDebut_array[$i], $HFin_array[$i], $Date_array[$i], $Nom_array[$i], $Prenom_array[$i], $Nom_intervention_array[$i]); // une ligne contiendra l'heure de début, de fin, la date, le nom, le prénom et le nom de l'intervention
             }
             return $res;
         }
