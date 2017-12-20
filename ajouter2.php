@@ -110,7 +110,7 @@ print($_SESSION['prenom']." ".$_SESSION['nom']) ;
         <br><br>
         <label>Facturation</label> : <input type="text" required="on" name="bill">
         <br><br>        
-        <input type="submit" value="Ajouter un service d'intervention" name="bouton_accueil_add">
+        <input type="submit" value="Ajouter un service d'accueil" name="bouton_accueil_add">
 	</form>
 
     <?php
