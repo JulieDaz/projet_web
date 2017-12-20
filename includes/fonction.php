@@ -69,6 +69,19 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
         {
             foreach($IDp_intervention as $IDp) // pour chaque ID patient récupéré
             {
+                $nb_rdv = 0;
+                if(!isset($ancien_IDp))
+                {
+                    $ancien_IDp = $IDp;
+                }
+                else
+                {
+                    if($ancien_IDp == $IDp)
+                    {
+                        $nb_rdv++;
+                    }
+                }
+                $ancien_IDp = $IDp;
                 $request_HDebut = "SELECT Heure_debut FROM Creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de début du créneau
                 $request_HFin = "SELECT Heure_fin FROM Creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer l'heure de fin du créneau
                 $request_date_creneau = "SELECT Date_creneau FROM Creneaux WHERE Nom_intervention = '$intervention_admin_med' AND IDp = '$IDp'"; // requête pour récupérer la date du créneau
@@ -77,10 +90,10 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
                 $Date_creneau = do_request($connexion, $request_date_creneau);
                 $Heure_debut = do_request($connexion, $request_HDebut);
                 $Heure_fin = do_request($connexion, $request_HFin);
-                $IDc_array[] = $IDc[0];
-                $HDebut_array[] = $Heure_debut[0];
-                $HFin_array[] = $Heure_fin[0];
-                $Date_array[] = $Date_creneau[0];
+                $IDc_array[] = $IDc[$nb_rdv];
+                $HDebut_array[] = $Heure_debut[$nb_rdv];
+                $HFin_array[] = $Heure_fin[$nb_rdv];
+                $Date_array[] = $Date_creneau[$nb_rdv];
             }
             foreach($IDc_array as $IDc_key) // pour chaque créneau récupéré
             {
