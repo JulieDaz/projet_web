@@ -67,9 +67,9 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
         }
         else
         {
+            $nb_rdv = 0;
             foreach($IDp_intervention as $IDp) // pour chaque ID patient récupéré
             {
-                $nb_rdv = 0;
                 if(!isset($ancien_IDp))
                 {
                     $ancien_IDp = $IDp;
@@ -79,6 +79,10 @@ function get_creneaux($job, $ID, $connexion, $dates_semaine,  $intervention_admi
                     if($ancien_IDp == $IDp)
                     {
                         $nb_rdv++;
+                    }
+                    else
+                    {
+                        $nb_rdv = 0;
                     }
                 }
                 $ancien_IDp = $IDp;
