@@ -11,7 +11,7 @@
 <html>
 
 
-  <title> Demande d'intervention - 1/2 </title>
+  <title> Demande d'intervention</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="style.css"/>
 
@@ -260,11 +260,11 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
     $verif_rdv_patient = verif_rdv_patient($date, $heure, $IDp) ;
     $verif_rdv_patient2 = verif_rdv_patient2($date, $heure, $IDp) ;
     if (!empty($verif_rdv_patient)) {   // On vérifie si le patient a déjà un rdv à cette heure-ci
-      echo '</br>Attention, ce patient a déjà un rdv pour l\'intervention '.$verif_rdv_patient[0]['Nom_intervention'].' à cette heure !</br></br>"' ;
+      echo '</br>Attention, ce patient a déjà un rdv pour l\'intervention '.$verif_rdv_patient[0]['Nom_intervention'].' à cette heure !</br></br>' ;
     }elseif ($verif_rdv_patient2 == FALSE) {    // On vérifie si le créneau sélectionné chevauche un autre rdv pris précédemment par le patient
-      echo '</br>Attention, le créneau sélectionné empiète sur un autre rdv pris par ce patient !</br></br>"' ;
+      echo '</br>Attention, le créneau sélectionné empiète sur un autre rdv pris par ce patient !</br></br>' ;
     }else{    //On insère le nouveau rdv dans la base de données si le patient n'a pas déjà un rdv à ce jour là
-      $insertCreneauRequest = "INSERT INTO Creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite)
+      $insertCreneauRequest = "INSERT INTO Creneaux (IDc, Date_creneau, Heure_debut, Heure_fin, Date_priseRDV, IDp, Nom_intervention, Niveau_priorite, Deplacement)
       VALUES (NULL, '$date', '$heure', '$heureFin', '$aujourdhui',
         (SELECT IDp
           FROM Patient
@@ -272,7 +272,7 @@ if(isset($_POST['demande_intervention'])){    // On vérifie que le formulaire a
 
           (SELECT Nom_intervention
             FROM Type_d_intervention
-            WHERE Nom_intervention LIKE '$typeIntervention') , '$niveau_priorite')";
+            WHERE Nom_intervention LIKE '$typeIntervention') , '$niveau_priorite', 0)";
 
             mysqli_query($connexion, $insertCreneauRequest) or die('<br>Erreur SQL !<br>'.$insertCreneauRequest.'<br>'.mysqli_error($connexion));
 
