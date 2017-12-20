@@ -313,8 +313,7 @@ elseif ($usertype == "Medecin") {
 elseif ($usertype == "Responsable") {
 	#REQUETE POUR RECUPERER LE TYPE D'INTERVENTION
 	?>
-	<br>
-	<p>Effectuer une demande d'urgence : </p>
+	<br><br>
 	<a class="access_form" href="urgence.php">Demande d'urgence</a>
 
 <?php
