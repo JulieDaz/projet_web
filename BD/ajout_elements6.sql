@@ -36,7 +36,7 @@ INSERT INTO `Pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Grippe","2
 INSERT INTO `Pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Jambe cassée","5");
 INSERT INTO `Pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Hépatite","3");
 INSERT INTO `Pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Cancer","4");
-INSERT INTO `Pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Diabète","3");
+INSERT INTO `Pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Diabète","1");
 INSERT INTO `Pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Hémorragie","4");
 INSERT INTO `Pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Carie","2");
 INSERT INTO `Pathologie`(`Nom_pathologie`, `Niveau_urgence`) VALUES ("Controle","1");
@@ -57,7 +57,7 @@ INSERT INTO `Patient`(`IDp`,`Nom`, `Prenom`, `Numero_tel`, `Niveau_priorite`, `N
 INSERT INTO `Patient`(`IDp`,`Nom`, `Prenom`, `Numero_tel`, `Niveau_priorite`, `Nom_service`) VALUES("9","Kim","Kang Ho","0612532163","0","");
 INSERT INTO `Patient`(`IDp`,`Nom`, `Prenom`, `Numero_tel`, `Niveau_priorite`, `Nom_service`) VALUES("10","Meunier","Pierre","0626194012","0","");
 INSERT INTO `Patient`(`IDp`,`Nom`, `Prenom`, `Numero_tel`, `Niveau_priorite`, `Nom_service`) VALUES("11","Nouny","Olivier","0611114739","0","");
-INSERT INTO `Patient`(`IDp`,`Nom`, `Prenom`, `Numero_tel`, `Niveau_priorite`, `Nom_service`) VALUES("12","Oryanna","Thomas","0609876543","0","");
+INSERT INTO `Patient`(`IDp`,`Nom`, `Prenom`, `Numero_tel`, `Niveau_priorite`, `Nom_service`) VALUES("12","Oryanna","Thomas","0605040302","0","");
 INSERT INTO `Patient`(`IDp`,`Nom`, `Prenom`, `Numero_tel`, `Niveau_priorite`, `Nom_service`) VALUES("13","Pettigrow", "Patrick","0612233445","0","");
 INSERT INTO `Patient`(`IDp`,`Nom`, `Prenom`, `Numero_tel`, `Niveau_priorite`, `Nom_service`) VALUES("14","Quentin","Eva","06","012345678","");
 INSERT INTO `Patient`(`IDp`,`Nom`, `Prenom`, `Numero_tel`, `Niveau_priorite`, `Nom_service`) VALUES("15","Romanov","Dymitry","0614119976","0","");
@@ -261,7 +261,9 @@ INSERT INTO `Creneaux` (`IDc`, `Date_creneau`, `Heure_debut`, `Heure_fin`, `Date
 (87, '2017-12-21', '15:00:00', '16:00:00', '2017-11-18', 1, 'Radiologie', 5, "0"),
 (88, '2017-12-21', '16:00:00', '17:00:00', '2017-11-18', 10, 'Radiologie', 5, "0"),
 (89, '2017-12-21', '17:00:00', '18:00:00', '2017-11-18', 29, 'Radiologie', 4, "0"),
-(90, '2017-12-21', '18:00:00', '19:00:00', '2017-11-18', 30, 'Radiologie', 5, "0");
+(90, '2017-12-21', '18:00:00', '19:00:00', '2017-11-18', 30, 'Radiologie', 5, "0"),
+(91, '2017-12-27', '08:00:00', '11:00:00', '2017-11-18', 12, 'Chirurgie', 1, "0"),
+(92, '2017-12-28', '08:00:00', '11:00:00', '2017-11-18', 12, 'Chirurgie', 1, "0");
 
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","0");
 INSERT INTO `souffre`(`Nom_pathologie`, `IDp`) VALUES ("Rhume","1");
