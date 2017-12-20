@@ -11,7 +11,7 @@
 <html>
 
 
-  <title> Demande d'intervention - 1/2 </title>
+  <title> Demande d'intervention</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="style.css"/>
 
